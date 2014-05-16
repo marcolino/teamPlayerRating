@@ -2,15 +2,29 @@
 
   <h1>Setup</h1>
 
+  <h4>Sports</h4>
   <ul>
-    <li ng-repeat="color in colors">
-      Name: <input ng-model="color.name">
-      [<a href ng-click="colors.splice($index, 1)">X</a>]
+    <li ng-repeat="sport in sports">
+      <input ng-model="sport.name">
+      [<a href ng-click="sports.splice($index, 1)">x</a>]
     </li>
     <li>
-      [<a href ng-click="colors.push({})">add</a>]
+      [<a href ng-click="sports.push({})"><b>+</b></a>]
     </li>
   </ul>
+
+  <h4>Players</h4>
+  <ul>
+    <li ng-repeat="player in players">
+      <input ng-model="player.name">
+      [<a href ng-click="colors.splice($index, 1)">x</a>]
+    </li>
+    <li>
+      [<a href ng-click="colors.push({})"><b>+</b></a>]
+    </li>
+  </ul>
+  
+<!--
   <hr/>
   Color (null not allowed):
   <select ng-model="myColor" ng-options="color.name for color in colors"></select><br>
@@ -33,4 +47,6 @@
   <div style="border:solid 1px black; height:20px"
        ng-style="{'background-color':myColor.name}">
   </div>
+-->
+
 </div>
