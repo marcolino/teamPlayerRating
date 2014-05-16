@@ -1,0 +1,272 @@
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+
+	<title>Team players rating system</title>
+
+	<meta name="keywords" content="sortable, reorder, list, javascript, html5, drag and drop, dnd, rubaxa">
+	<meta name="description" content="Sortable - is a minimalist JavaScript library for modern browsers and touch devices (No jQuery).">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+
+	<!--
+	  <link href="http://fonts.googleapis.com/css?family=Roboto:300" rel="stylesheet" type="text/css">
+  -->
+
+	<style>
+		html, body {
+			margin: 0;
+			padding: 0;
+			position: relative;
+			color: #464637;
+			min-height: 100%;
+			font-size: 20px;
+			font-family: 'Roboto', sans-serif;
+			font-weight: 300;
+		}
+
+
+		h1 {
+			color: #FF3F00;
+			font-size: 20px;
+			font-family: 'Roboto', sans-serif;
+			font-weight: 300;
+			text-align: center;
+		}
+
+
+		ul {
+			margin: 0;
+			padding: 0;
+			list-style: none;
+		}
+
+		.container {
+			width: 100%;
+			margin: auto;
+			min-width: 1100px;
+			max-width: 1300px;
+			position: relative;
+		}
+
+/*
+		@media (min-width: 750px) and (max-width: 970px){
+			.container {
+				width: 100%;
+				min-width: 750px;
+			}
+		}
+*/
+
+		.sortable-ghost {
+			opacity: .2;
+		}
+
+
+		img {
+			border: 0;
+			vertical-align: middle;
+		}
+
+
+		.logo {
+			top: 55px;
+			left: 30px;
+			position: absolute;
+		}
+
+
+		.title {
+			color: #fff;
+			margin-top: 10px;
+			padding: 3px 10px;
+			display: inline-block;
+			position: relative;
+			background-color: #FF7373;
+			z-index: 1000;
+		}
+			.title_xl {
+				padding: 3px 15px;
+				font-size: 40px;
+			}
+
+
+
+		.tile {
+			width: 2%;
+			min-width: 100px;
+			color: black;
+			padding: 10px 10px;
+			text-align: left;
+			margin-top: 15px;
+			margin-left: 5px;
+			margin-right: 30px;
+			background-color: #fff;
+			display: inline-block;
+			vertical-align: top;
+		}
+			.tile__name {
+				cursor: move;
+				padding-bottom: 10px;
+				border-bottom: 1px solid black;
+			}
+
+			.tile__list {
+				margin-top: 10px;
+			}
+				.tile__list:last-child {
+					margin-right: 0;
+					min-height: 80px;
+				}
+
+				.tile__list img {
+					cursor: move;
+					margin: 10px;
+					border-radius: 100%;
+				}
+
+
+
+		.block {
+			opacity: 1;
+			position: absolute;
+		}
+			.block__list {
+				padding: 20px 0;
+				max-width: 360px;
+				margin-top: -8px;
+				margin-left: 5px;
+				background-color: #fff;
+			}
+				.block__list li { cursor: move; }
+
+			.block__list_words li {
+				background-color: #fff;
+				padding: 10px 40px;
+			}
+				.block__list_words .sortable-ghost {
+					opacity: 0.4;
+					background-color: #F4E2C9;
+				}
+
+				.block__list_words li:first-letter {
+					text-transform: uppercase;
+				}
+
+			.block__list_tags {
+				padding-left: 30px;
+			}
+
+			.block__list_tags:after {
+				clear: both;
+				content: '';
+				display: block;
+			}
+				.block__list_tags li {
+					color: #fff;
+					float: left;
+					margin: 8px 20px 10px 0;
+					padding: 5px 10px;
+					min-width: 10px;
+					background-color: #5F9EDF;
+					text-align: center;
+				}
+					.block__list_tags li:first-child:first-letter {
+						text-transform: uppercase;
+					}
+	</style>
+</head>
+<body>
+  <div class="container">
+    <div id="multi" style="margin-left: 30px">
+      <div>
+        <div class="layer title title_xl">Team players rating system</div>
+      </div>
+      <div id="leftColumn" style="float:left; width:10%;">
+        <div class="layer tile" style="border:2px solid black;height:400px;overflow:auto;">
+          <div class="tile__name">Locker room</div>
+          <div class="tile__list">
+            <span class="item" id="1">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">soletta</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">lucio</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">paolo</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">frinks</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">attila</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">puntone</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+            <span class="item" id="2">
+              <div style="display:inline-block;position:relative;text-align:center;">
+                <img src="http://www.stthomassoccer.com/img/player-registration.png" width="48" style="margin-bottom:0;">
+      					<div style="min-width:62px;font-size:0.7em;font-weight:bold;text-align:center;color:white;margin:0px;padding:0em 0.5em;background:#000;border:1px solid #aaa;">mosso</div>
+    	  				<div style="height:10px"></div>
+    		  		</div>
+    				</span> 
+          </div>
+        </div>
+      </div>
+
+      <div id="rightColumn" style="float:right; width:88%;">
+        <div class="layer tile" style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border:2px solid darkred;width:410px;height:140px;">
+          <div class="tile__name">Team A</div>
+          <div class="tile__list"></div>
+        </div>
+  
+        <div class="layer tile" style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border:2px solid darkblue;width:410px;height:140px;">
+          <div class="tile__name">Team B</div>
+          <div class="tile__list"></div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+<script src="js/Sortable.js"></script>
+<script>
+	new Sortable(multi, {
+		draggable: '.tile',
+		handle: '.tile__name'
+	});
+	[].forEach.call(multi.getElementsByClassName('tile__list'), function (el) {
+		new Sortable(el, {
+ 		  draggable: ".item",
+		  group: 'players'
+  	});
+	})();
+</script>
+
+</body>
+</html>

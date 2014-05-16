@@ -1,0 +1,92 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN">
+<html>
+<head>
+<title>Drag &amp; Drop</title>
+
+<style type="text/css">
+#phonetic {
+	position: absolute;
+	left: 10px;
+	top: 10px;
+}
+
+#numeric {
+	position: absolute;
+	right: 10px;
+	top: 50px;
+	border: 1px solid white;
+}
+</style>
+
+<link rel="stylesheet" href="lists.css" type="text/css"/>
+<script language="JavaScript" type="text/javascript" src="coordinates.js"></script>
+<script language="JavaScript" type="text/javascript" src="drag.js"></script>
+<script language="JavaScript" type="text/javascript" src="dragdrop.js"></script>
+<script language="JavaScript" type="text/javascript"><!--
+	window.onload = function() {
+		var list = document.getElementById("phonetic");
+		DragDrop.makeListContainer( list );
+		list.onDragOver = function() { this.style["background"] = "#EEF"; };
+		list.onDragOut = function() {this.style["background"] = "none"; };
+		
+		list = document.getElementById("numeric");
+		DragDrop.makeListContainer( list );
+		list.onDragOver = function() { this.style["border"] = "1px dashed #AAA"; };
+		list.onDragOut = function() {this.style["border"] = "1px solid white"; };
+	};
+	//-->
+</script>
+</head>
+<body>
+<ul id="phonetic" class="sortable boxy" style="margin-left: 1em;">
+	<li>Alpha</li>
+	<li>Bravo</li>
+	<li>Charlie</li>
+	<li>Delta</li>
+	<li>Echo</li>
+	<li>Foxtrot</li>
+	<li>Golf</li>
+	<li>Hotel</li>
+	<li>India</li>
+	<li>Juliet</li>
+	<li>Kilo</li>
+	<li>Lima</li>
+	<li>Mike</li>
+	<li>November</li>
+	<li>Oscar</li>
+	<li>Papa</li>
+	<li>Quebec</li>
+	<li>Romeo</li>
+	<li>Sierra</li>
+	<li>Tango</li>
+	<li>Uniform</li>
+	<li>Victor</li>
+	<li>Whiskey</li>
+	<li>Xray</li>
+	<li>Yankee</li>
+	<li>Zulu</li>
+</ul>
+<ul id="numeric" class="sortable boxier" style="margin-right: 1em;">
+	<li>One</li>
+	<li>Two</li>
+	<li>Three</li>
+	<li>Four</li>
+	<li>Five</li>
+	<li>Six</li>
+	<li>Seven</li>
+	<li>Eight</li>
+	<li>Nine</li>
+	<li>Ten</li>
+	<li>Eleven</li>
+	<li>Twelve</li>
+	<li>Thirteen</li>
+	<li>Fourteen</li>
+	<li>Fifteen</li>
+	<li>Sixteen</li>
+	<li>Seventeen</li>
+	<li>Eightteen</li>
+	<li>Nineteen</li>
+	<li>Twenty</li>
+</ul>
+</body>
+</html>

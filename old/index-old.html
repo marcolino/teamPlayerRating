@@ -1,0 +1,139 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+<style type="text/css">
+#lockerRoom {
+  background-image:url('bricks.png');
+  background-repeat:repeat;
+  float:left;
+  width:90%;
+  height:88px;
+  overflow-x:auto;
+  overflow-y:hidden;
+}
+#field {
+  background-image:url('grassfield.png');
+  background-repeat:repeat;
+  float:left;
+  width:500px;
+  height:300px;
+}
+div[id^="place"] {
+  float:left;
+  width:80px;
+  height:80px;
+  margin:3px;
+  padding:3px;
+  background-color:rgba(0,0,0,0);
+}
+.teamA {
+  border:4px solid darkorange;
+}
+.teamB {
+  border:4px solid darkviolet;
+}
+span {
+  float:left;
+  width:80px;
+  margin:3px;
+  padding:3px;
+  border:1px solid #999999;
+  color:#333333;
+}
+.divisor {
+  height:100px;
+  clear:both;
+}
+.pics, .nums {
+  clear:both;
+  t_ext-align:center;
+}
+</style>
+<script type="text/javascript">
+// function called when drag starts
+function dragIt(theEvent) {
+  // tell the browser what to drag
+  theEvent.dataTransfer.setData("Text", theEvent.target.id);
+}
+
+// function called when element drops
+function dropIt(theEvent) {
+  // get a reference to the element being dragged
+  var theData = theEvent.dataTransfer.getData("Text");
+  // get the element
+  var theDraggedElement = document.getElementById(theData);
+  // add it to the drop element
+  theEvent.target.appendChild(theDraggedElement);
+  // instruct the browser to allow the drop
+  theEvent.preventDefault();
+}
+
+</script>
+</head>
+<body>
+  <div class="pics">
+    <div id="lockerRoom" ondrop="dropIt(event);" ondragover="event.preventDefault();">
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic1" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic2" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic3" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic4" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic5" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic6" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic7" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic8" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic9" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic0" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic11" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic12" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic13" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic14" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic15" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic16" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic17" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic18" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic19" />
+      <img src="player.png" width="80" height="80" draggable="true" ondragstart="dragIt(event);" id="pic20" />
+    </div>
+
+    <div class="divisor"></div>
+
+    <div id="field">
+      <div id="teamA">
+        <div class="teamA" id="place1A" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamA" id="place2A" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamA" id="place3A" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamA" id="place4A" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamA" id="place5A" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+      </div>
+<!--
+      <div class="nums">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+-->
+      <div class="divisor"></div>
+
+      <div id="teamB">
+        <div class="teamB" id="place1B" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamB" id="place2B" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamB" id="place3B" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamB" id="place4B" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+        <div class="teamB" id="place5B" ondrop="dropIt(event);" ondragover="event.preventDefault();"></div>
+      </div>
+<!--
+      <div class="nums">
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+        <span></span>
+      </div>
+-->
+    </div>
+  </div>
+
+</body>
+</html>
