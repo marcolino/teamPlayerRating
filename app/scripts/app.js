@@ -4,8 +4,10 @@ var app = angular.module('teamplayerratingApp', [
     'ngRoute',
     'ngSanitize',
     'ui.bootstrap',
-    'ngDragDrop'
+    'ngDragDrop',
+    'firebase'
   ])
+  .constant('FIREBASE_URL',' https://teamplayerrating.firebaseio.com/')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

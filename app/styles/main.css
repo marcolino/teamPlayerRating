@@ -7,11 +7,12 @@
 			font-size: 20px;
 			font-family: 'Roboto', sans-serif;
 			font-weight: 300;
+			background-color: gray;
 		}
 
 
 		h1 {
-			color: #FF3F00;
+			color: darkgray;
 			font-size: 20px;
 			font-family: 'Roboto', sans-serif;
 			font-weight: 300;
@@ -28,8 +29,10 @@
 		.container {
 			width: 100%;
 			margin: auto;
+			/*
 			min-width: 1100px;
 			max-width: 1300px;
+			*/
 			position: relative;
 		}
 

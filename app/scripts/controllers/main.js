@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, $timeout) {
+app.controller('MainCtrl', function ($scope) {
     $scope.team1 = [];
     $scope.team2 = [];
    
@@ -29,7 +29,7 @@ app.controller('MainCtrl', function ($scope, $timeout) {
 
     // limit items to be dropped in list1
     $scope.optionsList1 = {
-      accept: function(dragEl) {
+      accept: function(/*dragEl*/) {
         if ($scope.team1.length >= 5) {
           return false;
         } else {

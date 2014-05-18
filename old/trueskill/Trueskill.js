@@ -27,15 +27,16 @@ function Players () {
 
   this.getByName = function(name) {
     if (this.players.name == "name") {
-      
+    }
   }
+
   this.store = function() {
-    localStorage.doctors = JSON.stringify(this.players);
+    //localStorage.players = JSON.stringify(this.players);
   }
 
   this.load = function() {
-    this.players = JSON.parse(localStorage.players);
-    console.info('there are ' + this.players.length + ' players in the system');
+    //this.players = JSON.parse(localStorage.players);
+    //console.info('there are ' + this.players.length + ' players in the system');
   }
 
   this.getLastError = function() {
@@ -47,8 +48,8 @@ function Team (name = '', color = '', size = 5) {
   this.name = name;
   this.color = color;
   this.size = size;
-  private this.players = [{}];
-  private this.lastError = "";
+  this.players = [{}];
+  this.lastError = "";
   
   this.addPlayer = function(player) {
     if (! player instanceof Player) {
@@ -66,7 +67,7 @@ function Team (name = '', color = '', size = 5) {
 }
 
 function Match (date = null) {
-  this.date = date or new Date();
+  this.date = date || new Date();
   this.teams = [{}];
 
   this.create = function(comboTeams, comboPlayers) {
@@ -112,7 +113,6 @@ chris.skill = [25.0, 25.0/3.0]
 
 darren = {}
 darren.skill = [25.0, 25.0/3.0]
-*/
 
 console.log("alice:");
 console.log(alice.skill);
@@ -149,4 +149,4 @@ console.log("chris:");
 console.log(chris.skill);
 console.log("darren:");
 console.log(darren.skill);
-
+*/

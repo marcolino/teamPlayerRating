@@ -1,4 +1,4 @@
-<div ng-controller="SetupCtrl">
+<div>
 
   <h1>Setup</h1>
 
@@ -17,10 +17,11 @@
   <ul>
     <li ng-repeat="player in players">
       <input ng-model="player.name">
-      [<a href ng-click="colors.splice($index, 1)">x</a>]
+      [<a href ng-click="players.splice($index, 1); removePlayer();">x</a>]
     </li>
     <li>
-      [<a href ng-click="colors.push({})"><b>+</b></a>]
+      <input ng-model="player.name">
+      [<a href ng-click="addPlayer(player.name);"><b>+</b></a>]
     </li>
   </ul>
   
