@@ -7,7 +7,7 @@ var app = angular.module('teamplayerratingApp', [
     'ngDragDrop',
     'firebase'
   ])
-  .constant('FIREBASE_URL',' https://teamplayerrating.firebaseio.com/')
+  .constant('FIREBASE_URL', 'https://teamplayerrating.firebaseio.com')
   .config(function ($routeProvider) {
     $routeProvider
       .when('/', {

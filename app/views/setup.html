@@ -2,6 +2,22 @@
 
   <h1>Setup</h1>
 
+  <div class="hero-unit">
+    <h4>Angular Firebase</h4>
+    <ul>
+      <li ng-repeat="(k,v) in players"><button ng-click="deletePlayer(k)"> x </button> - {{v.text}}</li>
+    </ul> 
+    <div>
+      <input type=text ng-model="newPlayer.text" />
+      <button ng-click="addPlayer()">Add Player</button>
+      <button ng-click="removeAll()">Remove All</button>
+    </div>
+    <hr>
+    {{ players | json }}
+    <hr>
+  </div>
+
+<!--
   <h4>Sports</h4>
   <ul>
     <li ng-repeat="sport in sports">
@@ -24,7 +40,8 @@
       [<a href ng-click="addPlayer(player.name);"><b>+</b></a>]
     </li>
   </ul>
-  
+-->
+
 <!--
   <hr/>
   Color (null not allowed):

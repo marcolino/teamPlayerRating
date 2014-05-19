@@ -1,26 +1,52 @@
 'use strict';
 
-app.controller('SetupCtrl', function ($scope, Player) {
+app.controller('SetupCtrl', function ($scope, playersFactory) {
 
   $scope.team1 = [];
   $scope.team2 = [];
   $scope.sports = [];
   //$scope.players = [];
-  $scope.players = Player.all;
-     
-  $scope.player = { name: 'soletta', drop: true };
-     
-  $scope.addPlayer = function () {
-    Post.create($scope.post).then(function () {
-      $scope.post = {url: 'http://', 'title': ''};
-    });
+  $scope.players = playersFactory.getAllplayers();
+  console.info($scope.players);
+
+  //fireService.setListToScope($scope, 'players');
+  $scope.newPlayer = { name: 'me' };
+
+  $scope.addPlayer = function() {
+    console.log("setup: addPlayer()");
+    console.info($scope.newPlayer);
+    playersFactory.addPlayer($scope.newPlayer);
+    $scope.newPlayer = { name: 'me', text: 'NEW' };
+    //$scope.newPlayer.text = 'NEW';
   };
-     
-  $scope.deletePlayer = function (postId) {
-    Post.delete(postId);
+/*
+  $scope.removePlayer = function(id) {
+    console.log("setup: addNewPlayer()");
+    fireService.removeItem(id);
   };
-     
+  $scope.removeAll = function() {
+    fireService.removeAll();
+  };
+*/
 });
+
+/*
+var MainCtrl = function($scope, fireService) {
+  itemService.setListToScope($scope, 'items');
+  $scope.newItem = {};
+
+  $scope.addNewItem = function() {
+    itemService.addItem($scope.newItem);
+    $scope.newItem = {};
+  };
+  $scope.deleteItem = function(id){
+    itemService.deleteItem(id);
+  };
+  $scope.removeAll = function() {
+    itemService.removeAll(); 
+  };
+};
+*/
 
 /*
   $scope.setup = function () {
