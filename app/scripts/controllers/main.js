@@ -30,7 +30,7 @@ app.controller('MainCtrl', function ($scope, playerFactory) {
     { 'name': 'Nordin5',    'skill': 99, 'drag': true }
   ];
 console.log($scope.players);
-  //$scope.players = playerFactory.all;
+  $scope.players = playerFactory.all;
 console.log($scope.players);
 
 /*

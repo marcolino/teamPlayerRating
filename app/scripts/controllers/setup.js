@@ -14,6 +14,7 @@ app.controller('SetupCtrl', function($scope, playerFactory) {
     console.info('Players loaded.');
     console.info('findByProperty(name, soletta): ' + playerFactory.findByProperty('name', 'soletta'));
     console.info('findByProperty(skill, 99): ' + playerFactory.findByProperty('skill', 99));
+    console.info('$scope.allPlayers', playerFactory.allPlayers());
   });
 
   function clone(obj) {
