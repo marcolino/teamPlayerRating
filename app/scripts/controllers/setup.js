@@ -1,33 +1,48 @@
 'use strict';
 
-app.controller('SetupCtrl', function ($scope, playersFactory) {
 
+app.controller('SetupCtrl', function($scope, playerFactory) {
+  $scope.players = [];
   $scope.team1 = [];
   $scope.team2 = [];
   $scope.sports = [];
-  //$scope.players = [];
-  $scope.players = playersFactory.getAllplayers();
-  console.info($scope.players);
 
-  //fireService.setListToScope($scope, 'players');
-  $scope.newPlayer = { name: 'me' };
+  $scope.players = playerFactory.all;
+  console.info('$scope.players', $scope.players);
+
+  $scope.players.$on('loaded', function() { 
+    console.info('Players loaded.');
+    console.info('findByProperty(name, soletta): ' + playerFactory.findByProperty('name', 'soletta'));
+    console.info('findByProperty(skill, 99): ' + playerFactory.findByProperty('skill', 99));
+  });
+
+  function clone(obj) {
+    var target = {};
+    for (var i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        target[i] = obj[i];
+      }
+    }
+    return target;
+  }
+
+  $scope.playerDefault = { name: '', drag: true, skill: 50 };
+  $scope.playerNew = clone($scope.playerDefault);
 
   $scope.addPlayer = function() {
-    console.log("setup: addPlayer()");
-    console.info($scope.newPlayer);
-    playersFactory.addPlayer($scope.newPlayer);
-    $scope.newPlayer = { name: 'me', text: 'NEW' };
-    //$scope.newPlayer.text = 'NEW';
+    console.log('setup: addPlayer(): ', $scope.playerNew);
+    playerFactory.add($scope.playerNew);
+    $scope.playerNew = clone($scope.playerDefault);
   };
-/*
+
   $scope.removePlayer = function(id) {
-    console.log("setup: addNewPlayer()");
-    fireService.removeItem(id);
+    console.log('setup: removePlayer()');
+    playerFactory.remove(id);
   };
   $scope.removeAll = function() {
-    fireService.removeAll();
+    playerFactory.delete();
   };
-*/
+
 });
 
 /*

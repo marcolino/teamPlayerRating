@@ -1,14 +1,15 @@
 <div>
 
-  <h1>Setup</h1>
+  <h2>Setup</h2>
 
-  <div class="hero-unit">
-    <h4>Angular Firebase</h4>
+  <div>
     <ul>
-      <li ng-repeat="(k,v) in players"><button ng-click="deletePlayer(k)"> x </button> - {{v.text}}</li>
+      <li ng-repeat="(k,v) in players">name: {{v.name}} - skill: {{v.skill}} <button ng-click="removePlayer(k)"> x </button></li>
     </ul> 
+    <hr>
     <div>
-      <input type=text ng-model="newPlayer.text" />
+      <input type="text" ng-model="playerNew.name" />
+      <input type="number" ng-model="playerNew.skill" />
       <button ng-click="addPlayer()">Add Player</button>
       <button ng-click="removeAll()">Remove All</button>
     </div>

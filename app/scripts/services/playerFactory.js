@@ -1,5 +1,41 @@
 'use strict';
 
+app.factory('playerFactory',
+  function($firebase, FIREBASE_URL) {
+    var ref = new Firebase(FIREBASE_URL + '/' + 'players');
+    var players = $firebase(ref);
+
+    return {
+      all: players,
+      add: function(player) {
+        return players.$add(player);
+      },
+      find: function(id) {
+        return players.$child(id);
+      },
+      findByProperty: function(property, value) {
+        var ret;
+        ref.once('value', function(ss) {
+          ss.forEach(function(childSnapshot) {
+            var id = childSnapshot.name();
+            childSnapshot.ref().child(property).once('value', function(ss) {
+              if (ss.val() === value) {
+                ret = id;
+              }
+            });
+          });
+        });
+        return ret;
+      },
+      remove: function(id) {
+        return players.$remove(id);
+      },
+      delete: function(id) { return this.remove(id); } // alias
+    };
+  }
+);
+
+/*
 app.factory('playersFactory', 
   function ($firebase, FIREBASE_URL, $rootScope) {
     var ref = new Firebase(FIREBASE_URL + '/' + 'players');
@@ -14,7 +50,7 @@ app.factory('playersFactory',
         console.log(player);
         players[player.name] = {
           name: player.name,
-          skill: 0 /* player.skill */
+          skill: 0 / * player.skill * /
         };
    
         players.$save(player.name).then(function () {
@@ -39,6 +75,7 @@ app.factory('playersFactory',
     return Player;
   }
 );
+*/
 
 /*
     return {
