@@ -12,9 +12,13 @@ app.controller('SetupCtrl', function($scope, playerFactory) {
 
   $scope.players.$on('loaded', function() { 
     console.info('Players loaded.');
-    console.info('findByProperty(name, soletta): ' + playerFactory.findByProperty('name', 'soletta'));
-    console.info('findByProperty(skill, 99): ' + playerFactory.findByProperty('skill', 99));
-    console.info('$scope.allPlayers', playerFactory.allPlayers());
+    //console.info('$scope.allPlayers', playerFactory.allPlayers());
+    var keys = $scope.players.$getIndex();
+    console.info('keys:', keys);
+    ["-JNOkKzl7CEGb-hY1PVG"].forEach(function(element) {
+      //$scope.messages.push("Test for " + element + ": " + (keys.indexOf(element) !== -1));
+      console.info("Test for " + element + ": " + (keys.indexOf(element) !== -1));
+    });
   });
 
   function clone(obj) {

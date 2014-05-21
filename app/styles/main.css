@@ -1,10 +1,8 @@
 		html, body {
-/*
 			margin: 0;
 			padding: 0;
 			position: relative;
 			min-height: 100%;
-*/
 			color: #464637;
 			font-size: 20px;
 			font-family: 'Roboto', sans-serif;
@@ -27,17 +25,15 @@
 			list-style: none;
 		}
 
-/*
 		.container {
 			width: 100%;
 			margin: auto;
-			/ *
+			/*
 			min-width: 1100px;
 			max-width: 1300px;
-			* /
+			*/
 			position: relative;
 		}
-*/
 
 /*
 		@media (min-width: 750px) and (max-width: 970px){
@@ -65,8 +61,8 @@
 			position: absolute;
 		}
 
-/*
 
+/*
 		.title {
 			color: #fff;
 			margin-top: 10px;

@@ -7,9 +7,9 @@ app.factory('playerFactory',
 
     return {
       all: players,
-      allPlayers: function() {
-        return $firebase(ref.child('/players'));
-      },
+      //allPlayers: function() {
+      //  return $firebase(ref.child('/players'));
+      //},
       add: function(player) {
         return players.$add(player);
       },
