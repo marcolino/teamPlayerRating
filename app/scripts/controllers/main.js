@@ -1,166 +1,123 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, playerFactory) {
+app.controller('MainCtrl', function ($scope, sportFactory, playerFactory) {
   $scope.teamA = [];
   $scope.teamB = [];
   $scope.teamSelected = null;
+  $scope.sportSelected = "Calcio a 5";
+  $scope.sports = sportFactory.all;
+  $scope.players = playerFactory.all;
+  sportFactory.ref.on('value', function(snapshot) {
+    var keys = snapshot.val();
+    //console.info("KEYS: ", getObjects(keys));
+    $scope.sportsAvailable = getObjects(keys);
+    $scope.playersMax = $scope.sportsAvailable.containsProperty('name', $scope.sportSelected).players;
+    //var playersMax = $scope.sportsAvailable.containsProperty('name', $scope.sportSelected).players;
+    //console.info('playersMax:', playersMax);
+  });
+  playerFactory.ref.on('value', function(snapshot) {
+    var keys = snapshot.val();
+    //console.info("KEYS: ", getObjects(keys));
+    $scope.playersAvailable = getObjects(keys);
+  });
  
   $scope.teamSelect = function(element) {
     var id = element.target.id;
-    //console.log(element);
-    console.info('target.id:', id);
-    /*
-    if (is_touch_device()) {
-      alert('IS TOUCH');
-    } else {
-      console.info('IS NOT TOUCH');
-    }
-    */
-    if (id) {
-      $("div[id^='team']").css({ opacity: '0.5', 'border-width': '7' });
-      $("div[id='" + id + "']").css({ opacity: '1.0', 'border-width': '7' });
+    //console.info('target.id:', id);
+    if (id) { // selected a team
+      $("div[id^='team']").css({ opacity: '0.3', 'border-width': '7' });
+      $("div[id='" + id + "']").css({ opacity: '1.2', 'border-width': '7' });
       $scope.teamSelected = (id === 'teamA' ? $scope.teamA : $scope.teamB);
-    }
-    else console.info('empty id element:', element.target);
-  }
-
-  $scope.optionsTeamA = {
-    accept: function(dragEl) {
-      console.log(dragEl);
-      if ($scope.teamSelected != $scope.TeamA) {
-        return false;
-      }
-      if ($scope.teamA.length >= 5) {
-        return false;
+      console.info('Selected', id);
+    } else {
+      var name = element.target.firstChild.data;
+      if (name) { // selected a player in team to remove it
+        //console.log("PLAYER IN TEAM: REMOVE IT!");
+        if ($scope.teamSelected.containsProperty('name', name)) {
+          // remove this player from this team, and put it in players available
+          var obj = $scope.teamSelected.removeObjectByProperty('name', name);
+          //console.log('obj:', obj);
+          $scope.playersAvailable.push(obj);
+          //console.log('Player [' + name + '] removed from ' + $scope.teamSelected);
+        }
       } else {
-        return true;
+        // TODO: handle errors!
+        console.error('empty element.target.firstChild.data:', element.target.firstChild, '!!!');
       }
     }
-  };
-
-  $scope.optionsTeamB = {
-    accept: function(dragEl) {
-      console.log(dragEl);
-      if ($scope.teamSelected != $scope.teamB) {
-        return false;
-      }
-      if ($scope.teamB.length >= 5) {
-        return false;
-      } else {
-        return true;
-      }
-    }
-  };
-
-  $scope.dropA = function() {
-    console.info("dropA");
-    return true;
   }
 
   $scope.playerSelect = function(element) {
-    //console.log("element:", element);
+    //console.log("playerSelect(element):", element);
     var name = element.target.firstChild.data;
     //console.info('element.target.firstChild.data:', element.target.firstChild.data);
     if (name) {
-      if (!$scope.teamSelected) {
+      if (!$scope.teamSelected) { // TODO: better handle error...
         alert("Please select a team!");
         return;
       }
-      if ($scope.teamSelected.length >= 5) return false;
-      $("#" + ($scope.teamSelected == $scope.teamA ? 'teamA' : 'teamB')).append(element.target).show('slow');
-      $scope.teamSelected.push(element.target);
+      if ($scope.teamSelected.length >= $scope.playersMax) return false;
+
+      $scope.player = { 'name': name, 'drag': true }; // TODO: add all properties...
+
+      $scope.teamSelected.push($scope.player);
+console.log("teamSelected:", $scope.teamSelected);
+    
+      $scope.playersAvailable.removeObjectByProperty('name', name);
+
       console.log('Player [' + name + '] assigned to ' + $scope.teamSelected);
+    } else {
+      console.error('empty name element.target:', element.target, '!!!');
     }
-    //else console.info('empty name element.target:', element.target);
   }
 
-  function is_touch_device() {
+  function isTouchDevice() {
     return 'ontouchstart' in window // works on most browsers 
       || 'onmsgesturechange' in window; // works on ie10
   };
 
-  $scope.sports = [
-    { 'name': 'Calcio a 5', 'players': 5 },
-    { 'name': 'Calcio a 7', 'players': 7 },
-    { 'name': 'Calcio a 8', 'players': 8 },
-    { 'name': 'Calcio',     'players': 11 },
-    { 'name': 'Rugby',      'players': 15 },
-  ];
-
-  $scope.players = [
-    { 'name': 'Frinks',    'drag': true },
-    { 'name': 'Lucio',     'drag': true },
-    { 'name': 'Soletta',   'drag': true },
-    { 'name': 'Paoloalgo', 'drag': true },
-    { 'name': 'Marcotono', 'drag': true },
-    { 'name': 'Attila',    'drag': true },
-    { 'name': 'Puntone',   'drag': true },
-    { 'name': 'Bonnie',    'drag': true },
-    { 'name': 'Remi',      'drag': true },
-    { 'name': 'Grigio',    'drag': true },
-    { 'name': 'Mosso',     'drag': true },
-    { 'name': 'Aleandro',  'skill': 99, 'drag': true },
-    { 'name': 'Cavallero', 'skill': 99, 'drag': true },
-    { 'name': 'Nordin2',    'skill': 99, 'drag': true },
-    { 'name': 'Nordin3',    'skill': 99, 'drag': true },
-    { 'name': 'Nordin4',    'skill': 99, 'drag': true },
-    { 'name': 'Nordin5',    'skill': 99, 'drag': true }
-  ];
-console.log($scope.players);
-  //$scope.players = playerFactory.all;
-console.log($scope.players);
-
-/*
-  $('.thumbnail').focus(
-    function() {
-      console.info('FOCUS');
-      $(this).css({
-        'border-color': 'yellow',
-        'border-weight': '7px',
-        'border-style': 'solid'
-      });
-    }
-  );
-  $('.thumbnail').blur(
-    function() {
-      console.info('BLUR');
-      $(this).css({ 
-        'border-color': '#f40',
-        'border-weight': '7px',
-        'border-style': 'solid'
-      });
-    }
-  );
-*/
-
-/*
-  angular.forEach($scope.players,
-    function(player) {
-      if (typeof player === 'object') {
-        angular.forEach(player, function(o) {
-          console.log(o);
-        });
+  function clone(obj) {
+    var target = {};
+    for (var i in obj) {
+      if (obj.hasOwnProperty(i)) {
+        target[i] = obj[i];
       }
-    });
-*/
-/*
-  for (var key in $scope.players) {
-    if (typeof key === 'object') {
-      console.log('object:', $scope.players[key]);
     }
+    return target;
   }
-*/
 
-/*
-  // limit items to be dropped in teams
-  $scope.optionsTeam1 = {
-    accept: function(/ *dragEl* /) {
-      if ($scope.team1.length >= 5) {
-        return false;
-      } else {
-        return true;
+  function getObjects(obj) {
+    var keys = [];
+    for (var key in obj) {
+      if (obj.hasOwnProperty(key)) {
+        var o = obj[key];
+        keys.push(o);
       }
     }
-  };
-*/
+    return keys;
+  }
+
+  Array.prototype.containsProperty = function(property, value) {
+    for (var i = 0; i < this.length; i++) {
+      if (!property in this) {
+        break;
+      }
+      if (this[i][property] === value) {
+        return this[i];
+      }
+    }
+    return null;
+  }
+
+  Array.prototype.removeObjectByProperty = function(property, value) {
+    for (var i = 0; i < this.length; i++) {
+      if (this[i][property] === value) {
+        var obj = this[i];
+        this.splice(i, 1);
+        return obj;
+      }
+    }
+    return null;
+  }
+
 });

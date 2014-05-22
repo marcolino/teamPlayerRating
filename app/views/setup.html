@@ -16,6 +16,9 @@
     <hr>
     {{ players | json }}
     <hr>
+    <ul>
+      <li ng-repeat="(k,v) in sports">{{v.name}} - players: {{v.players}} <button ng-click="removeSport(k)"> x </button></li>
+    </ul> 
   </div>
 
 <!--

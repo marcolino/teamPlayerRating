@@ -1,13 +1,12 @@
 <style>
   .thumbnail {
-    min-height: 84px;
-    min-width: 164px;
+    min-height: 242px;
+    min-width: 152px;
   }
-  .btn-droppable {
-    width: 120px;
-    height: 30px;
-    margin: 4px;
-    padding-left: 4px;
+  .btn-droppable:hover, .btn-droppable:focus, .btn-droppable:active, .btn-droppable.active {
+    color: black;
+    background-color: white;
+    background-url: none;
   }
   .btn-draggable {
     width: 120px;
@@ -29,13 +28,13 @@
     <div class="container-fixed">
       <div class="row">
         <div class="col-xs-6">
-          <div id="teamA" ng-click="teamSelect($event)" class="thumbnail caption" data-drop="true" ng-model='teamA' data-jqyoui-options="optionsTeamA" jqyoui-droppable="{multiple:true, onDrop:'dropA',}" style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border:7px solid #f40;">
-            <div class="btn btn-info btn-draggable" ng-repeat="item in teamA" ng-show="item.name" data-drag="{{item.drag}}" data-jqyoui-options="{revert: 'invalid'}" ng-model="teamA" jqyoui-draggable="{index: {{$index}},animate:true}">{{item.name}}</div>
+          <div id="teamA" ng-click="teamSelect($event)" class="thumbnail caption" ng-model='teamA' style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border: 7px solid #f40; opacity: 0.9;">
+            <div class="btn btn-info btn-draggable" ng-repeat="item in teamA" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
           </div>
         </div>
         <div class="col-xs-6">
-          <div id="teamB" ng-click="teamSelect($event)" class="thumbnail caption" data-drop="true" ng-model='teamB' data-jqyoui-options="optionsTeamB" jqyoui-droppable="{multiple:true}" style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border:7px solid darkblue;">
-            <div class="btn btn-info btn-draggable" ng-repeat="item in teamB" ng-show="item.name" data-drag="{{item.drag}}" data-jqyoui-options="{revert: 'invalid'}" ng-model="teamB" jqyoui-draggable="{index: {{$index}},animate:true}">{{item.name}}</div>
+          <div id="teamB" ng-click="teamSelect($event)" class="thumbnail caption" ng-model='teamB' style="background: url('images/grassfield.png') repeat scroll 0% 0% transparent; border:7px solid darkblue; opacity: 0.9;">
+            <div class="btn btn-info btn-draggable" ng-repeat="item in teamB" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
           </div>
         </div>
       </div>
@@ -43,9 +42,9 @@
   </div>
   <div class="navbar-inner">
     <div class="container form-inline" style="margin-left: 0;">
-      <div class="btn btn-droppable" ng-repeat="item in players | orderByPriority" data-drop="true" ng-model='players' djqyoui-options="{accept:'.btn-draggable:not([ng-model=players])'}" jqyoui-droppable="{index: {{$index}}}">
-        <div class="btn btn-info btn-draggable" ng-click="playerSelect($event)" data-drag="{{item.drag}}" data-jqyoui-options="{revert: 'invalid'}" ng-model="players" jqyoui-draggable="{index: {{$index}},placeholder:true,animate:true}" ng-hide="!item.name">{{item.name}}</div>
-      </div>
+      <span ng-repeat="(key, item) in playersAvailable">
+        <div class="btn btn-info btn-draggable" ng-click="playerSelect($event)" ng-model="players" ng-hide="!item.name">{{item.name}}</div>
+      </span>
     </div>
   </div>
 </div>

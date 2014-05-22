@@ -1,17 +1,34 @@
 'use strict';
 
-
-app.controller('SetupCtrl', function($scope, playerFactory) {
-  $scope.players = [];
+app.controller('SetupCtrl', function($scope, sportFactory, playerFactory) {
   $scope.team1 = [];
   $scope.team2 = [];
-  $scope.sports = [];
 
+  $scope.sports = sportFactory.all;
   $scope.players = playerFactory.all;
-  console.info('$scope.players', $scope.players);
+  //$scope.players = playerFactory.all;
+  //console.info('$scope.players', $scope.players);
+
+  $scope.sports.$on('loaded', function() { 
+    console.info('Sports loaded.');
+    $scope.sports = sportFactory.all;
+    console.info($scope.sports);
+    if (0) {
+      $scope.populateSports();
+      $scope.sports = sportFactory.all;
+    }
+  });
 
   $scope.players.$on('loaded', function() { 
     console.info('Players loaded.');
+    $scope.players = playerFactory.all;
+    if (0) {
+      $scope.populatePlayers();
+      $scope.players = playerFactory.all;
+    }
+  });
+
+/*
     //console.info('$scope.allPlayers', playerFactory.allPlayers());
     var keys = $scope.players.$getIndex();
     console.info('keys:', keys);
@@ -19,8 +36,9 @@ app.controller('SetupCtrl', function($scope, playerFactory) {
       //$scope.messages.push("Test for " + element + ": " + (keys.indexOf(element) !== -1));
       console.info("Test for " + element + ": " + (keys.indexOf(element) !== -1));
     });
-  });
+*/
 
+  /*
   function clone(obj) {
     var target = {};
     for (var i in obj) {
@@ -30,14 +48,17 @@ app.controller('SetupCtrl', function($scope, playerFactory) {
     }
     return target;
   }
+  */
 
   $scope.playerDefault = { name: '', drag: true, skill: 50 };
-  $scope.playerNew = clone($scope.playerDefault);
+  //$scope.playerNew = clone($scope.playerDefault);
+  $scope.playerNew = angular.copy($scope.playerDefault);
 
   $scope.addPlayer = function() {
     console.log('setup: addPlayer(): ', $scope.playerNew);
     playerFactory.add($scope.playerNew);
-    $scope.playerNew = clone($scope.playerDefault);
+    //$scope.playerNew = clone($scope.playerDefault);
+    $scope.playerNew = angular.copy($scope.playerDefault);
   };
 
   $scope.removePlayer = function(id) {
@@ -46,6 +67,44 @@ app.controller('SetupCtrl', function($scope, playerFactory) {
   };
   $scope.removeAll = function() {
     playerFactory.delete();
+  };
+
+  $scope.populateSports = function() {
+    console.info('NO SPORTS, POPULATING...');
+    $scope.sportsDefault = [
+      { 'name': 'Calcio a 5', 'players': 5 },
+      { 'name': 'Calcio a 7', 'players': 7 },
+      { 'name': 'Calcio a 8', 'players': 8 },
+      { 'name': 'Calcio',     'players': 11 },
+      { 'name': 'Rugby',      'players': 15 },
+    ];
+    // store the object
+    $scope.sportsDefault.forEach(function(sport) {
+      sportFactory.add(sport);
+    });
+  };
+
+  $scope.populatePlayers = function() {
+    console.info('NO PLAYERS, POPULATING...');
+    $scope.playersDefault = [
+      { 'name': 'Frinks',    'drag': true },
+      { 'name': 'Lucio',     'drag': true },
+      { 'name': 'Soletta',   'drag': true },
+      { 'name': 'Paoloalgo', 'drag': true },
+      { 'name': 'Marcotono', 'drag': true },
+      { 'name': 'Attila',    'drag': true },
+      { 'name': 'Puntone',   'drag': true },
+      { 'name': 'Bonnie',    'drag': true },
+      { 'name': 'Remi',      'drag': true },
+      { 'name': 'Grigio',    'drag': true },
+      { 'name': 'Mosso',     'drag': true },
+      { 'name': 'Nordin',    'drag': true }
+    ];
+    // store the object
+    $scope.playersDefault.forEach(function(player) {
+      console.log('player:', player);
+      playerFactory.add(player);
+    });
   };
 
 });
@@ -69,36 +128,6 @@ var MainCtrl = function($scope, fireService) {
 */
 
 /*
-  $scope.setup = function () {
-    $scope.sports = [
-      { 'name': 'Calcio a 5', 'players': 5 },
-      { 'name': 'Calcio a 7', 'players': 7 },
-      { 'name': 'Calcio a 8', 'players': 8 },
-      { 'name': 'Calcio',     'players': 11 },
-      { 'name': 'Rugby',      'players': 15 },
-    ];
-    $scope.load();
-    // JUST TO DEBUG...
-    if ($scope.players === null) {
-      $scope.players = [
-        { 'name': 'Frinks',    'drag': true },
-        { 'name': 'Lucio',     'drag': true },
-        { 'name': 'Soletta',   'drag': true },
-        { 'name': 'Paoloalgo', 'drag': true },
-        { 'name': 'Marcotono', 'drag': true },
-        { 'name': 'Attila',    'drag': true },
-        { 'name': 'Puntone',   'drag': true },
-        { 'name': 'Bonnie',    'drag': true },
-        { 'name': 'Remi',      'drag': true },
-        { 'name': 'Grigio',    'drag': true },
-        { 'name': 'Mosso',     'drag': true },
-        { 'name': 'Nordin',    'drag': true }
-      ];
-      // put the object to storage
-      $scope.store();
-    }
-    //
-
     $scope.colors = [
       {name:'black', shade:'dark'},
       {name:'white', shade:'light'},

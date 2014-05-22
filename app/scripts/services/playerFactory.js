@@ -2,14 +2,13 @@
 
 app.factory('playerFactory',
   function($firebase, FIREBASE_URL) {
-    var ref = new Firebase(FIREBASE_URL + '/' + 'players');
+    var url = FIREBASE_URL + '/' + 'players';
+    var ref = new Firebase(url);
     var players = $firebase(ref);
 
     return {
+      ref: ref,
       all: players,
-      //allPlayers: function() {
-      //  return $firebase(ref.child('/players'));
-      //},
       add: function(player) {
         return players.$add(player);
       },
