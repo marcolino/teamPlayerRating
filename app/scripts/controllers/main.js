@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, sportFactory, playerFactory) {
+app.controller('MainCtrl', function ($scope, sportFactory, playerFactory, notificationFactory) {
   $scope.teamA = [];
   $scope.teamB = [];
   $scope.teamSelected = null;
@@ -26,23 +26,19 @@ app.controller('MainCtrl', function ($scope, sportFactory, playerFactory) {
     //console.info('target.id:', id);
     if (id) { // selected a team
       $("div[id^='team']").css({ opacity: '0.3', 'border-width': '7' });
-      $("div[id='" + id + "']").css({ opacity: '1.2', 'border-width': '7' });
+      $("div[id='" + id + "']").css({ opacity: '1.0', 'border-width': '7' });
       $scope.teamSelected = (id === 'teamA' ? $scope.teamA : $scope.teamB);
       console.info('Selected', id);
     } else {
       var name = element.target.firstChild.data;
       if (name) { // selected a player in team to remove it
-        //console.log("PLAYER IN TEAM: REMOVE IT!");
         if ($scope.teamSelected.containsProperty('name', name)) {
           // remove this player from this team, and put it in players available
           var obj = $scope.teamSelected.removeObjectByProperty('name', name);
-          //console.log('obj:', obj);
           $scope.playersAvailable.push(obj);
-          //console.log('Player [' + name + '] removed from ' + $scope.teamSelected);
         }
       } else {
-        // TODO: handle errors!
-        console.error('empty element.target.firstChild.data:', element.target.firstChild, '!!!');
+        notificationFactory.error('empty element.target.firstChild.data: ' + JSON.stringify(element.target.firstChild) + ' !');
       }
     }
   }
@@ -53,21 +49,17 @@ app.controller('MainCtrl', function ($scope, sportFactory, playerFactory) {
     //console.info('element.target.firstChild.data:', element.target.firstChild.data);
     if (name) {
       if (!$scope.teamSelected) { // TODO: better handle error...
-        alert("Please select a team!");
+        notificationFactory.warning("Please select a team!");
         return;
       }
       if ($scope.teamSelected.length >= $scope.playersMax) return false;
-
       $scope.player = { 'name': name, 'drag': true }; // TODO: add all properties...
-
       $scope.teamSelected.push($scope.player);
-console.log("teamSelected:", $scope.teamSelected);
-    
       $scope.playersAvailable.removeObjectByProperty('name', name);
-
       console.log('Player [' + name + '] assigned to ' + $scope.teamSelected);
     } else {
       console.error('empty name element.target:', element.target, '!!!');
+      notificationFactory.error('empty name element.target: ' + JSON.stringify(element.target) + ' !');
     }
   }
 
