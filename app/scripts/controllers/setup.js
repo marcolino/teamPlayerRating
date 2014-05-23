@@ -1,6 +1,17 @@
 'use strict';
 
-app.controller('SetupCtrl', function($scope, sportFactory, playerFactory) {
+app.controller('SetupCtrl', function($scope, stateFactory, sportFactory, playerFactory) {
+  $scope.s = stateFactory.state;
+  $scope.$watch('state', function (newVal, oldVal) {
+    console.info('SETUP WATCH - new state:', newVal, 'old state:', oldVal);
+    $scope.s = newVal;
+  });
+
+
+  $scope.setup = function() {
+    $scope.s.teams = {};
+  };
+
   $scope.team1 = [];
   $scope.team2 = [];
 
@@ -13,7 +24,7 @@ app.controller('SetupCtrl', function($scope, sportFactory, playerFactory) {
     console.info('Sports loaded.');
     $scope.sports = sportFactory.all;
     console.info($scope.sports);
-    if (0) {
+    if (0) { // TODO: how to check if sports are empty?
       $scope.populateSports();
       $scope.sports = sportFactory.all;
     }
@@ -22,7 +33,7 @@ app.controller('SetupCtrl', function($scope, sportFactory, playerFactory) {
   $scope.players.$on('loaded', function() { 
     console.info('Players loaded.');
     $scope.players = playerFactory.all;
-    if (0) {
+    if (0) { // TODO: how to check if players are empty?
       $scope.populatePlayers();
       $scope.players = playerFactory.all;
     }
@@ -107,58 +118,6 @@ app.controller('SetupCtrl', function($scope, sportFactory, playerFactory) {
     });
   };
 
+  if (!$scope.s.status) { $scope.setup(); }
+
 });
-
-/*
-var MainCtrl = function($scope, fireService) {
-  itemService.setListToScope($scope, 'items');
-  $scope.newItem = {};
-
-  $scope.addNewItem = function() {
-    itemService.addItem($scope.newItem);
-    $scope.newItem = {};
-  };
-  $scope.deleteItem = function(id){
-    itemService.deleteItem(id);
-  };
-  $scope.removeAll = function() {
-    itemService.removeAll(); 
-  };
-};
-*/
-
-/*
-    $scope.colors = [
-      {name:'black', shade:'dark'},
-      {name:'white', shade:'light'},
-      {name:'red', shade:'dark'},
-      {name:'blue', shade:'dark'},
-      {name:'yellow', shade:'light'}
-    ];
-    $scope.myColor = $scope.colors[2]; // red
-  };
-
-  $scope.addPlayer = function(name) {
-    console.info(name);
-    $scope.players.push({ name: name, drag: true });
-    $scope.store();
-  };
-
-  $scope.removePlayer = function() {
-    $scope.store();
-  };
-
-  $scope.load = function() {
-    var players = localStorageService.get('players');
-    console.log(players);
-    //$scope.players = players;
-  };
-
-  $scope.store = function() {
-    localStorageService.remove(players);
-    localStorageService.set('players', JSON.stringify($scope.players));
-  };
-
-  $scope.setup();
-
-*/

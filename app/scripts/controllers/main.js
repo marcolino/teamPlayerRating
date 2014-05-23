@@ -1,67 +1,133 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, sportFactory, playerFactory, notificationFactory) {
+app.controller('MainCtrl', function ($scope, stateFactory, sportFactory, playerFactory, notificationFactory) {
+
+  // setup a scope state variable to share state among controllers
+  $scope.s = stateFactory.state;
+    $scope.$watch('state', function (newVal, oldVal) {
+    console.info('MAIN WATCH - new state:', newVal, 'old state:', oldVal);
+    $scope.s = newVal;
+  });
+  $scope.setup = function() {
+    $scope.s.match = {};
+    $scope.s.match.status = 'starting';
+  };
+
   $scope.teamA = [];
   $scope.teamB = [];
+  $scope.teamAname = 'Oranges';
+  $scope.teamBname = 'Blues';
+  $scope.teamAresult = '';
+  $scope.teamBresult = '';
   $scope.teamSelected = null;
+  $scope.teamsCompleted = false;
+  $scope.teamsClosed = false;
   $scope.sportSelected = "Calcio a 5";
   $scope.sports = sportFactory.all;
   $scope.players = playerFactory.all;
+  
+  //$scope.players.$bind($scope, "modelName"); // 3-way data binding
+
   sportFactory.ref.on('value', function(snapshot) {
-    var keys = snapshot.val();
-    //console.info("KEYS: ", getObjects(keys));
-    $scope.sportsAvailable = getObjects(keys);
+    var ids = snapshot.val();
+    $scope.sportsAvailable = getObjects(ids);
+    console.info('$sportsAvailable:', $scope.sportsAvailable);
+    console.info('sportsAvailable.containsProperty:', $scope.sportsAvailable.containsProperty);
     $scope.playersMax = $scope.sportsAvailable.containsProperty('name', $scope.sportSelected).players;
-    //var playersMax = $scope.sportsAvailable.containsProperty('name', $scope.sportSelected).players;
-    //console.info('playersMax:', playersMax);
   });
   playerFactory.ref.on('value', function(snapshot) {
-    var keys = snapshot.val();
-    //console.info("KEYS: ", getObjects(keys));
-    $scope.playersAvailable = getObjects(keys);
+    var ids = snapshot.val();
+    $scope.playersAvailable = getObjects(ids);
   });
  
   $scope.teamSelect = function(element) {
+//notificationFactory.success("OK!!!");
+    if ($scope.teamsClosed) return;
     var id = element.target.id;
-    //console.info('target.id:', id);
     if (id) { // selected a team
-      $("div[id^='team']").css({ opacity: '0.3', 'border-width': '7' });
-      $("div[id='" + id + "']").css({ opacity: '1.0', 'border-width': '7' });
-      $scope.teamSelected = (id === 'teamA' ? $scope.teamA : $scope.teamB);
-      console.info('Selected', id);
+      $scope.teamSetSelected(id);
     } else {
       var name = element.target.firstChild.data;
       if (name) { // selected a player in team to remove it
-        if ($scope.teamSelected.containsProperty('name', name)) {
-          // remove this player from this team, and put it in players available
-          var obj = $scope.teamSelected.removeObjectByProperty('name', name);
-          $scope.playersAvailable.push(obj);
+        // remove this player from his team, and put it in players available
+        var obj = null;
+        if ($scope.teamA.containsProperty('name', name)) {
+          obj = $scope.teamA.removeObjectByProperty('name', name);
         }
-      } else {
-        notificationFactory.error('empty element.target.firstChild.data: ' + JSON.stringify(element.target.firstChild) + ' !');
+        if ($scope.teamB.containsProperty('name', name)) {
+          obj = $scope.teamB.removeObjectByProperty('name', name);
+        }
+        if (obj) {
+          $scope.playersAvailable.push(obj);
+          $scope.teamsCompleted = $scope.checkTeamsCompleted();
+        } else { // this shouldn't happen...
+          notificationFactory.error('Selected element in team not found in team!');
+        }
+      } else { // this shouldn't happen...
+        notificationFactory.error('Selected element in team with empty first child data: ' + JSON.stringify(element.target.firstChild) + ' !');
       }
     }
   }
 
   $scope.playerSelect = function(element) {
-    //console.log("playerSelect(element):", element);
+    if ($scope.teamsClosed) return;
     var name = element.target.firstChild.data;
-    //console.info('element.target.firstChild.data:', element.target.firstChild.data);
     if (name) {
       if (!$scope.teamSelected) { // TODO: better handle error...
         notificationFactory.warning("Please select a team!");
-        return;
+        return false;
       }
-      if ($scope.teamSelected.length >= $scope.playersMax) return false;
+      if ($scope.teamSelected.length >= $scope.playersMax) {
+        notificationFactory.info('This team is "complete"');
+        return false;
+      }
       $scope.player = { 'name': name, 'drag': true }; // TODO: add all properties...
       $scope.teamSelected.push($scope.player);
       $scope.playersAvailable.removeObjectByProperty('name', name);
       console.log('Player [' + name + '] assigned to ' + $scope.teamSelected);
-    } else {
-      console.error('empty name element.target:', element.target, '!!!');
-      notificationFactory.error('empty name element.target: ' + JSON.stringify(element.target) + ' !');
+    } else { // this shouldn't happen...
+      console.error('empty name element.target:', element.target, '!');
+      notificationFactory.error('Empty name element target: ', element.target);
+      return false;
     }
+    $scope.teamsCompleted = $scope.checkTeamsCompleted();
+    return true;
   }
+
+  $scope.checkTeamsCompleted = function() {
+    // check if all teams are complete
+    if (
+      ($scope.teamA.length === $scope.playersMax) &&
+      ($scope.teamB.length === $scope.playersMax)
+    ) {
+      console.info('All teams are complete');
+      return true;
+    }
+    return false;
+  }
+
+  $scope.teamsClose = function() {
+    if ($scope.checkTeamsCompleted()) {
+      $scope.teamsSetClosed();
+    }
+  };
+
+  $scope.teamSetSelected = function(id) {
+    $("div[id^='team']").css({ opacity: '0.3', 'b_order-width': '3' });
+    $("input[id^='label-team']").css({ opacity: '0.3', 'b_order-width': '3' });
+    $("div[id='" + id + "']").css({ opacity: '1.0', 'b_order-width': '6' });
+    $("input[id='label-" + id + "']").css({ opacity: '1.0', 'b_order-width': '6' });
+    $scope.teamSelected = (id === 'teamA' ? $scope.teamA : $scope.teamB);
+    console.info('Team', id, 'selected');
+  };
+
+  $scope.teamsSetClosed = function() {
+    $("div[id^='team']").css({ opacity: '1.0', 'b_order-width': '9' });
+    $("input[id^='label-team']").css({ opacity: '1.0', 'b_order-width': '9' });
+    $('input[id^="label-team"]').attr("disabled", true);
+    $scope.teamsClosed = true;
+    console.info('Teams Closed');
+  };
 
   function isTouchDevice() {
     return 'ontouchstart' in window // works on most browsers 
@@ -111,5 +177,8 @@ app.controller('MainCtrl', function ($scope, sportFactory, playerFactory, notifi
     }
     return null;
   }
+
+
+  if (!$scope.s.status) { $scope.setup(); }
 
 });

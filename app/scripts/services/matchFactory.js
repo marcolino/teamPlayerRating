@@ -1,19 +1,19 @@
 'use strict';
 
-app.factory('sportFactory',
+app.factory('matchFactory',
   function($firebase, FIREBASE_URL) {
-    var url = FIREBASE_URL + '/' + 'sports';
+    var url = FIREBASE_URL + '/' + 'match';
     var ref = new Firebase(url);
-    var sports = $firebase(ref);
+    var matches = $firebase(ref);
 
     return {
       ref: ref,
-      all: sports,
-      add: function(sport) {
-        return sports.$add(sport);
+      all: match,
+      add: function(match) {
+        return matches.$add(match);
       },
       find: function(id) {
-        return sports.$child(id);
+        return matches.$child(id);
       },
       findByProperty: function(property, value) {
         var ret;
@@ -30,7 +30,7 @@ app.factory('sportFactory',
         return ret;
       },
       remove: function(id) {
-        return sports.$remove(id);
+        return matches.$remove(id);
       },
       delete: function(id) { return this.remove(id); } // alias
     };
