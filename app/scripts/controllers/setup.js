@@ -1,16 +1,14 @@
 'use strict';
 
-app.controller('SetupCtrl', function($scope, stateFactory, sportFactory, playerFactory) {
-  $scope.s = stateFactory.state;
-  $scope.$watch('state', function (newVal, oldVal) {
+app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, playerFactory) {
+  $scope.match = stateFactory.match;
+  //$scope.s = stateFactory.state;
+  $scope.$watch('match', function (newVal, oldVal) {
     console.info('SETUP WATCH - new state:', newVal, 'old state:', oldVal);
-    $scope.s = newVal;
+    $scope.match = newVal;
   });
 
-
-  $scope.setup = function() {
-    $scope.s.teams = {};
-  };
+  $scope.teams = {};
 
   $scope.team1 = [];
   $scope.team2 = [];
@@ -98,18 +96,18 @@ app.controller('SetupCtrl', function($scope, stateFactory, sportFactory, playerF
   $scope.populatePlayers = function() {
     console.info('NO PLAYERS, POPULATING...');
     $scope.playersDefault = [
-      { 'name': 'Frinks',    'drag': true },
-      { 'name': 'Lucio',     'drag': true },
-      { 'name': 'Soletta',   'drag': true },
-      { 'name': 'Paoloalgo', 'drag': true },
-      { 'name': 'Marcotono', 'drag': true },
-      { 'name': 'Attila',    'drag': true },
-      { 'name': 'Puntone',   'drag': true },
-      { 'name': 'Bonnie',    'drag': true },
-      { 'name': 'Remi',      'drag': true },
-      { 'name': 'Grigio',    'drag': true },
-      { 'name': 'Mosso',     'drag': true },
-      { 'name': 'Nordin',    'drag': true }
+      { 'name': 'Frinks',    'skill': 50 },
+      { 'name': 'Lucio',     'skill': 50 },
+      { 'name': 'Soletta',   'skill': 50 },
+      { 'name': 'Paoloalgo', 'skill': 50 },
+      { 'name': 'Marcotono', 'skill': 50 },
+      { 'name': 'Attila',    'skill': 50 },
+      { 'name': 'Puntone',   'skill': 50 },
+      { 'name': 'Bonnie',    'skill': 50 },
+      { 'name': 'Remi',      'skill': 50 },
+      { 'name': 'Grigio',    'skill': 50 },
+      { 'name': 'Mosso',     'skill': 50 },
+      { 'name': 'Nordin',    'skill': 50 }
     ];
     // store the object
     $scope.playersDefault.forEach(function(player) {
@@ -117,7 +115,5 @@ app.controller('SetupCtrl', function($scope, stateFactory, sportFactory, playerF
       playerFactory.add(player);
     });
   };
-
-  if (!$scope.s.status) { $scope.setup(); }
 
 });

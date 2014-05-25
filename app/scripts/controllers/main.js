@@ -1,18 +1,18 @@
 'use strict';
 
 app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory) {
-
-  // setup a scope state variable to share state among controllers
-  $scope.s = stateFactory.state;
-    $scope.$watch('state', function (newVal, oldVal) {
-    console.info('MAIN WATCH - new state:', newVal, 'old state:', oldVal);
-    $scope.s = newVal;
+  //$scope.s = stateFactory.state;
+  $scope.match = stateFactory.match;
+  $scope.$watch('match', function (newVal, oldVal) {
+    console.info('SETUP WATCH - new state:', newVal, 'old state:', oldVal);
+    $scope.match = newVal;
   });
+/*
   $scope.setup = function() {
     $scope.s.match = {};
     $scope.s.match.status = 'starting';
   };
-
+*/
   $scope.teamA = [];
   $scope.teamB = [];
   $scope.teamAname = 'Oranges';
@@ -95,7 +95,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   }
 
   $scope.checkTeamsCompleted = function() {
-    // check if all teams are complete
+    // check if all teams are completed
     if (
       ($scope.teamA.length === $scope.playersMax) &&
       ($scope.teamB.length === $scope.playersMax)
@@ -185,8 +185,5 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     }
     return null;
   }
-
-
-  if (!$scope.s.status) { $scope.setup(); }
 
 });
