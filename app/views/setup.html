@@ -1,8 +1,6 @@
 <div>
-
   <h2>Setup</h2>
   {{ state.x }}
-
   <div>
     <ul>
       <li ng-repeat="(k,v) in players">name: {{v.name}} - skill: {{v.skill}} <button ng-click="removePlayer(k)"> x </button></li>
@@ -21,55 +19,4 @@
       <li ng-repeat="(k,v) in sports">{{v.name}} - players: {{v.players}} <button ng-click="removeSport(k)"> x </button></li>
     </ul> 
   </div>
-
-<!--
-  <h4>Sports</h4>
-  <ul>
-    <li ng-repeat="sport in sports">
-      <input ng-model="sport.name">
-      [<a href ng-click="sports.splice($index, 1)">x</a>]
-    </li>
-    <li>
-      [<a href ng-click="sports.push({})"><b>+</b></a>]
-    </li>
-  </ul>
-
-  <h4>Players</h4>
-  <ul>
-    <li ng-repeat="player in players">
-      <input ng-model="player.name">
-      [<a href ng-click="players.splice($index, 1); removePlayer();">x</a>]
-    </li>
-    <li>
-      <input ng-model="player.name">
-      [<a href ng-click="addPlayer(player.name);"><b>+</b></a>]
-    </li>
-  </ul>
--->
-
-<!--
-  <hr/>
-  Color (null not allowed):
-  <select ng-model="myColor" ng-options="color.name for color in colors"></select><br>
-
-  Color (null allowed):
-  <span  class="nullable">
-    <select ng-model="myColor" ng-options="color.name for color in colors">
-      <option value="">-- choose color --</option>
-    </select>
-  </span><br/>
-
-  Color grouped by shade:
-  <select ng-model="myColor" ng-options="color.name group by color.shade for color in colors">
-  </select><br/>
-
-
-  Select <a href ng-click="myColor = { name:'not in list', shade: 'other' }">bogus</a>.<br>
-  <hr/>
-  Currently selected: {{ {selected_color:myColor}  }}
-  <div style="border:solid 1px black; height:20px"
-       ng-style="{'background-color':myColor.name}">
-  </div>
--->
-
 </div>

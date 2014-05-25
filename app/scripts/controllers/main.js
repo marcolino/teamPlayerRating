@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, stateFactory, sportFactory, playerFactory, notificationFactory) {
+app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory) {
 
   // setup a scope state variable to share state among controllers
   $scope.s = stateFactory.state;
@@ -113,20 +113,28 @@ app.controller('MainCtrl', function ($scope, stateFactory, sportFactory, playerF
   };
 
   $scope.teamSetSelected = function(id) {
-    $("div[id^='team']").css({ opacity: '0.3', 'b_order-width': '3' });
-    $("input[id^='label-team']").css({ opacity: '0.3', 'b_order-width': '3' });
-    $("div[id='" + id + "']").css({ opacity: '1.0', 'b_order-width': '6' });
-    $("input[id='label-" + id + "']").css({ opacity: '1.0', 'b_order-width': '6' });
+    $("div[id^='team']").css({ opacity: '0.3' });
+    $("input[id^='label-team']").css({ opacity: '0.3' });
+    $("div[id='" + id + "']").css({ opacity: '1.0' });
+    $("input[id='label-" + id + "']").css({ opacity: '1.0' });
     $scope.teamSelected = (id === 'teamA' ? $scope.teamA : $scope.teamB);
     console.info('Team', id, 'selected');
   };
 
   $scope.teamsSetClosed = function() {
-    $("div[id^='team']").css({ opacity: '1.0', 'b_order-width': '9' });
-    $("input[id^='label-team']").css({ opacity: '1.0', 'b_order-width': '9' });
+    $("div[id^='team']").css({ opacity: '1.0' });
+    $("input[id^='label-team']").css({ opacity: '1.0' });
     $('input[id^="label-team"]').attr("disabled", true);
     $scope.teamsClosed = true;
     console.info('Teams Closed');
+  };
+
+  $scope.matchClose = function() {
+    if (!$scope.teamsClosed) {
+      return;
+    }
+    // TODO: check scores
+    $location.path('/statistics');
   };
 
   function isTouchDevice() {

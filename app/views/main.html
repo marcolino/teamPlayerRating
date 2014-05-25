@@ -4,8 +4,9 @@
   }
   .container-lockerroom {
     padding: 0.8em;
+    max-height: 16.0em;
   }
-  .container-results {
+  .container-scores {
     padding: 0.8em;
   }
   .court {
@@ -42,23 +43,36 @@
   }
   .lockerroom {
     padding: 0.7em;
-    opacity: 1.0;
-    b_ackground: url('images/bricks.png') repeat scroll 0% 0% transparent;
-    b_ackground-color: #683c3c;
     background-color: #333;
     border: 4px solid #888;
     -webkit-border-radius: 7px;
        -moz-border-radius: 7px;
             border-radius: 7px;
+    max-height: 16.0em;
+    overflow: auto;
   }
-  .results {
-    padding: 0.7em;
-    opacity: 1.0;
-    background-color: yellow;
-    border: 4px solid #444;
+  .scores {
+    padding: 0.8em;
+    color: #eee;
+    background-color: #444;
+     font-size:1.6em;
+    border: 4px solid #888;
     -webkit-border-radius: 7px;
        -moz-border-radius: 7px;
             border-radius: 7px;
+  }
+  .score-input-container {
+    padding: 0.1em;
+    padding-bottom: 0.4em;
+  }
+  .score-input-container-a {
+    text-align: right;
+  }
+  .score-input-container-b {
+    text-align: left;
+  }
+  .score-input {
+    font-size: 1.8em; max-width: 1.8em; background-color: #222; color: #eee; text-align: right; padding-right: 0.2em;
   }
   .court-a {
     border-color: #f40;
@@ -74,19 +88,10 @@
     color: #000;
     border: 1px solid #222222;
   }
-/*
-  .player-team-a {
-    border: 1px solid #f40;
-  }
-  .player-team-b {
-    border: 1px solid #05e;
-  }
-*/
 </style>
-{{ state.x }}
 <div class="disable-select ng-cloak">
 
-  <div class="container-fixed container-court">
+  <div class="container-fluid container-court">
     <div class="row">
       <div class="col-xs-6">
         <div id="teamA" ng-click="teamSelect($event)" class="court court-a" ng-model='teamA'>
@@ -113,7 +118,7 @@
     <button class="btn btn-lg btn-primary" type="button" ng-click="teamsClose();">Close teams and Play!</button>
   </div>
 
-  <div class="container-fixed container-lockerroom" ng-show="!teamsClosed">
+  <div class="container-fluid container-lockerroom" ng-show="!teamsClosed">
     <div class="lockerroom">
       <span ng-repeat="(key, item) in playersAvailable">
         <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="players" ng-hide="!item.name">{{item.name}}</div>
@@ -121,21 +126,25 @@
     </div>
   </div>
 
-  <div class="container-fixed container-results" ng-show="teamsClosed">
-    <div class="span12 results text-center">
+  
+  <div class="container-fluid container-scores text-center" ng-show="teamsClosed">
+    <div class="scores">
       <div class="row">
-        <div class="col-xs-12" style="text-align:center; font-size:2.0em;">
-          <label style="color:black;">Risultato finale</label>
+        <div class="col-xs-12">Final match score</div>
+      </div>
+      <div class="row">
+        <div class="col-xs-6 score-input-container score-input-container-a">
+          <input type="text" class="score-input court-a" valid-score ng-model="teamAscore" />
+        </div>
+        <div class="col-xs-6 score-input-container score-input-container-b">
+          <input type="text" class="score-input court-b" valid-score ng-model="teamBscore" />
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-6" style="text-align: right; font-size: 3.0em;">
-          <input id="result-teamA" type="text" class="result-label result-label-a" style="text-align: right; max-width: 90px; padding-right:10px;" ng-model="teamAresult">
+        <div class="col-xs-12">
+          <button class="btn btn-lg btn-primary" type="button" ng-click="matchClose();">Confirm score and calculate ratings</button>
         </div>
-        <div class="col-xs-6" style="text-align: left; font-size: 3.0em;">
-          <input id="result-teamB" type="text" class="result-label result-label-b"  style="text-align: right; max-width: 90px; padding-right:10px;" ng-model="teamBresult">
-        </div>
-        </div>
+      </div>
     </div>
   </div>
 
