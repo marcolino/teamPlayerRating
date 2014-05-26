@@ -9,7 +9,7 @@ app.directive('validScore', function() {
       }
 
       ngModelCtrl.$parsers.push(function(val) {
-        var clean = val.replace(/[^0-9]+/g, '').replace(/^0/, '');
+        var clean = val.replace(/[^0-9]+/g, '').replace(/^0([0-9])/, '$1');
         if (val !== clean) {
           ngModelCtrl.$setViewValue(clean);
           ngModelCtrl.$render();

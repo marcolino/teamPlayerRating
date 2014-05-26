@@ -6,11 +6,20 @@ app.factory('playerFactory',
     var ref = new Firebase(url);
     var players = $firebase(ref);
 
+/*
+var name = 'me';
+var newScore = 7;
+var refUser = ref.child(name);
+// use setWithPriority to put the name / score in Firebase, and set the priority to be the score
+refUser.setWithPriority({ name: name, score: newScore }, newScore);
+*/
+
     return {
       ref: ref,
       all: players,
       add: function(player) {
-        return players.$add(player);
+        ref.child(player.name).set(player);
+        //ref.child(player.name).setWithPriority(player, priority);
       },
       find: function(id) {
         return players.$child(id);

@@ -11,33 +11,33 @@
   <div class="container-fluid container-court">
     <div class="row">
       <div class="col-xs-6">
-        <div id="teamA" ng-click="teamSelect($event)" class="court court-a" ng-model='teamA'>
-          <div class="btn btn-warning player player-team-a" ng-repeat="item in teamA" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
+        <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="teams['A'].players">
+          <div class="btn btn-warning player player-team-a" ng-repeat="item in teams['A'].players" ng-show="item.name" ng-class="{teamSelected: true}" ng-model="teamA">{{item.name}}</div>
         </div>
       </div>
       <div class="col-xs-6">
-        <div id="teamB" ng-click="teamSelect($event)" class="court court-b" ng-model='teamB'>
-          <div class="btn btn-warning player player-team-b" ng-repeat="item in teamB" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
+        <div id="teamB" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-b': true, 'team-selected': isTeamSelected('B')}" ng-model="teams['B'].players">
+          <div class="btn btn-warning player player-team-b" ng-repeat="item in teams['B'].players" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <input id="label-teamA" type="text" class="team-label team-label-a" ng-model="teamAname">
+        <input id="label-teamA" type="text" class="team-label team-label-a" ng-disabled="teams.closed" ng-model="teams['A'].name">
       </div>
       <div class="col-xs-6">
-        <input id="label-teamB" type="text" class="team-label team-label-b" ng-model="teamBname">
+        <input id="label-teamB" type="text" class="team-label team-label-b" ng-disabled="teams.closed" ng-model="teams['B'].name">
       </div>
     </div>
   </div>
 
   <div class="container-fluid">
-    <div class="span12 text-center" ng-show="teamsCompleted && !teamsClosed">
+    <div class="span12 text-center" ng-show="teams.completed && !teams.closed">
       <button class="btn btn-lg btn-primary" type="button" ng-click="teamsClose();">Close teams and Play!</button>
     </div>
   </div>
 
-  <div class="container-fluid container-lockerroom" ng-show="!teamsClosed">
+  <div class="container-fluid container-lockerroom" ng-show="!teams.closed">
     <div class="lockerroom">
       <span ng-repeat="(key, item) in playersAvailable">
         <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="players" ng-hide="!item.name">{{item.name}}</div>
@@ -45,7 +45,7 @@
     </div>
   </div>
   
-  <div class="container-fluid container-scores text-center" ng-show="teamsClosed">
+  <div class="container-fluid container-scores text-center" ng-show="teams.closed">
     <div class="scores">
       <div class="row">
         <div class="col-xs-12">Final match score</div>

@@ -54,6 +54,7 @@ app.factory('notificationFactory', function ($timeout) {
       }
     },
     error: function () {
+      var text = stringify.apply(this, arguments);
       if (last['error'] !== text) {
         toastr.error(text);
         $timeout(function() { resetLast('error') }, toastr.options.timeOut, false);

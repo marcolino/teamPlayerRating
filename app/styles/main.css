@@ -54,6 +54,15 @@ ul {
      -moz-border-radius: 7px;
           border-radius: 7px;
 }
+.court-a {
+  border-color: #f40;
+}
+.court-b {
+  border-color: #05e;
+}
+.team-selected {
+  opacity: 1.0 !important;
+}
 .team-label {
   width: 100%;
   min-width: 152px;
@@ -112,12 +121,6 @@ ul {
   background-color: #222;
   text-align: right;
   padding-right: 0.2em;
-}
-.court-a {
-  border-color: #f40;
-}
-.court-b {
-  border-color: #05e;
 }
 .player {
   width: 120px;

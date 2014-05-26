@@ -10,7 +10,7 @@ app.factory('sportFactory',
       ref: ref,
       all: sports,
       add: function(sport) {
-        return sports.$add(sport);
+        ref.child(sport.name).set(sport);
       },
       find: function(id) {
         return sports.$child(id);

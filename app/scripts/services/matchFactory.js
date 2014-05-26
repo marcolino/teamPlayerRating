@@ -8,7 +8,7 @@ app.factory('matchFactory',
 
     return {
       ref: ref,
-      all: match,
+      all: matches,
       add: function(match) {
         return matches.$add(match);
       },
