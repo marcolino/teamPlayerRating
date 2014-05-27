@@ -3,6 +3,7 @@
 app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, playerFactory) {
   $scope.match = stateFactory.match;
   $scope.teams = stateFactory.teams;
+  $scope.players = stateFactory.players;
 console.log('setup - $scope.teams:', $scope.teams);
 /*
   $scope.$watch('match', function (newVal, oldVal) {
@@ -61,11 +62,11 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   $scope.populateSports = function() {
     console.info('POPULATING SPORTS');
     $scope.sportsDefault = [
-      { 'name': 'Calcio a 5', 'players': 5 },
-      { 'name': 'Calcio a 7', 'players': 7 },
-      { 'name': 'Calcio a 8', 'players': 8 },
-      { 'name': 'Calcio',     'players': 11 },
-      { 'name': 'Rugby',      'players': 15 },
+      { 'name': 'Calcio a 5', 'playersMax': 5 },
+      { 'name': 'Calcio a 7', 'playersMax': 7 },
+      { 'name': 'Calcio a 8', 'playersMax': 8 },
+      { 'name': 'Calcio',     'playersMax': 11 },
+      { 'name': 'Rugby',      'playersMax': 15 },
     ];
     // store the object
     $scope.sportsDefault.forEach(function(sport) {

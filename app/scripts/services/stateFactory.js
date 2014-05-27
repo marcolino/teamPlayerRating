@@ -5,10 +5,4 @@
  */
 app.factory('stateFactory', function() {
   return {};
-  /*
-  var state = {};
-  return {
-    state: state
-  };
-  */
 });
