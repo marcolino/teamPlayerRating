@@ -13,7 +13,6 @@ html, body {
 }
 .container {
 	margin: auto;
-	po_sition: relative;
 }
 .disable-select {
   -webkit-touch-callout: none !important;

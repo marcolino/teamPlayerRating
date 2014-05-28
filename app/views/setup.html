@@ -7,8 +7,8 @@ i {
    margin: 2px;
 }
 */
-::-webkit-scrollbar { 
-    display: none; 
+.voffset10 {
+  margin-top: 10px;
 }
 .table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
   background-color: #333;
@@ -20,14 +20,10 @@ i {
       <li class="active"><a href="#tab-players">Players</a></li>
       <li><a href="#tab-sports">Sports</a></li>
     </ul>
-    <div class="tab-content" s_tyle="width: 25%">
+    <div class="tab-content">
       <div class="tab-players" id="tab-players">
-        <div>
-          tab players 
-        </div>
-        <a href="#">skill <span class="badge">42</span></a>
         </ul>
-        <div style="position: relative; height: 300px; overflow-y: auto;">
+        <div class="voffset10">
           <table class="table NOtable-striped table-bordered table-condensed table-hover" style="width: auto;">
             <tr>
               <th>
@@ -105,24 +101,19 @@ i {
           </div>
         </div>
       </div>
-      <div class="tab-sports" id="tab-sports">
+      <div class="tab-sports" id="tab-sports" ng-show="!!false">
         tab sports
       </div>
     </div>
   </div>
 </div>
 
+<!--
+  <a href="#">skill <span class="badge">42</span></a>
+-->
 
 
-
-
-
-
-
-
-
-
-
+<!--
 
 <div>
   <h2>Setup</h2>
@@ -156,3 +147,5 @@ i {
   </div>
 
 </div>
+
+-->
