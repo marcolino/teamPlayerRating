@@ -4,7 +4,11 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   $scope.match = stateFactory.match;
   $scope.teams = stateFactory.teams;
   $scope.players = stateFactory.players;
-console.log('setup - $scope.teams:', $scope.teams);
+
+  var share = stateFactory;
+  $scope.share = share;
+
+//console.log('setup - $scope.teams:', $scope.teams);
 /*
   $scope.$watch('match', function (newVal, oldVal) {
     $scope.match = newVal;
@@ -21,7 +25,7 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   //$scope.players = playerFactory.all;
   //console.info('$scope.players', $scope.players);
 
-  $scope.sports.$on('loaded', function() { 
+  $scope.sports.$on('loaded', function () { 
     //console.info('Sports loaded.');
     $scope.sports = sportFactory.all;
     if ($scope.sports.$value === null) {
@@ -31,7 +35,7 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     }
   });
 
-  $scope.players.$on('loaded', function() { 
+  $scope.players.$on('loaded', function () { 
     //console.info('Players loaded.');
     $scope.players = playerFactory.all;
     if ($scope.players.$value === null) {
@@ -44,22 +48,22 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   $scope.playerDefault = { name: '', skill: 50 };
   $scope.playerNew = angular.copy($scope.playerDefault);
 
-  $scope.addPlayer = function() {
+  $scope.addPlayer = function () {
     console.log('setup: addPlayer(): ', $scope.playerNew);
     playerFactory.add($scope.playerNew);
     $scope.playerNew = angular.copy($scope.playerDefault);
   };
 
-  $scope.removePlayer = function(id) {
+  $scope.removePlayer = function (id) {
     console.log('setup: removePlayer()');
     playerFactory.remove(id);
   };
-  $scope.removeAll = function() {
+  $scope.removeAll = function () {
     console.log('setup: removeAll()');
     playerFactory.delete();
   };
 
-  $scope.populateSports = function() {
+  $scope.populateSports = function () {
     console.info('POPULATING SPORTS');
     $scope.sportsDefault = [
       { 'name': 'Calcio a 5', 'playersMax': 5 },
@@ -74,7 +78,7 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     });
   };
 
-  $scope.populatePlayers = function() {
+  $scope.populatePlayers = function () {
     console.info('POPULATING PLAYERS');
     $scope.playersDefault = [
       { 'name': 'Frinks',    'skill': 50 },
@@ -100,6 +104,12 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     });
   };
 
-$scope.addMode = false;
+  $scope.addMode = false;
+  $scope.orderByPredicate = '-name';
+  $scope.toggleAddMode = function () {
+console.info("addMode :", $scope.addMode);
+    $scope.addMode = !$scope.addMode;
+console.info("addMode :", $scope.addMode);
+  };
 
 });

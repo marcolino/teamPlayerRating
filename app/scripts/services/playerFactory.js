@@ -18,6 +18,7 @@ refUser.setWithPriority({ name: name, score: newScore }, newScore);
       ref: ref,
       all: players,
       add: function(player) {
+        // ref.child().set(player); // TODO: test this: child(EMPTY) ...
         ref.child(player.name).set(player);
         //ref.child(player.name).setWithPriority(player, priority);
       },

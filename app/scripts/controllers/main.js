@@ -18,6 +18,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
       share.dateFormat = 'yyyy-MM-dd';
+
       sportFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
         share.teams.playersMax = ids[share.match.sport].playersMax;
@@ -25,6 +26,8 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
         share.playersAvailable = angular.copy(ids);
+console.info("share.players", share.players);
+console.info("share.playersAvailable", share.playersAvailable);
       });
     } else { console.info("NOT DOING INIT..."); }
   };
