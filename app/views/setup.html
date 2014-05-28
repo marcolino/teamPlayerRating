@@ -1,45 +1,64 @@
-<style>
-/*
-i {
-  cursor: pointer;
-}
-.btn {
-   margin: 2px;
-}
-*/
+<style type="text/css">
 .voffset10 {
   margin-top: 10px;
 }
-.table-hover tbody tr:hover td, .table-hover tbody tr:hover th {
+.table-hover thead {
+  color: #ccc;
+  background-color: #666;
+}
+.table-hover tbody tr:hover td,
+.table-hover tbody tr:hover th {
+  color: #fff;
   background-color: #333;
 }
+.table-auto-width {
+   width: auto;
+}
+.table-auto-width thead tr th {
+   padding: 0.2em 0.5em;
+   border-bottom: 0;
+}
+.table-auto-width tbody tr td {
+   padding: 0.2em 0.5em;
+}
+.vertical-middle {
+  vertical-align: middle;
+}
+.numerical {
+  text-align: right;
+}
 </style>
+
 <div ng-cloak>
   <div class="container-fluid">
+    <div class="tabbable">
     <ul class="nav nav-pills">
-      <li class="active"><a href="#tab-players">Players</a></li>
-      <li><a href="#tab-sports">Sports</a></li>
+      <li class="active">
+        <a data-target="#tab-players" data-toggle="pill">Players</a>
+      </li>
+      <li>
+        <a data-target="#tab-sports" data-toggle="pill">Sports</a>
+      </li>
     </ul>
+
     <div class="tab-content">
-      <div class="tab-players" id="tab-players">
-        </ul>
-        <div class="voffset10">
-          <table class="table NOtable-striped table-bordered table-condensed table-hover" style="width: auto;">
+
+      <div id="tab-players" class="tab-pane active">
+        <div class="voffset10"></div>
+        <table class="table table-bordered table-condensed table-hover table-auto-width">
+          <thead>
             <tr>
               <th>
                 <button type="button" class="btn btn-primary">
                   <span class="glyphicon glyphicon-plus" ng-click="toggleAddMode(v)"></span>
                 </button>
-<!--
-                <div class="btn-toolbar">
-                  <i class="btn glyphicon glyphicon-plus" ng-click="toggleAddMode()"></i>
-                </div>
--->
               </th>
               <th>Name</th>
               <th>Email</th>
               <th>Skill</th>
             </tr>
+          </thead>
+          <tbody>
             <tr ng-show="addMode">
               <td>
                 <div class="btn-toolbar">
@@ -58,9 +77,8 @@ i {
               <td>
                 <input ng-model="person.skill" />
               </td>
-
             </tr>
-            <tr ng-repeat="(k,v) in players | orderBy:'skill':true">
+            <tr class="vertical-middle" ng-repeat="(k,v) in players | orderBy:'skill':true">
               <td>
                 <div c_lass="btn-group">
                   <button type="button" class="btn btn-primary">
@@ -70,40 +88,34 @@ i {
                     <span class="glyphicon glyphicon-trash" ng-click="deletePerson(v)"></span>
                   </button>
                 </div>
-<!--
-                <div class="btn-toolbarNO" ng-show="v.editMode == null || v.editMode == false">
+                <div class="btn-toolbar" ng-show="v.editMode == true">
                   <div class="btn-group">
-                    <i class="btn glyphicon glyphicon-edit" ng-click="toggleEditMode(v)"></i>
-                    <i class="btn glyphicon glyphicon-trash" ng-click="deletePerson(v)"></i>
-                  </div>
-                </div>
--->
-                <div class="btn-toolbar" ng-show="v.editMode == true" style="text-align:center">
-                  <div class="btn-group" style="text-align:center">
                     <i class="btn glyphicon glyphicon-save" ng-click="updatePerson(v)"></i>
                     <i class="btn glyphicon glyphicon-remove" ng-click="toggleEditMode(v)"></i>
                   </div>
                 </div>
               </td>
-              <td style="vertical-align: middle;">
+              <td class="vertical-middle" style="vertical-align: middle;">
                 <span ng-show="v.editMode == null || v.editMode == false">{{v.name}}</span>
                 <input ng-model="v.name" ng-show="v.editMode == true" />
-              <td>
+              <td class="vertical-middle" style="vertical-align: middle;">
                 <span ng-show="v.editMode == null || v.editMode == false">{{v.email}}</span>
                 <input ng-model="v.name" ng-show="v.editMode == true" />
               </td>
-              <td>
+              <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <span ng-show="v.editMode == null || v.editMode == false">{{v.skill}}</span>
                 <input ng-model="v.name" ng-show="v.editMode == true" />
               </td>
             </tr>
-          </table>
-          </div>
-        </div>
+          </tbody>
+        </table>
       </div>
-      <div class="tab-sports" id="tab-sports" ng-show="!!false">
-        tab sports
+
+      <div id="tab-sports" class="tab-pane">
+        tab sports ...
       </div>
+
+    </div>
     </div>
   </div>
 </div>

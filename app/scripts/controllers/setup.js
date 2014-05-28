@@ -100,4 +100,7 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     });
   };
 
+$scope.addMode = false;
+$scope.editMode = true;
+
 });
