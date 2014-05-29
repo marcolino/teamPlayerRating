@@ -35,6 +35,4 @@ app.run(function (stateFactory) {
   stateFactory.match.date = new Date();
   stateFactory.match.status = 'starting';
   stateFactory.teams = {};
-
-  console.info(stateFactory.match.date);
 });

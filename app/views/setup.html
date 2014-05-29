@@ -2,7 +2,8 @@
 .voffset10 {
   margin-top: 10px;
 }
-.table-hover thead {
+.table-hover thead,
+.table-hover tfoot {
   color: #ccc;
   background-color: #666;
 }
@@ -18,6 +19,10 @@
    padding: 0.2em 0.5em;
    border-bottom: 0;
 }
+.table-auto-width tfoot tr td {
+   padding: 0.2em 0.5em;
+   border-bottom: 0;
+}
 .table-auto-width tbody tr td {
    padding: 0.2em 0.5em;
 }
@@ -27,6 +32,9 @@
 .numerical {
   text-align: right;
 }
+.ng-isolate-scope.in {
+  color: #222;
+</style>
 </style>
 
 <!--
@@ -59,7 +67,6 @@
 
 <div ng-cloak>
   <div class="container-fluid">
-    <div class="tabbable">
     <ul class="nav nav-pills">
       <li class="active">
         <a data-target="#tab-players" data-toggle="pill">Players</a>
@@ -71,14 +78,14 @@
 
     <div class="tab-content">
 
+      <div class="voffset10"></div>
       <div id="tab-players" class="tab-pane active">
-        <div class="voffset10"></div>
         <table class="table table-bordered table-condensed table-hover table-auto-width">
           <thead>
             <tr>
               <th>
-                <button type="button" class="btn btn-primary">
-                  <span class="glyphicon glyphicon-plus" ng-click="toggleAddMode()"></span>
+                <button type="button" class="btn btn-primary glyphicon glyphicon-plus"
+                 ng-click="toggleAddMode()">
                 </button>
               </th>
               <th>Name</th>
@@ -90,55 +97,79 @@
             <tr ng-show="addMode">
               <td>
                 <div style="white-space: nowrap;">
-                  <button type="button" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-ok" ng-click="addPlayer()"></span>
+                  <button type="button" class="btn btn-primary glyphicon glyphicon-ok"
+                   ng-click="addPlayer();">
                   </button>
-                  <button type="button" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-remove" ng-click="toggleAddMode()"></span>
+                  <button type="button" class="btn btn-primary glyphicon glyphicon-remove"
+                   ng-click="toggleAddMode()">
                   </button>
                 </div>
               </td>
               <td>
-                <input ng-model="person.name" />
+                <input ng-model="playerNew.name" ng-enter="addPlayer()" />
               </td>
               <td>
-                <input ng-model="person.email" />
+                <input ng-model="playerNew.email" />
               </td>
               <td>
-                <input ng-model="person.skill" />
+                <input ng-model="playerNew.skill" />
               </td>
             </tr>
             <tr class="vertical-middle" ng-repeat="v in players | orderBy:orderByPredicate:false">
               <td>
-                <div style="white-space: nowrap;">
-                  <button type="button" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-edit" ng-click="toggleEditMode(v)"></span>
+                <div style="white-space: nowrap;" ng-show="!v.editMode">
+                  <button type="button" class="btn btn-primary glyphicon glyphicon-edit"
+                   ng-click="toggleEditMode(v)">
                   </button>
-                  <button type="button" class="btn btn-primary">
-                    <span class="glyphicon glyphicon-trash" ng-click="deletePlayer(v)"></span>
+                  <button type="button" class="btn btn-primary glyphicon glyphicon-trash"
+                   ng-click="deletePlayer(v)">
                   </button>
                 </div>
-                <div class="btn-toolbar" ng-show="v.editMode == true">
+                <div class="btn-toolbar" ng-show="v.editMode">
+                  <!--
                   <div class="btn-group">
                     <i class="btn glyphicon glyphicon-save" ng-click="updatePerson(v)"></i>
                     <i class="btn glyphicon glyphicon-remove" ng-click="toggleEditMode(v)"></i>
                   </div>
+                  -->
+                  <div style="white-space: nowrap;">
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-save"
+                     ng-click="updatePlayer(v, playerEdit);">
+                    </button>
+                    <button type="button" class="btn btn-primary glyphicon glyphicon-remove"
+                     ng-click="toggleEditMode(v);">
+                    </button>
+                  </div>
                 </div>
               </td>
               <td class="vertical-middle" style="vertical-align: middle;">
-                <span ng-show="v.editMode == null || v.editMode == false">{{v.name}}</span>
-                <input ng-model="v.name" ng-show="v.editMode == true" />
+                <span ng-show="!v.editMode">{{v.name}}</span>
+                <input ng-model="playerEdit.name" ng-show="v.editMode" ui-keypress="{13: 'updatePlayer(v, playerEdit)'}" />
+              </td>
               <td class="vertical-middle" style="vertical-align: middle;">
-                <span ng-show="v.editMode == null || v.editMode == false">{{v.email}}</span>
-                <input ng-model="v.name" ng-show="v.editMode == true" />
+                <span ng-show="!v.editMode">{{v.email}}</span>
+                <input ng-model="playerEdit.email" ng-show="v.editMode" />
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
-                <span ng-show="v.editMode == null || v.editMode == false">{{v.skill}}</span>
-                <input ng-model="v.name" ng-show="v.editMode == true" />
+                <span ng-show="!v.editMode">{{v.skill}}</span>
+                <input ng-model="playerEdit.skill" ng-show="v.editMode" />
               </td>
             </tr>
           </tbody>
+          <tfoot>
+            <tr>
+              <td colspan="4"><!-- TODO: 4 should be in a variable -->
+                <button type="button" class="btn btn-primary glyphicon glyphicon-trash" n_g-disabled="empty(players)"
+                   ng-really-message="Are you really sure to remove ALL players?" ng-really-click="removeAll()"
+                </button>
+                <button type="button" class="btn btn-primary glyphicon glyphicon-upload" n_g-disabled="!empty(players)"
+                  ng-click="populatePlayers()">
+                </button>
+              </td>
+            </tr>
+          </tfoot>
         </table>
+        <div class="voffset10"></div>
       </div>
 
       <div id="tab-sports" class="tab-pane">
@@ -146,48 +177,5 @@
       </div>
 
     </div>
-    </div>
   </div>
 </div>
-
-<!--
-  <a href="#">skill <span class="badge">42</span></a>
--->
-
-
-<!--
-
-<div>
-  <h2>Setup</h2>
-
-  <div>
-    <ul>
-      <li ng-repeat="(k,v) in players">name: {{v.name}} - skill: {{v.skill}} <button ng-click="removePlayer(k)"> x </button></li>
-    </ul> 
-
-    <div>
-      <input type="text" ng-model="playerNew.name" />
-      <input type="number" ng-model="playerNew.skill" />
-      <button ng-click="addPlayer()">Add Player</button>
-      <button ng-click="removeAll()">Remove all players</button>
-    </div>
-
-    <hr>
-
-    <ul>
-      <li ng-repeat="(k,v) in sports">{{v.name}} - players: {{v.players}} <button ng-click="removeSport(k)"> x </button></li>
-    </ul> 
-
-    <div>
-      <input type="text" ng-model="sportNew.name" />
-      <input type="number" ng-model="sportNew.players" />
-      <button ng-click="addSport()">Add Player</button>
-      <button ng-click="removeAll()">Remove all sports</button>
-    </div>
-
-    <hr>
-  </div>
-
-</div>
-
--->

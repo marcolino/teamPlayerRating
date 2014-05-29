@@ -54,9 +54,9 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     $scope.playerNew = angular.copy($scope.playerDefault);
   };
 
-  $scope.removePlayer = function (id) {
+  $scope.removePlayer = function (player) {
     console.log('setup: removePlayer()');
-    playerFactory.remove(id);
+    playerFactory.remove(player.name);
   };
   $scope.removeAll = function () {
     console.log('setup: removeAll()');
@@ -81,21 +81,23 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   $scope.populatePlayers = function () {
     console.info('POPULATING PLAYERS');
     $scope.playersDefault = [
-      { 'name': 'Frinks',    'skill': 50 },
-      { 'name': 'Lucio',     'skill': 50 },
-      { 'name': 'Soletta',   'skill': 50 },
-      { 'name': 'Paoloalgo', 'skill': 50 },
-      { 'name': 'Marcotono', 'skill': 50 },
-      { 'name': 'Attila',    'skill': 50 },
-      { 'name': 'Puntone',   'skill': 50 },
-      { 'name': 'Bonnie',    'skill': 50 },
-      { 'name': 'Remi',      'skill': 50 },
-      { 'name': 'Grigio',    'skill': 50 },
-      { 'name': 'Mosso',     'skill': 50 },
-      { 'name': 'Nordin',    'skill': 50 },
-      { 'name': 'Hermes',    'skill': 50 },
-      { 'name': 'Cavallero', 'skill': 50 },
-      { 'name': 'Aleandro',  'skill': 50 }
+      { 'name': 'Frinks',            'skill': 50 },
+      { 'name': 'Lucio',             'skill': 50 },
+      { 'name': 'Soletta',           'skill': 50 },
+      { 'name': 'Paoloalgo',         'skill': 50 },
+      { 'name': 'Marcotono',         'skill': 50 },
+      { 'name': 'Attila',            'skill': 50 },
+      { 'name': 'Puntone',           'skill': 50 },
+      { 'name': 'Bonnie',            'skill': 50 },
+      { 'name': 'Remi',              'skill': 50 },
+      { 'name': 'Grigio',            'skill': 50 },
+      { 'name': 'Mosso',             'skill': 50 },
+      { 'name': 'Nordin',            'skill': 50 },
+      { 'name': 'Hermes',            'skill': 50 },
+      { 'name': 'Cavallero',         'skill': 50 },
+      { 'name': 'Aleandro',          'skill': 50 },
+      { 'name': 'Francescobeltocco', 'skill': 50 },
+      { 'name': 'Nuovoragazzino',    'skill': 50 },
     ];
     // store the object
     $scope.playersDefault.forEach(function(player) {
@@ -105,11 +107,41 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   };
 
   $scope.addMode = false;
-  $scope.orderByPredicate = '-name';
+  $scope.editMode = false;
+  $scope.orderByPredicate = 'name';
+
   $scope.toggleAddMode = function () {
-console.info("addMode :", $scope.addMode);
     $scope.addMode = !$scope.addMode;
 console.info("addMode :", $scope.addMode);
+  };
+
+  $scope.toggleEditMode = function (player) {
+console.info("tEM() - player:", player);
+console.info("tEM() - players[player.name]:", $scope.players[player.name]);
+    $scope.players[player.name].editMode = !$scope.players[player.name].editMode;
+console.info("$scope.players[player.name].editMode :", $scope.players[player.name].editMode);
+    if ($scope.players[player.name].editMode) {
+console.info("copying player to $scope.playerEdit");
+      $scope.playerEdit = angular.copy(player);
+console.info("$scope.playerEdit:", $scope.playerEdit);
+    }
+  };
+
+  $scope.updatePlayer = function (playerOld, playerNew) {
+console.log("updatePlayer()", playerOld.name, playerNew);
+    $scope.removePlayer(playerOld);
+    $scope.players[playerNew.name] = playerNew;
+console.info($scope.players[playerOld.name]);
+console.info($scope.players[playerNew.name]);
+    $scope.toggleEditMode(playerNew);
+  };
+
+  $scope.deletePlayer = function (player) {
+    $scope.removePlayer(player);
+  };
+
+  $scope.test = function () {
+    console.log("TEST");
   };
 
 });
