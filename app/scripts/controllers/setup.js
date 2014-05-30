@@ -123,6 +123,15 @@ console.log('tableColumns td', colCount);
     return colCount;
   };
 
+ $scope.tableRows = function (table) {
+    var rowCount = 0;
+    $('tr').each(function () {
+      rowCount++;
+    });
+console.log('tableRows', rowCount);
+    return rowCount;
+  };
+
   $scope.columns = $scope.tableColumns($('#table-players'));
   //$scope.columns = 1 + 3;
 console.info('columns:' + $scope.columns);
@@ -132,7 +141,7 @@ console.info('columns:' + $scope.columns);
 
   $scope.playersEmpty = function () {
 console.info('scope.playersEmpty:', $scope.players);
-    $scope.players || $scope.players.length === 0;
+    return ($scope.tableRows($('#table-players')) <= 3);
   }
 
   $scope.toggleAddMode = function () {
