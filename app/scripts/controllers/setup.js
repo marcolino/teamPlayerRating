@@ -29,9 +29,9 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     //console.info('Sports loaded.');
     $scope.sports = sportFactory.all;
     if ($scope.sports.$value === null) {
-      console.info("$scope.sports.$value === null, POPULATING...");
-      $scope.populateSports();
-      $scope.sports = sportFactory.all;
+      //console.info("$scope.sports.$value === null, POPULATING...");
+      //$scope.populateSports();
+      ////$scope.sports = sportFactory.all;
     }
   });
 
@@ -39,20 +39,22 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     //console.info('Players loaded.');
     $scope.players = playerFactory.all;
     if ($scope.players.$value === null) {
-      console.info("$scope.players.$value === null, POPULATING...");
-      $scope.populatePlayers();
-      $scope.players = playerFactory.all;
+      //console.info("$scope.players.$value === null, POPULATING...");
+      //$scope.populatePlayers();
+      ////$scope.players = playerFactory.all;
     }
   });
 
   $scope.playerDefault = { name: '', skill: 50 };
   $scope.playerNew = angular.copy($scope.playerDefault);
 
+/*
   $scope.addPlayer = function () {
     console.log('setup: addPlayer(): ', $scope.playerNew);
     playerFactory.add($scope.playerNew);
     $scope.playerNew = angular.copy($scope.playerDefault);
   };
+*/
 
   $scope.removePlayer = function (player) {
     console.log('setup: removePlayer()');
@@ -106,9 +108,32 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     });
   };
 
+  $scope.tableColumns = function (table) {
+    var colCount = 0;
+console.log('tableColumns start', colCount);
+    $('tr:nth-child(1) td').each(function () {
+      if ($(this).attr('colspan')) {
+        colCount += $(this).attr('colspan');
+console.log('tableColumns colspan', colCount);
+      } else {
+        colCount++;
+console.log('tableColumns td', colCount);
+      }
+    });
+    return colCount;
+  };
+
+  $scope.columns = $scope.tableColumns($('#table-players'));
+  //$scope.columns = 1 + 3;
+console.info('columns:' + $scope.columns);
   $scope.addMode = false;
   $scope.editMode = false;
   $scope.orderByPredicate = 'name';
+
+  $scope.playersEmpty = function () {
+console.info('scope.playersEmpty:', $scope.players);
+    $scope.players || $scope.players.length === 0;
+  }
 
   $scope.toggleAddMode = function () {
     $scope.addMode = !$scope.addMode;
@@ -127,6 +152,18 @@ console.info("$scope.playerEdit:", $scope.playerEdit);
     }
   };
 
+  $scope.addPlayer = function (toggle) {
+    console.log('setup: addPlayer(): ', $scope.playerNew);
+    if ($scope.playerNew.name) {
+      playerFactory.add($scope.playerNew);
+      $scope.playerNew = angular.copy($scope.playerDefault);
+    }
+    if (toggle) {
+console.log('TOGGLE');
+      $scope.toggleAddMode();
+    }
+  };
+
   $scope.updatePlayer = function (playerOld, playerNew) {
 console.log("updatePlayer()", playerOld.name, playerNew);
     $scope.removePlayer(playerOld);
@@ -140,8 +177,10 @@ console.info($scope.players[playerNew.name]);
     $scope.removePlayer(player);
   };
 
+  /*
   $scope.test = function () {
     console.log("TEST");
   };
+  */
 
 });

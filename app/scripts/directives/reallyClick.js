@@ -1,6 +1,6 @@
 'use strict';
 
-app.directive('ngReallyClick', function($modal) {
+app.directive('reallyClick', function($modal) {
   var ModalInstanceCtrl = function ($scope, $modalInstance) {
     $scope.ok = function () {
       $modalInstance.close();
@@ -14,16 +14,16 @@ app.directive('ngReallyClick', function($modal) {
   return {
     restrict: 'A',
     scope: {
-      ngReallyClick: "&",
+      reallyClick: "&",
       item: "="
     },
     link: function (scope, element, attrs) {
       element.bind( 'click', function() {
-        var message = attrs.ngReallyMessage || "Are you sure?";
+        var message = attrs.reallyMessage || "Are you sure?";
         /*
         // This works
         if (message && confirm(message)) {
-          scope.$apply(attrs.ngReallyClick);
+          scope.$apply(attrs.reallyClick);
         }
         //*/
 
@@ -37,7 +37,7 @@ app.directive('ngReallyClick', function($modal) {
         });
 
         modalInstance.result.then(function () {
-          scope.ngReallyClick({item:scope.item}); // raise an error : $digest already in progress
+          scope.reallyClick({item:scope.item}); // raise an error : $digest already in progress
         }, function() {
           // modal dismissed
         });
