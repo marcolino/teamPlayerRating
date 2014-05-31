@@ -11,8 +11,16 @@ html, body {
 	color: #eee;
 	background-color: #444;
 }
+a {
+  outline: 0 !important;
+}
+ul {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
 .container {
-	margin: auto;
+  margin: auto;
 }
 .disable-select {
   -webkit-touch-callout: none !important;
@@ -22,13 +30,17 @@ html, body {
       -ms-user-select: none !important;
           user-select: none !important;
 }
-a {
-  outline: 0 !important;
-}
-ul {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+#loading {
+  width: 100px;
+  height: 100px;
+  position: fixed;
+  top: 50%;
+  left: 50%;
+  background: transparent url(../images/spinner.gif) no-repeat center;
+  padding: 10px;
+  margin-left: -50px;
+  margin-top: -50px;
+  z-index: 2;
 }
 
 /* main view style */

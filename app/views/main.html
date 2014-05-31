@@ -37,8 +37,10 @@
 
   <div class="container-fluid container-lockerroom" ng-show="!share.teams.closed">
     <div class="lockerroom">
-      <span ng-repeat="(key, item) in share.playersAvailable">
-        <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="share.players" ng-hide="!item.name">{{item.name}}</div>
+      <span ng-repeat="(key, item) in share.playersAvailable" limit-text-length len="111">
+        <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="share.players" ng-hide="!item.name">
+          <div id="player-{{key}}">{{item.name}}</div>
+        </div>
       </span>
     </div>
   </div>

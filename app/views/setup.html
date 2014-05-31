@@ -64,6 +64,7 @@
   </table>
 </div>
 -->
+<div id="loading"></div>
 
 <div ng-cloak>
   <div class="container-fluid">
@@ -122,7 +123,7 @@
                    ng-click="toggleEditMode(v)">
                   </button>
                   <button type="button" class="btn btn-primary glyphicon glyphicon-trash"
-                   really-message="Are you really sure to remove player <i>{{v.name}}</i> ?" really-click="deletePlayer(v)">
+                   really-message="Are you really sure to remove player <i>{{v.name}}</i> ?" really-click="removePlayer(v)">
                   </button>
                 </div>
                 <div class="btn-toolbar" ng-show="v.editMode">
@@ -161,7 +162,7 @@
               <td colspan="{{columns}}"><!-- TODO: 4 should be in a variable -->
                 <div class="btn-toolbar">
                   <button type="button" class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="playersEmpty()"
-                    really-message="Are you really sure to remove ALL players?" really-click="removeAll()"
+                    really-message="Are you really sure to remove <i>all</i> players?" really-click="removePlayersAll()"
                   </button>
                   <button type="button" class="btn btn-primary glyphicon glyphicon-upload" ng-disabled="!playersEmpty()"
                     ng-click="populatePlayers()">

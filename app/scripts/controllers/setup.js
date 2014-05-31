@@ -1,72 +1,38 @@
 'use strict';
 
 app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, playerFactory) {
+  var share = stateFactory;
+  $scope.share = share;
+
+// TODO: change $scope with share...
+
   $scope.match = stateFactory.match;
   $scope.teams = stateFactory.teams;
   $scope.players = stateFactory.players;
 
-  var share = stateFactory;
-  $scope.share = share;
-
-//console.log('setup - $scope.teams:', $scope.teams);
-/*
-  $scope.$watch('match', function (newVal, oldVal) {
-    $scope.match = newVal;
-  });
-  $scope.$watch('teams', function (newval, oldval) {
-    $scope.teams = newval;
-console.log('setup watch - $scope.teams:', $scope.teams);
-  });
-*/
-
-//  $scope.teams = {};
   $scope.sports = sportFactory.all;
   $scope.players = playerFactory.all;
-  //$scope.players = playerFactory.all;
-  //console.info('$scope.players', $scope.players);
+  //$scope.teams = {};
+
+  $scope.columns = tableColumns($('#table-players'));
+  $scope.addMode = false;
+  $scope.editMode = false;
+  $scope.orderByPredicate = 'name';
 
   $scope.sports.$on('loaded', function () { 
-    //console.info('Sports loaded.');
-    $scope.sports = sportFactory.all;
-    if ($scope.sports.$value === null) {
-      //console.info("$scope.sports.$value === null, POPULATING...");
-      //$scope.populateSports();
-      ////$scope.sports = sportFactory.all;
-    }
+    //$scope.sports = sportFactory.all;
+    $('#loading').hide();
   });
 
   $scope.players.$on('loaded', function () { 
-    //console.info('Players loaded.');
-    $scope.players = playerFactory.all;
-    if ($scope.players.$value === null) {
-      //console.info("$scope.players.$value === null, POPULATING...");
-      //$scope.populatePlayers();
-      ////$scope.players = playerFactory.all;
-    }
+    //$scope.players = playerFactory.all;
+    $('#loading').hide();
   });
 
   $scope.playerDefault = { name: '', skill: 50 };
   $scope.playerNew = angular.copy($scope.playerDefault);
 
-/*
-  $scope.addPlayer = function () {
-    console.log('setup: addPlayer(): ', $scope.playerNew);
-    playerFactory.add($scope.playerNew);
-    $scope.playerNew = angular.copy($scope.playerDefault);
-  };
-*/
-
-  $scope.removePlayer = function (player) {
-    console.log('setup: removePlayer()');
-    playerFactory.remove(player.name);
-  };
-  $scope.removeAll = function () {
-    console.log('setup: removeAll()');
-    playerFactory.delete();
-  };
-
   $scope.populateSports = function () {
-    console.info('POPULATING SPORTS');
     $scope.sportsDefault = [
       { 'name': 'Calcio a 5', 'playersMax': 5 },
       { 'name': 'Calcio a 7', 'playersMax': 7 },
@@ -81,7 +47,6 @@ console.log('setup watch - $scope.teams:', $scope.teams);
   };
 
   $scope.populatePlayers = function () {
-    console.info('POPULATING PLAYERS');
     $scope.playersDefault = [
       { 'name': 'Frinks',            'skill': 50 },
       { 'name': 'Lucio',             'skill': 50 },
@@ -103,93 +68,69 @@ console.log('setup watch - $scope.teams:', $scope.teams);
     ];
     // store the object
     $scope.playersDefault.forEach(function(player) {
-      console.log('player:', player);
       playerFactory.add(player);
     });
   };
 
-  $scope.tableColumns = function (table) {
-    var colCount = 0;
-console.log('tableColumns start', colCount);
-    $('tr:nth-child(1) td').each(function () {
-      if ($(this).attr('colspan')) {
-        colCount += $(this).attr('colspan');
-console.log('tableColumns colspan', colCount);
-      } else {
-        colCount++;
-console.log('tableColumns td', colCount);
-      }
-    });
-    return colCount;
-  };
-
- $scope.tableRows = function (table) {
-    var rowCount = 0;
-    $('tr').each(function () {
-      rowCount++;
-    });
-console.log('tableRows', rowCount);
-    return rowCount;
-  };
-
-  $scope.columns = $scope.tableColumns($('#table-players'));
-  //$scope.columns = 1 + 3;
-console.info('columns:' + $scope.columns);
-  $scope.addMode = false;
-  $scope.editMode = false;
-  $scope.orderByPredicate = 'name';
 
   $scope.playersEmpty = function () {
-console.info('scope.playersEmpty:', $scope.players);
-    return ($scope.tableRows($('#table-players')) <= 3);
+    return (tableRows($('#table-players')) <= 3); // 3 = thead tr + dummy tbody tr + tfoot tr
   }
 
   $scope.toggleAddMode = function () {
     $scope.addMode = !$scope.addMode;
-console.info("addMode :", $scope.addMode);
   };
 
   $scope.toggleEditMode = function (player) {
-console.info("tEM() - player:", player);
-console.info("tEM() - players[player.name]:", $scope.players[player.name]);
     $scope.players[player.name].editMode = !$scope.players[player.name].editMode;
-console.info("$scope.players[player.name].editMode :", $scope.players[player.name].editMode);
     if ($scope.players[player.name].editMode) {
-console.info("copying player to $scope.playerEdit");
       $scope.playerEdit = angular.copy(player);
-console.info("$scope.playerEdit:", $scope.playerEdit);
     }
   };
 
   $scope.addPlayer = function (toggle) {
-    console.log('setup: addPlayer(): ', $scope.playerNew);
     if ($scope.playerNew.name) {
       playerFactory.add($scope.playerNew);
       $scope.playerNew = angular.copy($scope.playerDefault);
     }
     if (toggle) {
-console.log('TOGGLE');
       $scope.toggleAddMode();
     }
   };
 
   $scope.updatePlayer = function (playerOld, playerNew) {
-console.log("updatePlayer()", playerOld.name, playerNew);
+    // TODO: if name not changed ???
     $scope.removePlayer(playerOld);
     $scope.players[playerNew.name] = playerNew;
-console.info($scope.players[playerOld.name]);
-console.info($scope.players[playerNew.name]);
     $scope.toggleEditMode(playerNew);
   };
 
-  $scope.deletePlayer = function (player) {
-    $scope.removePlayer(player);
+  $scope.removePlayer = function (player) {
+    playerFactory.remove(player.name);
   };
 
-  /*
-  $scope.test = function () {
-    console.log("TEST");
+  $scope.removePlayersAll = function () {
+    playerFactory.remove();
   };
-  */
+
+  function tableColumns (table) {
+    var colCount = 0;
+    $('tr:nth-child(1) td').each(function () {
+      if ($(this).attr('colspan')) {
+        colCount += $(this).attr('colspan');
+      } else {
+        colCount++;
+      }
+    });
+    return colCount;
+  }
+
+  function tableRows (table) {
+    var rowCount = 0;
+    $('tr').each(function () {
+      rowCount++;
+    });
+    return rowCount;
+  }
 
 });

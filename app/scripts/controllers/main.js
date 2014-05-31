@@ -26,8 +26,13 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
         share.playersAvailable = angular.copy(ids);
-console.info("share.players", share.players);
-console.info("share.playersAvailable", share.playersAvailable);
+        //console.info(share.playersAvailable);
+/*
+        angular.forEach(share.playersAvailable, function(value, key) {
+          console.info(value, key);
+          console.info('Name of player ' + key + ' width: ',  $('#' + 'player-' + key).width());
+        });
+*/
       });
     } else { console.info("NOT DOING INIT..."); }
   };
@@ -86,6 +91,20 @@ console.info("share.playersAvailable", share.playersAvailable);
       return false;
     }
     share.teams.completed = $scope.checkTeamsCompleted();
+/*
+    console.info('Name of player ' + name + ' width: ',  $('#' + 'player-' + name).width());
+    var el = $('#' + 'player-' + name);
+    if (el.width() > 110) { // check text width is not too much
+      while (el.width() > 110) {
+console.info(el.width());
+        var nameTruncated = el.html();
+        nameTruncated = nameTruncated.substring(0, nameTruncated.length - 1);
+        el.html(nameTruncated);
+      }
+    }
+    el.append('&hellip;');
+console.info(el.html());
+*/
     return true;
   };
 
