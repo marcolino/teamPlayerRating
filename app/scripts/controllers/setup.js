@@ -4,50 +4,52 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   var share = stateFactory;
   $scope.share = share;
 
-// TODO: change $scope with share...
+  $scope.init = function () { // first load
+    if (!share.initialized) {
+      console.info(" * INITIALIZING");
+      share.spinner = new jSpinner();
+      share.spinner.show();
 
-  $scope.match = stateFactory.match;
-  //$scope.teams = stateFactory.teams;
-  $scope.players = stateFactory.players;
+      share.sports = sportFactory.all;
+      share.players = playerFactory.all;
 
-  $scope.sports = sportFactory.all;
-  $scope.players = playerFactory.all;
-  //$scope.teams = {};
+      //share.playersColumns = tableColumns($('#table-players'));
+      share.playersAddMode = false;
+      share.playersEditMode = false;
+      share.playersOrderByPredicate = 'name';
 
-  $scope.columns = tableColumns($('#table-players'));
-  $scope.addMode = false;
-  $scope.editMode = false;
-  $scope.orderByPredicate = 'name';
+      //share.sportsColumns = tableColumns($('#table-sports'));
+      share.sportsAddMode = false;
+      share.sportsEditMode = false;
+      share.sportsOrderByPredicate = 'name';
 
-  $scope.sports.$on('loaded', function () { 
-    //$scope.sports = sportFactory.all;
-    $('#loading').hide();
-  });
+      share.players.$on('loaded', function () { 
+        share.spinner.hide();
+      });
 
-  $scope.players.$on('loaded', function () { 
-    //$scope.players = playerFactory.all;
-    $('#loading').hide();
-  });
+      share.sports.$on('loaded', function () { 
+        share.spinner.hide();
+      });
 
-  $scope.playerDefault = { name: '', skill: 50 };
-  $scope.playerNew = angular.copy($scope.playerDefault);
+      share.playerDefault = { name: '', email: '', skill: 50 };
+      share.playerNew = angular.copy(share.playerDefault);
+      share.playerEdit = {};
 
-  $scope.populateSports = function () {
-    $scope.sportsDefault = [
-      { 'name': 'Calcio a 5', 'playersMax': 5 },
-      { 'name': 'Calcio a 7', 'playersMax': 7 },
-      { 'name': 'Calcio a 8', 'playersMax': 8 },
-      { 'name': 'Calcio',     'playersMax': 11 },
-      { 'name': 'Rugby',      'playersMax': 15 },
-    ];
-    // store the object
-    $scope.sportsDefault.forEach(function(sport) {
-      sportFactory.add(sport);
-    });
+      share.sportDefault = { name: '', playersMax: 0 };
+      share.sportNew = angular.copy(share.sportDefault);
+      share.sportEdit = {};
+
+      share.currentTab = "Players";
+
+    } else {
+      share.spinner.hide();
+    }
+    console.info(share.players);
+    console.info(share.sports);
   };
 
   $scope.populatePlayers = function () {
-    $scope.playersDefault = [
+    share.playersDefault = [
       { 'name': 'Frinks',            'skill': 50 },
       { 'name': 'Lucio',             'skill': 50 },
       { 'name': 'Soletta',           'skill': 50 },
@@ -68,70 +70,109 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       { 'name': 'Marcobellancio',    'skill': 50 },
     ];
     // store the object
-    $scope.playersDefault.forEach(function(player) {
+    share.playersDefault.forEach(function(player) {
       playerFactory.add(player);
     });
   };
 
+  $scope.populateSports = function () {
+    share.sportsDefault = [
+      { 'name': 'Calcio a 5', 'playersMax': 5 },
+      { 'name': 'Calcio a 7', 'playersMax': 7 },
+      { 'name': 'Calcio a 8', 'playersMax': 8 },
+      { 'name': 'Calcio',     'playersMax': 11 },
+      { 'name': 'Rugby',      'playersMax': 15 },
+    ];
+    // store the object
+    share.sportsDefault.forEach(function(sport) {
+      sportFactory.add(sport);
+    });
+  };
 
   $scope.playersEmpty = function () {
+console.info(tableRows($('#table-players')));
     return (tableRows($('#table-players')) <= 3); // 3 = thead tr + dummy tbody tr + tfoot tr
   }
 
-  $scope.toggleAddMode = function () {
-    $scope.addMode = !$scope.addMode;
+  $scope.sportsEmpty = function () {
+    return (tableRows($('#table-sports')) <= 3); // 3 = thead tr + dummy tbody tr + tfoot tr
+  }
+
+  $scope.playersToggleAddMode = function () {
+    share.playersAddMode = !share.playersAddMode;
   };
 
-  $scope.toggleEditMode = function (player) {
-    $scope.players[player.name].editMode = !$scope.players[player.name].editMode;
-    if ($scope.players[player.name].editMode) {
-      $scope.playerEdit = angular.copy(player);
+  $scope.sportsToggleAddMode = function () {
+    share.sportsAddMode = !share.sportsAddMode;
+  };
+
+  $scope.playersToggleEditMode = function (player) {
+    share.players[player.name].editMode = !share.players[player.name].editMode;
+    if (share.players[player.name].editMode) {
+      share.playerEdit = angular.copy(player);
+    }
+  };
+
+  $scope.sportsToggleEditMode = function (sport) {
+    share.sports[sport.name].editMode = !share.sports[sport.name].editMode;
+    if (share.sports[sport.name].editMode) {
+      share.sportEdit = angular.copy(sport);
     }
   };
 
   $scope.addPlayer = function (toggle) {
-    if ($scope.playerNew.name) {
-      playerFactory.add($scope.playerNew);
-      $scope.playerNew = angular.copy($scope.playerDefault);
+    if (share.playerNew.name) {
+      playerFactory.add(share.playerNew);
+      share.playerNew = angular.copy(share.playerDefault);
     }
     if (toggle) {
-      $scope.toggleAddMode();
+      $scope.playersToggleAddMode();
+    }
+  };
+
+  $scope.addSport = function (toggle) {
+    if (share.sportNew.name) {
+      sportFactory.add(share.sportNew);
+      share.sportNew = angular.copy(share.sportDefault);
+    }
+    if (toggle) {
+      $scope.sportsToggleAddMode();
     }
   };
 
   $scope.updatePlayer = function (playerOld, playerNew) {
+    // TODO: if name empty ???
     // TODO: if name not changed ???
     $scope.removePlayer(playerOld);
-    $scope.players[playerNew.name] = playerNew;
-    $scope.toggleEditMode(playerNew);
+    share.players[playerNew.name] = playerNew;
+    $scope.playersToggleEditMode(playerNew);
+  };
+
+  $scope.updatesport = function (sportOld, sportNew) {
+    // TODO: if name empty ???
+    // TODO: if name not changed ???
+    $scope.removesport(sportOld);
+    share.sports[sportNew.name] = sportNew;
+    $scope.sportsToggleEditMode(sportNew);
   };
 
   $scope.removePlayer = function (player) {
     playerFactory.remove(player.name);
   };
 
+  $scope.removesport = function (sport) {
+    sportFactory.remove(sport.name);
+  };
+
   $scope.removePlayersAll = function () {
     playerFactory.remove();
   };
 
-  function tableColumns (table) {
-    var colCount = 0;
-    $('tr:nth-child(1) td').each(function () {
-      if ($(this).attr('colspan')) {
-        colCount += $(this).attr('colspan');
-      } else {
-        colCount++;
-      }
-    });
-    return colCount;
-  }
+  $scope.removesportsAll = function () {
+    sportFactory.remove();
+  };
 
-  function tableRows (table) {
-    var rowCount = 0;
-    $('tr').each(function () {
-      rowCount++;
-    });
-    return rowCount;
-  }
+  $scope.init();
+
 
 });

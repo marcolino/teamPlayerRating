@@ -4,9 +4,11 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   var share = stateFactory;
   $scope.share = share;
 
-  $scope.init = function () {
+  $scope.init = function () { // first load
     if (!share.initialized) {
-      console.info("DOING INIT...");
+      share.spinner = new jSpinner();
+      share.spinner.show();
+ 
       share.teams['A'] = { name: 'Oranges', selected: false };
       share.teams['B'] = { name: 'Blues', selected: false };
       share.teams['A']['players'] = {};
@@ -16,9 +18,12 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       share.teams.completed = false;
       share.teams.closed = false;
       share.match.sport = 'Calcio a 5';
+      share.match.dateFormat = 'yyyy-MM-dd';
+      share.match.dateOptions = {};
+      share.match.dateOptions['starting-day'] = 1;
+      share.match.dateOptions['showWeeks'] = 0;
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
-      share.dateFormat = 'yyyy-MM-dd';
 
       sportFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
@@ -27,16 +32,12 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
         share.playersAvailable = angular.copy(ids);
-        //console.info(share.playersAvailable);
-/*
-        angular.forEach(share.playersAvailable, function(value, key) {
-          console.info(value, key);
-          console.info('Name of player ' + key + ' width: ',  $('#' + 'player-' + key).width());
-        });
-*/
+        share.spinner.hide();
       });
       share.initialized = true;
-    } else { console.info("NOT DOING INIT..."); }
+    } else {
+      share.spinner.hide();
+    }
   };
   
   $scope.reset = function () {
@@ -158,79 +159,20 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   };
 
   $scope.updateScores = function () {
-    // TODO: ...
+    // TODO: ... :-)
   };
 
-  function objectLength (obj) {
-    var length = 0;
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        ++length;
-      }
-    }
-    return length;
-  }
-
-  function objectIsEmpty (obj) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        return false;
-      }
-    }
-    return true;
-  }
-
-  function objectDelete (obj, stack) {
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        if (typeof obj[prop] == 'object') {
-          objectDelete(obj[prop], stack + '.' + prop);
-          delete obj[prop];
-        } else {
-          console.log(prop + ": " + obj[prop]);
-          delete obj[prop];
-        }
-      }
-    }
-  }
-
-  $scope.init();
-
-
-  $scope.today = function() {
-    $scope.dt = new Date();
-  };
-  $scope.today();
-
-  $scope.showWeeks = false;
-  $scope.clear = function () {
-    $scope.dt = null;
-  };
-
-  $scope.disabled = function(date, mode) {
+  $scope.matchDateDisabled = function(date, mode) {
     //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
     return false;
   };
 
-  $scope.toggleMin = function() {
-    $scope.minDate = ( $scope.minDate ) ? null : new Date();
-  };
-  $scope.toggleMin();
-
-  $scope.open = function($event) {
+  $scope.matchDateOpen = function($event) {
     $event.preventDefault();
     $event.stopPropagation();
     $scope.opened = true;
   };
 
-  $scope.dateOptions = {
-    'year-format': "'yy'",
-    'starting-day': 1,
-    'showWeeks': 0
-
-  };
-
-  //$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
-  //$scope.format = 'DD, d MM, yy';
+  $scope.init();
 
 });
