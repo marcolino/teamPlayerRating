@@ -1,11 +1,12 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory) {
+app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory, $timeout) {
   var share = stateFactory;
   $scope.share = share;
 
   $scope.init = function () {
     if (!share.initialized) {
+      console.info("DOING INIT...");
       share.teams['A'] = { name: 'Oranges', selected: false };
       share.teams['B'] = { name: 'Blues', selected: false };
       share.teams['A']['players'] = {};
@@ -34,6 +35,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         });
 */
       });
+      share.initialized = true;
     } else { console.info("NOT DOING INIT..."); }
   };
   
@@ -74,7 +76,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     if ($scope.checkTeamsClosed()) {
       return false; // avoid selecting a player when teams are closed
     }
-    var name = element.target.firstChild.data;
+    var name = element.currentTarget.firstElementChild.innerHTML;
     if (name) {
       if (!share.teams.selected) {
         notificationFactory.warning("Please select a team!");
@@ -91,20 +93,6 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       return false;
     }
     share.teams.completed = $scope.checkTeamsCompleted();
-/*
-    console.info('Name of player ' + name + ' width: ',  $('#' + 'player-' + name).width());
-    var el = $('#' + 'player-' + name);
-    if (el.width() > 110) { // check text width is not too much
-      while (el.width() > 110) {
-console.info(el.width());
-        var nameTruncated = el.html();
-        nameTruncated = nameTruncated.substring(0, nameTruncated.length - 1);
-        el.html(nameTruncated);
-      }
-    }
-    el.append('&hellip;');
-console.info(el.html());
-*/
     return true;
   };
 
@@ -149,6 +137,10 @@ console.info(el.html());
     return true;
   };
 
+  $scope.checkMatchConfirmed = function () {
+    return share.match.confirmed;
+  };
+
   $scope.matchConfirm = function () {
     if (!share.teams.closed) {
       return false;
@@ -159,8 +151,10 @@ console.info(el.html());
 
     $scope.updateScores();
 
-    $scope.reset();
     $location.path('/statistics');
+    $timeout(function () {
+      share.match.confirmed = true;
+    }, 0, false);
   };
 
   $scope.updateScores = function () {
@@ -201,5 +195,42 @@ console.info(el.html());
   }
 
   $scope.init();
+
+
+  $scope.today = function() {
+    $scope.dt = new Date();
+  };
+  $scope.today();
+
+  $scope.showWeeks = false;
+  $scope.clear = function () {
+    $scope.dt = null;
+  };
+
+  $scope.disabled = function(date, mode) {
+    //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    return false;
+  };
+
+  $scope.toggleMin = function() {
+    $scope.minDate = ( $scope.minDate ) ? null : new Date();
+  };
+  $scope.toggleMin();
+
+  $scope.open = function($event) {
+    $event.preventDefault();
+    $event.stopPropagation();
+    $scope.opened = true;
+  };
+
+  $scope.dateOptions = {
+    'year-format': "'yy'",
+    'starting-day': 1,
+    'showWeeks': 0
+
+  };
+
+  //$scope.formats = ['dd-MMMM-yyyy', 'yyyy/MM/dd', 'shortDate'];
+  //$scope.format = 'DD, d MM, yy';
 
 });

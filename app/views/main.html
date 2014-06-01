@@ -1,8 +1,16 @@
 <div class="disable-select ng-cloak">
 
   <div class="container-fluid">
-    <div class="span12 text-right date">
-      <div ng-bind="share.match.date | date:share.dateFormat"></div>
+    <div class="span12 text-right">
+      <!--<div ng-bind="share.match.date | date:share.dateFormat"></div>-->
+
+              <input type="text" class="text-right date" datepicker-popup="{{format}}" ng-model="dt" is-open="opened" min="minDate" max="'2015-06-22'" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="open($event)" />
+
+<!--
+       <input class="text-right d_ate" type="text" datepicker-popup="{{share.dateFormat}}" ng-model="share.match.date" is-open="opened" min="minDate" datepicker-options="dateOptions" date-disabled="disabled(date, mode)" ng-required="true" ng-click="open($event)" />
+       <button class="btn btn-primary glyphicon glyphicon-calendar" ng-click="open($event)"></button>
+-->
+
     </div>
   </div>
 
@@ -10,7 +18,7 @@
     <div class="row">
       <div class="col-xs-6">
         <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="share.teams['A'].players">
-          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.teams['A'].players" ng-show="item.name" ng-class="teamSelected" ng-model="teamA">{{item.name}}</div>
+          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.teams['A'].players" ng-show="item.name" n_g-class="teamSelected" ng-model="teamA">{{item.name}}</div>
         </div>
       </div>
       <div class="col-xs-6">
@@ -37,9 +45,9 @@
 
   <div class="container-fluid container-lockerroom" ng-show="!share.teams.closed">
     <div class="lockerroom">
-      <span ng-repeat="(key, item) in share.playersAvailable" limit-text-length len="111">
+      <span ng-repeat="(key, item) in share.playersAvailable" NOlimit-text-length NOmax-len="103">
         <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="share.players" ng-hide="!item.name">
-          <div id="player-{{key}}">{{item.name}}</div>
+          <span id="player-{{key}}" title="{{item.name}}">{{item.name}}</span>
         </div>
       </span>
     </div>
@@ -59,8 +67,15 @@
         </div>
       </div>
       <div class="row">
-        <div class="col-xs-12">
-          <button class="btn btn-lg btn-primary" type="button" ng-disabled="!checkMatchClosed()" ng-click="matchConfirm()">Confirm score and calculate ratings</button>
+        <div class="col-xs-16">
+          <button class="btn btn-lg btn-primary" type="button" ng-disabled="!checkMatchClosed()" ng-click="matchConfirm()">
+            Confirm score
+          </button>
+        </div>
+        <div class="col-xs-16">
+          <button class="btn btn-lg btn-primary" type="button" ng-show="checkMatchConfirmed()" ng-click="reset(); init()">
+            Reset match
+          </button>
         </div>
       </div>
     </div>

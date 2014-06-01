@@ -28,29 +28,7 @@ var app = angular.module('teamplayerratingApp', [
       .otherwise({
         redirectTo: '/'
       });
-  })
-.directive('limitTextLength', function() {
-  return function(scope, element, attrs) {
-    var maxlen = attrs.len;
-console.info('maxlen:', maxlen);
-//console.info(element);
-//console.info(element.children().children());
-    var el = element.children().children();//.find​("[id^=player]");
-//console.info(el.html());
-//console.info('Name of player ' + el.id + ' width: ', el[0].childNodes[0].textContent.width());
-    if (0 || el.width() > maxlen) { // check text width is not too much
-      while (el.width() > maxlen) {
-console.info(el.width());
-        var nameTruncated = el.html();
-        nameTruncated = nameTruncated.substring(0, nameTruncated.length - 1);
-        el.html(nameTruncated);
-      }
-      el.append('&hellip;');
-console.info(el.html());
-    }
-  };
-})
-  ;
+  });
 /*
   .config(function ($httpProvider) {
     $httpProvider.responseInterceptors.push('myHttpInterceptor');

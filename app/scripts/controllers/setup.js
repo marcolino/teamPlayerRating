@@ -7,7 +7,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 // TODO: change $scope with share...
 
   $scope.match = stateFactory.match;
-  $scope.teams = stateFactory.teams;
+  //$scope.teams = stateFactory.teams;
   $scope.players = stateFactory.players;
 
   $scope.sports = sportFactory.all;
@@ -65,6 +65,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       { 'name': 'Aleandro',          'skill': 50 },
       { 'name': 'Francescobeltocco', 'skill': 50 },
       { 'name': 'Nuovoragazzino',    'skill': 50 },
+      { 'name': 'Marcobellancio',    'skill': 50 },
     ];
     // store the object
     $scope.playersDefault.forEach(function(player) {
