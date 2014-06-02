@@ -19,7 +19,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       share.teams.selected = null;
       share.teams.completed = false;
       share.teams.closed = false;
-      share.match.sport = 'Calcio a 5';
+      share.match.sportSelected = 'Calcio a 5';
       share.match.dateFormat = 'yyyy-MM-dd';
       share.match.dateOptions = {};
       share.match.dateOptions['starting-day'] = 1;
@@ -29,7 +29,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
       sportFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
-        share.teams.playersMax = ids[share.match.sport].playersMax;
+        share.teams.playersMax = ids[share.match.sportSelected].playersMax;
       });
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();

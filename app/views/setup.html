@@ -107,6 +107,7 @@
               </th>
               <th>Name</th>
               <th>Sports</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -157,6 +158,12 @@
                 <span ng-show="!v.editMode">{{v.playersMax}}</span>
                 <input ng-show="v.editMode" ng-model="share.sportEdit.playersMax" key="enter" trap-key="updateSport(v, share.sportEdit)" />
               </td>
+              <td class="vertical-middle numerical" style="vertical-align: middle;">
+                <span ng-show="v.editMode"></span>
+                <span ng-show="!v.editMode">
+                  <button class="btn btn-primary glyphicon glyphicon-ok" ng-class="{ 'button-selected': v.selected, 'button-deselected': !v.selected }" ng-click="sportSelect(v)"></button>
+                </span> 
+              </td>
             </tr>
           </tbody>
           <tfoot>
@@ -171,6 +178,7 @@
             </tr>
           </tfoot>
         </table>
+        <!-- {{share.sports}} -->
       </div>
 
     </div>

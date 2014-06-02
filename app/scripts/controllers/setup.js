@@ -13,12 +13,10 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
 
-      //share.playersColumns = tableColumns($('#table-players'));
       share.playersAddMode = false;
       share.playersEditMode = false;
       share.playersOrderByPredicate = 'name';
 
-      //share.sportsColumns = tableColumns($('#table-sports'));
       share.sportsAddMode = false;
       share.sportsEditMode = false;
       share.sportsOrderByPredicate = 'name';
@@ -44,8 +42,6 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     } else {
       share.spinner.hide();
     }
-    //console.info(share.players);
-    //console.info(share.sports);
   };
 
   $scope.populatePlayers = function () {
@@ -77,9 +73,9 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
   $scope.populateSports = function () {
     share.sportsDefault = [
-      { 'name': 'Calcio a 5', 'playersMax': 5 },
-      { 'name': 'Calcio a 7', 'playersMax': 7 },
-      { 'name': 'Calcio a 8', 'playersMax': 8 },
+      { 'name': 'Calcio a 5', 'playersMax':  5 },
+      { 'name': 'Calcio a 7', 'playersMax':  7 },
+      { 'name': 'Calcio a 8', 'playersMax':  8 },
       { 'name': 'Calcio',     'playersMax': 11 },
       { 'name': 'Rugby',      'playersMax': 15 },
     ];
@@ -106,7 +102,6 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   };
 
   $scope.playersToggleEditMode = function (player) {
-console.info('playersToggleEditMode', player);
     share.players[player.name].editMode = !share.players[player.name].editMode;
     if (share.players[player.name].editMode) {
       share.playerEdit = angular.copy(player);
@@ -114,7 +109,6 @@ console.info('playersToggleEditMode', player);
   };
 
   $scope.sportsToggleEditMode = function (sport) {
-console.info('sportsToggleEditMode', sport);
     share.sports[sport.name].editMode = !share.sports[sport.name].editMode;
     if (share.sports[sport.name].editMode) {
       share.sportEdit = angular.copy(sport);
@@ -158,6 +152,22 @@ console.info('sportsToggleEditMode', sport);
     $scope.removeSport(sportOld);
     sportNew.editMode = false;
     $scope.addSport(sportNew, false, true);
+  };
+
+  $scope.sportSelect = function (sport) {
+    // deselect all sports
+    var obj = share.sports;
+    for (var prop in obj) {
+      if (obj.hasOwnProperty(prop)) {
+        if (typeof obj[prop] === 'object') {
+          if (obj[prop] !== null) {
+            obj[prop].selected = false;
+          }
+        }
+      }
+    }
+    // select current sport
+    share.sports[sport.name].selected = true;
   };
 
   $scope.removePlayer = function (player) {
