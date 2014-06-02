@@ -2,18 +2,18 @@
 
 app.factory('notificationFactory', function ($timeout) {
   toastr.options = {
-    "closeButton": false,
-    "debug": false,
-    "positionClass": "toast-top-right",
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "3500",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut"
+    'closeButton': false,
+    'debug': false,
+    'positionClass': 'toast-top-right',
+    'onclick': null,
+    'showDuration': '300',
+    'hideDuration': '1000',
+    'timeOut': '3500',
+    'extendedTimeOut': '1000',
+    'showEasing': 'swing',
+    'hideEasing': 'linear',
+    'showMethod': 'fadeIn',
+    'hideMethod': 'fadeOut'
   };
   var last = [];
 
@@ -31,34 +31,34 @@ app.factory('notificationFactory', function ($timeout) {
   return {
     success: function () {
       var text = stringify.apply(this, arguments);
-      if (last['success'] !== text) {
+      if (last.success !== text) {
         toastr.success(text /*, "success Title"*/);
-        $timeout(function() { resetLast('success') }, toastr.options.timeOut, false);
-        last['success'] = text;
+        $timeout(function() { resetLast('success'); }, toastr.options.timeOut, false);
+        last.success = text;
       }
     },
     info: function () {
       var text = stringify.apply(this, arguments);
-      if (last['info'] !== text) {
+      if (last.info !== text) {
         toastr.info(text);
-        $timeout(function() { resetLast('info') }, toastr.options.timeOut, false);
-        last['info'] = text;
+        $timeout(function() { resetLast('info'); }, toastr.options.timeOut, false);
+        last.info = text;
       }
     },
     warning: function () {
       var text = stringify.apply(this, arguments);
-      if (last['warning'] !== text) {
+      if (last.warning !== text) {
         toastr.warning(text);
-        $timeout(function() { resetLast('warning') }, toastr.options.timeOut, false);
-        last['warning'] = text;
+        $timeout(function() { resetLast('warning'); }, toastr.options.timeOut, false);
+        last.warning = text;
       }
     },
     error: function () {
       var text = stringify.apply(this, arguments);
-      if (last['error'] !== text) {
+      if (last.error !== text) {
         toastr.error(text);
-        $timeout(function() { resetLast('error') }, toastr.options.timeOut, false);
-        last['error'] = text;
+        $timeout(function() { resetLast('error'); }, toastr.options.timeOut, false);
+        last.error = text;
       }
     },
   };

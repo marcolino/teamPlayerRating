@@ -5,7 +5,7 @@ app.directive('validScore', function() {
     require: '?ngModel',
     link: function(scope, element, attrs, ngModelCtrl) {
       if (!ngModelCtrl) {
-        return; 
+        return;
       }
 
       ngModelCtrl.$parsers.push(function(val) {

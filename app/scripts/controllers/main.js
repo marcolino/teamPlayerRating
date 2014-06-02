@@ -1,13 +1,15 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory, $timeout) {
+app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, notificationFactory, sysFactory, spinnerFactory, $timeout) {
   var share = stateFactory;
   $scope.share = share;
 
   $scope.init = function () { // first load
     if (!share.initialized) {
-      share.spinner = new jSpinner();
-      share.spinner.show();
+      if (!share.spinner) {
+        share.spinner = spinnerFactory;
+        share.spinner.show();
+      }
  
       share.teams['A'] = { name: 'Oranges', selected: false };
       share.teams['B'] = { name: 'Blues', selected: false };
@@ -35,8 +37,6 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         share.spinner.hide();
       });
       share.initialized = true;
-    } else {
-      share.spinner.hide();
     }
   };
   
@@ -80,10 +80,10 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     var name = element.currentTarget.firstElementChild.innerHTML;
     if (name) {
       if (!share.teams.selected) {
-        notificationFactory.warning("Please select a team!");
+        notificationFactory.warning('Please select a team!');
         return false;
       }
-      if (objectLength(share.teams[share.teams.selected].players) >= share.teams.playersMax) {
+      if (sysFactory.objectLength(share.teams[share.teams.selected].players) >= share.teams.playersMax) {
         notificationFactory.info('This team is "complete"');
         return false;
       }
@@ -94,6 +94,9 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       return false;
     }
     share.teams.completed = $scope.checkTeamsCompleted();
+    if (!share.teams.completed && sysFactory.objectIsEmpty(share.playersAvailable)) {
+      notificationFactory.warning('Available players are insufficient to play a match. Please add some players!');
+    }
     return true;
   };
 
@@ -103,8 +106,8 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
   $scope.checkTeamsCompleted = function () {
     if (
-      (objectLength(share.teams['A'].players) === share.teams.playersMax) &&
-      (objectLength(share.teams['B'].players) === share.teams.playersMax)
+      (sysFactory.objectLength(share.teams['A'].players) === share.teams.playersMax) &&
+      (sysFactory.objectLength(share.teams['B'].players) === share.teams.playersMax)
     ) {
       console.info('All teams are complete');
       return true;
@@ -130,8 +133,8 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
   $scope.checkMatchClosed = function () {
     if (
-      (typeof share.teams['A'].score == 'undefined') ||
-      (typeof share.teams['B'].score == 'undefined')
+      (typeof share.teams['A'].score === 'undefined') ||
+      (typeof share.teams['B'].score === 'undefined')
     ) {
       return false;
     }
@@ -162,8 +165,12 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     // TODO: ... :-)
   };
 
+/*
   $scope.matchDateDisabled = function(date, mode) {
-    //return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+    return ( mode === 'day' && ( date.getDay() === 0 || date.getDay() === 6 ) );
+  };
+*/
+  $scope.matchDateDisabled = function() {
     return false;
   };
 
