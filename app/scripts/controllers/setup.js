@@ -73,11 +73,11 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
   $scope.populateSports = function () {
     share.sportsDefault = [
-      { 'name': 'Calcio a 5', 'playersMax':  5 },
-      { 'name': 'Calcio a 7', 'playersMax':  7 },
-      { 'name': 'Calcio a 8', 'playersMax':  8 },
-      { 'name': 'Calcio',     'playersMax': 11 },
-      { 'name': 'Rugby',      'playersMax': 15 },
+      { 'name': 'Calcio a 5', 'playersMax':  5, 'selected': true },
+      { 'name': 'Calcio a 7', 'playersMax':  7                   },
+      { 'name': 'Calcio a 8', 'playersMax':  8                   },
+      { 'name': 'Calcio',     'playersMax': 11                   },
+      { 'name': 'Rugby',      'playersMax': 15                   },
     ];
     // store the object
     share.sportsDefault.forEach(function(sport) {
@@ -155,19 +155,15 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   };
 
   $scope.sportSelect = function (sport) {
-    // deselect all sports
-    var obj = share.sports;
-    for (var prop in obj) {
-      if (obj.hasOwnProperty(prop)) {
-        if (typeof obj[prop] === 'object') {
-          if (obj[prop] !== null) {
-            obj[prop].selected = false;
-          }
-        }
-      }
-    }
-    // select current sport
-    share.sports[sport.name].selected = true;
+    // select current sport (de-selecting others)
+    sportFactory.select(sport);
+    //share.match.sportSelected = sport.name;
+    share.teams.playersMax = sport.playersMax;
+  };
+
+  $scope.sportSelected = function () {
+    // return selected sport
+    return sportFactory.selected();
   };
 
   $scope.removePlayer = function (player) {

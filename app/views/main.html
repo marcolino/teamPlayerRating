@@ -2,7 +2,7 @@
 
   <div class="container-fluid">
     <div class="span12 text-right">
-      <input type="text" ng-disabled="true" class="text-right sport" ng-model="share.match.sportSelected" />
+      <input type="text" ng-disabled="true" class="text-right sport" ng-value="sportSelected();" />
       <input type="text" class="text-right date" datepicker-popup="{{share.match.dateFormat}}" ng-model="share.match.date" is-open="opened" min="minDate" datepicker-options="share.match.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
     </div>
   </div>
@@ -22,10 +22,10 @@
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <input id="label-teamA" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="share.teams.closed" ng-model="share.teams['A'].name">
+        <input id="label-teamA" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="share.teams.closed" ng-model="share.teams['A'].name" />
       </div>
       <div class="col-xs-6">
-        <input id="label-teamB" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="share.teams.closed" ng-model="share.teams['B'].name">
+        <input id="label-teamB" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="share.teams.closed" ng-model="share.teams['B'].name" />
       </div>
     </div>
   </div>

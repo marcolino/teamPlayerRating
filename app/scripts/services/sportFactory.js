@@ -32,7 +32,53 @@ app.factory('sportFactory',
       remove: function(id) {
         return sports.$remove(id);
       },
-      delete: function(id) { return this.remove(id); } // alias
+      select: function (sport) {
+        ref.once('value', function(ss) {
+          ss.forEach(function(childSnapshot) {
+            var id = childSnapshot.name();
+            childSnapshot.ref().child('name').once('value', function(ss) {
+              if (ss.val() === sport.name) { // select requested sport
+                childSnapshot.ref().child('selected').set(true);
+              } else { // de-select other sports
+                childSnapshot.ref().child('selected').set(false);
+              }
+            });
+          });
+        });
+/*
+        var obj = sports;
+        for (var prop in obj) {
+          if (obj.hasOwnProperty(prop)) {
+            if (typeof obj[prop] === 'object') {
+              if (prop === sport.name) {
+                sport.selected = true;
+                ref.child(sport.name).set(sport);
+              } else {
+                if (obj[prop] !== null) {
+                  obj[prop].selected = false;
+                  ref.child(prop).set(obj[prop]);
+                }
+              }
+            }
+          }
+        }
+*/
+      },
+      selected: function () {
+        var obj = sports;
+        for (var prop in obj) {
+          if (obj.hasOwnProperty(prop)) {
+            if (typeof obj[prop] === 'object') {
+              if (obj[prop] !== null) {
+                if (obj[prop].selected) {
+                  return obj[prop].name;
+                }
+              }
+            }
+          }
+        }
+        return null;
+      }
     };
   }
 );

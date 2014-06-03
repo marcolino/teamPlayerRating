@@ -11,15 +11,14 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         share.spinner.show();
       }
  
-      share.teams['A'] = { name: 'Oranges', selected: false };
-      share.teams['B'] = { name: 'Blues', selected: false };
+      share.teams['A'] = { name: 'Oranges' }; //, selected: false };
+      share.teams['B'] = { name: 'Blues' }; //, selected: false };
       share.teams['A']['players'] = {};
       share.teams['B']['players'] = {};
       share.teams.initialized = true;
       share.teams.selected = null;
       share.teams.completed = false;
       share.teams.closed = false;
-      share.match.sportSelected = 'Calcio a 5';
       share.match.dateFormat = 'yyyy-MM-dd';
       share.match.dateOptions = {};
       share.match.dateOptions['starting-day'] = 1;
@@ -29,7 +28,12 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
       sportFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
-        share.teams.playersMax = ids[share.match.sportSelected].playersMax;
+        share.match.sportSelected = sportFactory.selected();
+        if (share.match.sportSelected) {
+          share.teams.playersMax = ids[share.match.sportSelected].playersMax;
+        } else { // this shouldn't happen...
+          console.error('no sport results selected...');
+        }
       });
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
@@ -44,25 +48,26 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     share.initialized = false;
   };
   
-  $scope.teamSelect = function (element) {
+  $scope.teamSelect = function (event) {
     if ($scope.checkTeamsClosed()) {
       return false; // avoid selecting a team when teams are closed
     }
-    var id = element.target.id;
+    var id = event.target.id;
+    id = id.replace(/^label-/, ''); // could come from a label
     if (id) { // selected a team
       $scope.teamSetSelected(id);
       share.teams.selected = id.replace(/^team/, '');
     } else {
-      var name = element.target.firstChild.data;
+      var name = event.target.firstChild.data;
       if (name) { // selected a player in team to remove it
-        var idParentTeam = element.target.parentElement.id.replace(/^team/, '');
+        var idParentTeam = event.target.parentElement.id.replace(/^team/, '');
         if (name in share.teams[idParentTeam].players) {
           share.playersAvailable[name] = share.teams[idParentTeam].players[name];
           delete share.teams[idParentTeam].players[name];
         }
         share.teams.completed = $scope.checkTeamsCompleted();
       } else { // this shouldn't happen...
-        notificationFactory.error('Selected element in team with empty first child data: ', element.target.firstChild, ' !');
+        notificationFactory.error('Selected element in team with empty first child data: ', event.target.firstChild, ' !');
         return false;
       }
     }
@@ -95,7 +100,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     }
     share.teams.completed = $scope.checkTeamsCompleted();
     if (!share.teams.completed && sysFactory.objectIsEmpty(share.playersAvailable)) {
-      notificationFactory.warning('Available players are insufficient to play a match. Please add some players!');
+      notificationFactory.warning('The number of players is insufficient to play a match. Please add some players!');
     }
     return true;
   };
@@ -132,13 +137,10 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   };
 
   $scope.checkMatchClosed = function () {
-    if (
-      (typeof share.teams['A'].score === 'undefined') ||
-      (typeof share.teams['B'].score === 'undefined')
-    ) {
-      return false;
-    }
-    return true;
+    return (
+      (typeof share.teams['A'].score !== 'undefined') &&
+      (typeof share.teams['B'].score !== 'undefined')
+    );
   };
 
   $scope.checkMatchConfirmed = function () {
@@ -178,6 +180,11 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     $event.preventDefault();
     $event.stopPropagation();
     $scope.opened = true;
+  };
+
+  $scope.sportSelected = function () {
+    // return selected sport
+    return sportFactory.selected();
   };
 
   $scope.init();
