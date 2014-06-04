@@ -35,7 +35,7 @@ app.factory('sportFactory',
       select: function (sport) {
         ref.once('value', function(ss) {
           ss.forEach(function(childSnapshot) {
-            var id = childSnapshot.name();
+            //var id = childSnapshot.name();
             childSnapshot.ref().child('name').once('value', function(ss) {
               if (ss.val() === sport.name) { // select requested sport
                 childSnapshot.ref().child('selected').set(true);
