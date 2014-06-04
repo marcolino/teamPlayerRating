@@ -20,10 +20,6 @@ app.factory('sysFactory', function () {
       return length;
     },
 
-    objectIsEmpty: function (obj) {
-      return this.objectLength(obj) === 0;
-    },
-    
     objectDelete: function (obj, stack) {
       for (var prop in obj) {
         if (obj.hasOwnProperty(prop)) {

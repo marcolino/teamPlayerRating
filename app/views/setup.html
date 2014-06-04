@@ -2,10 +2,10 @@
   <div class="container-fluid">
     <ul class="nav nav-pills">
       <li class="active">
-        <a data-target="#tab-players" NOng-click="tabSelect($event)" data-toggle="pill">Players</a>
+        <a data-target="#tab-players" data-toggle="pill">Players</a>
       </li>
       <li>
-        <a data-target="#tab-sports" NOng-click="tabSelect($event)" data-toggle="pill">Sports</a>
+        <a data-target="#tab-sports" data-toggle="pill">Sports</a>
       </li>
     </ul>
 
@@ -29,7 +29,7 @@
               <td>
                 <div style="white-space: nowrap;">
                   <button class="btn btn-primary glyphicon glyphicon-ok"
-                   ng-click="addPlayer(share.playerNew); playersToggleAddMode();">
+                   ng-click="playerAdd(share.playerAdd) && playersToggleAddMode();">
                   </button>
                   <button class="btn btn-primary glyphicon glyphicon-remove"
                    ng-click="playersToggleAddMode()">
@@ -37,58 +37,58 @@
                 </div>
               </td>
               <td>
-                <input ng-model="share.playerNew.name" key="enter" trap-key="addPlayer(share.playerNew, false, false)" />
+                <input ng-model="share.playerAdd.name" key="enter" trap-key="playerAdd(share.playerAdd, false, false)" />
               </td>
               <td>
-                <input ng-model="share.playerNew.email" key="enter" trap-key="addPlayer(share.playerNew, false, false)" />
+                <input ng-model="share.playerAdd.email" key="enter" trap-key="playerAdd(share.playerAdd, false, false)" />
               </td>
               <td>
-                <input ng-model="share.playerNew.skill" key="enter" trap-key="addPlayer(share.playerNew, false, false)" />
+                <input ng-model="share.playerAdd.skill" key="enter" trap-key="playerAdd(share.playerAdd, false, false)" />
               </td>
             </tr>
-            <tr class="vertical-middle" ng-repeat="v in share.players | orderBy:playersOrderByPredicate:false">
+            <tr class="vertical-middle" ng-repeat="(id, v) in share.players | orderBy:playersOrderByPredicate:false">
               <td>
                 <div style="white-space: nowrap;" ng-show="!v.editMode">
                   <button class="btn btn-primary glyphicon glyphicon-edit"
-                   ng-click="playersToggleEditMode(v)">
+                   ng-click="playersToggleEditMode(id, v)">
                   </button>
                   <button class="btn btn-primary glyphicon glyphicon-trash"
-                   really-message="Are you really sure to remove player <i>{{v.name}}</i> ?" really-click="removePlayer(v)">
+                   really-message="Are you really sure to remove player <i>{{v.name}}</i> ?" really-click="playerRemove(id)">
                   </button>
                 </div>
                 <div class="btn-toolbar" ng-show="v.editMode">
                   <div style="white-space: nowrap;">
                     <button class="btn btn-primary glyphicon glyphicon-save"
-                     ng-click="updatePlayer(v, share.playerEdit); playersToggleEditMode(v);">
+                     ng-click="playerUpdate(id, share.playerEdit)"> <!-- "; && playersToggleEditMode(id, v);"> -->
                     </button>
                     <button class="btn btn-primary glyphicon glyphicon-remove"
-                     ng-click="playersToggleEditMode(v);">
+                     ng-click="playersToggleEditMode(id, v);">
                     </button>
                   </div>
                 </div>
               </td>
               <td class="vertical-middle" style="vertical-align: middle;">
                 <span ng-show="!v.editMode">{{v.name}}</span>
-                <input ng-model="share.playerEdit.name" ng-show="v.editMode" key="enter" trap-key="updatePlayer(v, share.playerEdit)" />
+                <input ng-model="share.playerEdit.name" ng-show="v.editMode" key="enter" trap-key="playerUpdate(id, share.playerEdit)" />
               </td>
               <td class="vertical-middle" style="vertical-align: middle;">
                 <span ng-show="!v.editMode">{{v.email}}</span>
-                <input ng-model="share.playerEdit.email" ng-show="v.editMode" key="enter" trap-key="updatePlayer(v, share.playerEdit)" />
+                <input ng-model="share.playerEdit.email" ng-show="v.editMode" key="enter" trap-key="playerUpdate(id, share.playerEdit)" />
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <span ng-show="!v.editMode">{{v.skill}}</span>
-                <input ng-model="share.playerEdit.skill" ng-show="v.editMode" key="enter" trap-key="updatePlayer(v, share.playerEdit)" />
+                <input ng-model="share.playerEdit.skill" ng-show="v.editMode" key="enter" trap-key="playerUpdate(id, share.playerEdit)" />
               </td>
             </tr>
           </tbody>
           <tfoot>
             <tr>
               <td colspan="0">
-                <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="playersEmpty()"
-                  really-message="Are you really sure to remove <i>all</i> players?" really-click="removePlayersAll()">
+                <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="playersAreEmpty()"
+                  really-message="Are you really sure to remove <i>all</i> players?" really-click="playersRemoveAll()">
                 </button>
-                <button class="btn btn-primary glyphicon glyphicon-upload" ng-disabled="!playersEmpty()"
-                  ng-click="populatePlayers()">
+                <button class="btn btn-primary glyphicon glyphicon-upload" ng-disabled="!playersAreEmpty()"
+                  ng-click="playersPopulate()">
                 </button>
               </td>
             </tr>
@@ -115,7 +115,7 @@
               <td>
                 <div style="white-space: nowrap;">
                   <button class="btn btn-primary glyphicon glyphicon-ok"
-                   ng-click="addSport(share.sportNew); sportsToggleAddMode();">
+                   ng-click="sportAdd(share.sportAdd) && sportsToggleAddMode();">
                   </button>
                   <button class="btn btn-primary glyphicon glyphicon-remove"
                    ng-click="sportsToggleAddMode()">
@@ -123,45 +123,45 @@
                 </div>
               </td>
               <td>
-                <input ng-model="share.sportNew.name" key="enter" trap-key="addSport(share.sportNew)" />
+                <input ng-model="share.sportAdd.name" key="enter" trap-key="sportAdd(share.sportAdd)" />
               </td>
               <td>
-                <input ng-model="share.sportNew.playersMax" key="enter" trap-key="addSport(share.sportNew)" />
+                <input ng-model="share.sportAdd.playersMax" key="enter" trap-key="sportAdd(share.sportAdd)" />
               </td>
             </tr>
-            <tr class="vertical-middle" ng-repeat="v in share.sports | orderBy:sportsOrderByPredicate:false">
+            <tr class="vertical-middle" ng-repeat="(id, v) in share.sports | orderBy:sportsOrderByPredicate:false">
               <td>
                 <div style="white-space: nowrap;" ng-show="!v.editMode">
                   <button class="btn btn-primary glyphicon glyphicon-edit"
-                   ng-click="sportsToggleEditMode(v)">
+                   ng-click="sportsToggleEditMode(id, v)">
                   </button>
                   <button class="btn btn-primary glyphicon glyphicon-trash"
-                   really-message="Are you really sure to remove Sport <i>{{v.name}}</i> ?" really-click="removeSport(v)">
+                   really-message="Are you really sure to remove Sport <i>{{v.name}}</i> ?" really-click="sportRemove(id)">
                   </button>
                 </div>
                 <div class="btn-toolbar" ng-show="v.editMode">
                   <div style="white-space: nowrap;">
                     <button class="btn btn-primary glyphicon glyphicon-save"
-                     ng-click="updateSport(v, share.sportEdit); sportsToggleEditMode(v);">
+                     ng-click="sportUpdate(id, share.sportEdit) && sportsToggleEditMode(id, v);">
                     </button>
                     <button class="btn btn-primary glyphicon glyphicon-remove"
-                     ng-click="sportsToggleEditMode(v);">
+                     ng-click="sportsToggleEditMode(id, v);">
                     </button>
                   </div>
                 </div>
               </td>
               <td class="vertical-middle" style="vertical-align: middle;">
                 <span ng-show="!v.editMode">{{v.name}}</span>
-                <input ng-show="v.editMode" ng-model="share.sportEdit.name" key="enter" trap-key="updateSport(v, share.sportEdit)" />
+                <input ng-show="v.editMode" ng-model="share.sportEdit.name" key="enter" trap-key="sportUpdate(id, share.sportEdit)" />
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <span ng-show="!v.editMode">{{v.playersMax}}</span>
-                <input ng-show="v.editMode" ng-model="share.sportEdit.playersMax" key="enter" trap-key="updateSport(v, share.sportEdit)" />
+                <input ng-show="v.editMode" ng-model="share.sportEdit.playersMax" key="enter" trap-key="sportUpdate(id, share.sportEdit)" />
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <span ng-show="v.editMode"></span>
                 <span ng-show="!v.editMode">
-                  <button class="btn btn-primary glyphicon glyphicon-ok" ng-class="{ 'button-selected': v.selected, 'button-deselected': !v.selected }" ng-click="sportSelect(v)"></button>
+                  <button class="btn btn-primary glyphicon glyphicon-ok" ng-class="{ 'button-selected': v.selected, 'button-deselected': !v.selected }" ng-click="sportSelect(id)"></button>
                 </span> 
               </td>
             </tr>
@@ -169,16 +169,15 @@
           <tfoot>
             <tr>
               <td colspan="0">
-                <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="sportsEmpty()"
-                  really-message="Are you really sure to remove <i>all</i> sports?" really-click="removesportsAll()">
+                <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="sportsAreEmpty()"
+                  really-message="Are you really sure to remove <i>all</i> sports?" really-click="sportsRemoveAll()">
                 </button>
-                <button class="btn btn-primary glyphicon glyphicon-upload" ng-disabled="!sportsEmpty()" ng-click="populateSports()">
+                <button class="btn btn-primary glyphicon glyphicon-upload" ng-disabled="!sportsAreEmpty()" ng-click="sportsPopulate()">
                 </button>
               </td>
             </tr>
           </tfoot>
         </table>
-        <!-- {{share.sports}} -->
       </div>
 
     </div>

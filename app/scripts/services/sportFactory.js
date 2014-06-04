@@ -10,8 +10,26 @@ app.factory('sportFactory',
       ref: ref,
       all: sports,
       add: function(sport) {
+        return sports.$add(sport).then(
+          function (ref) {
+            var id = ref.name();
+            console.error('SUCCESS, id:', id);
+            return id;
+          },
+          function (err) { // TODO: IS THIS CALLED, ON ERROR? DO I NEED IT?
+            console.error('ERROR, TODO...', err);
+            return null;
+          }
+        );
+      },
+      set: function(id, sport) {
+        ref.child(id).set(sport);
+      },
+/*
+      add: function(sport) {
         ref.child(sport.name).set(sport);
       },
+*/
       find: function(id) {
         return sports.$child(id);
       },
@@ -22,7 +40,8 @@ app.factory('sportFactory',
             var id = childSnapshot.name();
             childSnapshot.ref().child(property).once('value', function(ss) {
               if (ss.val() === value) {
-                ret = id;
+              //ret = id;
+                ret = ss;
               }
             });
           });
@@ -32,7 +51,8 @@ app.factory('sportFactory',
       remove: function(id) {
         return sports.$remove(id);
       },
-      select: function (sport) {
+      select: function (id) {
+        //ref.child(id).child('selected').set(true);
         ref.once('value', function(ss) {
           ss.forEach(function(childSnapshot) {
             //var id = childSnapshot.name();

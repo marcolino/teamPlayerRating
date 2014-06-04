@@ -30,11 +30,11 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       });
 
       share.playerDefault = { name: '', email: '', skill: 50 };
-      share.playerNew = angular.copy(share.playerDefault);
+      share.playerAdd = angular.copy(share.playerDefault);
       share.playerEdit = {};
 
       share.sportDefault = { name: '', playersMax: 0 };
-      share.sportNew = angular.copy(share.sportDefault);
+      share.sportAdd = angular.copy(share.sportDefault);
       share.sportEdit = {};
 
       share.currentTab = 'Players';
@@ -44,34 +44,38 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     }
   };
 
-  $scope.populatePlayers = function () {
+  $scope.playersPopulate = function () {
+    // TODO: sort these (here, or in forEach()...)
     share.playersDefault = [
-      { 'name': 'Frinks',            'skill': 50 },
-      { 'name': 'Lucio',             'skill': 50 },
-      { 'name': 'Soletta',           'skill': 50 },
-      { 'name': 'Paoloalgo',         'skill': 50 },
-      { 'name': 'Marcotono',         'skill': 50 },
-      { 'name': 'Attila',            'skill': 50 },
-      { 'name': 'Puntone',           'skill': 50 },
-      { 'name': 'Bonnie',            'skill': 50 },
-      { 'name': 'Remi',              'skill': 50 },
-      { 'name': 'Grigio',            'skill': 50 },
-      { 'name': 'Mosso',             'skill': 50 },
-      { 'name': 'Nordin',            'skill': 50 },
-      { 'name': 'Hermes',            'skill': 50 },
-      { 'name': 'Cavallero',         'skill': 50 },
-      { 'name': 'Aleandro',          'skill': 50 },
-      { 'name': 'Francescobeltocco', 'skill': 50 },
-      { 'name': 'Nuovoragazzino',    'skill': 50 },
-      { 'name': 'Marcobellancio',    'skill': 50 },
+      { 'name': 'Frinks',            'email': '', 'skill': 50 },
+      { 'name': 'Lucio',             'email': '', 'skill': 50 },
+      { 'name': 'Soletta',           'email': '', 'skill': 50 },
+      { 'name': 'Paoloalgo',         'email': '', 'skill': 50 },
+      { 'name': 'Marcotono',         'email': '', 'skill': 50 },
+      { 'name': 'Attila',            'email': '', 'skill': 50 },
+      { 'name': 'Puntone',           'email': '', 'skill': 50 },
+      { 'name': 'Bonnie',            'email': '', 'skill': 50 },
+      { 'name': 'Remi',              'email': '', 'skill': 50 },
+      { 'name': 'Grigio',            'email': '', 'skill': 50 },
+      { 'name': 'Mosso',             'email': '', 'skill': 50 },
+      { 'name': 'Nordin',            'email': '', 'skill': 50 },
+      { 'name': 'Hermes',            'email': '', 'skill': 50 },
+      { 'name': 'Cavallero',         'email': '', 'skill': 50 },
+      { 'name': 'Aleandro',          'email': '', 'skill': 50 },
+      { 'name': 'Francesco',         'email': '', 'skill': 50 },
+      { 'name': 'Robertoventolin',   'email': '', 'skill': 50 },
+      { 'name': 'Marcobellancio',    'email': '', 'skill': 50 },
     ];
     // store the object
     share.playersDefault.forEach(function(player) {
-      playerFactory.add(player);
+      console.info('populating players with', player);
+      $scope.playerAdd(player);
+      //playerFactory.add(player);
     });
   };
 
-  $scope.populateSports = function () {
+  $scope.sportsPopulate = function () {
+    // TODO: sort these (here, or in forEach()...)
     share.sportsDefault = [
       { 'name': 'Calcio a 5', 'playersMax':  5, 'selected': true },
       { 'name': 'Calcio a 7', 'playersMax':  7                   },
@@ -81,16 +85,17 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     ];
     // store the object
     share.sportsDefault.forEach(function(sport) {
-      sportFactory.add(sport);
+      $scope.sportAdd(sport);
+      //sportFactory.add(sport);
     });
   };
 
-  $scope.playersEmpty = function () {
-    return sysFactory.objectIsEmpty(share.players);
+  $scope.playersAreEmpty = function () {
+    return sysFactory.objectLength(share.players) === 0;
   };
 
-  $scope.sportsEmpty = function () {
-    return sysFactory.objectIsEmpty(share.sports);
+  $scope.sportsAreEmpty = function () {
+    return sysFactory.objectLength(share.sports) === 0;
   };
 
   $scope.playersToggleAddMode = function () {
@@ -101,63 +106,88 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     share.sportsAddMode = !share.sportsAddMode;
   };
 
-  $scope.playersToggleEditMode = function (player) {
-    share.players[player.name].editMode = !share.players[player.name].editMode;
-    if (share.players[player.name].editMode) {
+  $scope.playersToggleEditMode = function (id, player) {
+    console.info('playersToggleEditMode():', id, player);
+    console.info('playersToggleEditMode(), before editMode:', share.players[id].editMode);
+    share.players[id].editMode = !share.players[id].editMode;
+    console.info('playersToggleEditMode(), after  editMode:', share.players[id].editMode);
+    if (share.players[id].editMode) {
       share.playerEdit = angular.copy(player);
     }
   };
 
-  $scope.sportsToggleEditMode = function (sport) {
-    share.sports[sport.name].editMode = !share.sports[sport.name].editMode;
-    if (share.sports[sport.name].editMode) {
+  $scope.sportsToggleEditMode = function (id, sport) {
+    share.sports[id].editMode = !share.sports[id].editMode;
+    if (share.sports[id].editMode) {
       share.sportEdit = angular.copy(sport);
     }
   };
 
-  $scope.addPlayer = function (player) {
-    if (player.name) {
-      playerFactory.add(player);
-      share.playerNew = angular.copy(share.playerDefault);
-    } else {
-      console.error('adding a player with no name...');
+  $scope.playerAdd = function (player) {
+    if (playerFactory.findByProperty('name', player.name)) { // do not permit duplicate names, even if they would be possible, using unique keys...
+      notificationFactory.error('Player name', player.name, 'already present!');
+      return false;
     }
+    if (!player.name) {
+      notificationFactory.error('Player name can\'t be empty!');
+      return false;
+    }
+    playerFactory.add(player).then(function (id) {
+      console.info('added player id:', id);
+    });
+    share.playerAdd = angular.copy(share.playerDefault);
+    return true;
   };
 
-  $scope.addSport = function (sport) {
-    if (sport.name) {
-      sportFactory.add(sport);
-      share.sportNew = angular.copy(share.sportDefault);
-    } else {
-      console.error('adding a sport with no name...');
+  $scope.sportAdd = function (sport) {
+    if (sportFactory.findByProperty('name', sport.name)) { // do not permit duplicate names, even if they would be possible, using unique keys...
+      notificationFactory.error('Sport name', sport.name, 'already present!');
+      return false;
     }
+    if (!sport.name) {
+      notificationFactory.error('Sport name can\'t be empty!');
+      return false;
+    }
+    sportFactory.add(sport).then(function (id) {
+      console.info('added sport id:', id);
+    });
+    share.sportAdd = angular.copy(share.sportDefault);
+    return true;
   };
 
-  $scope.updatePlayer = function (playerOld, playerNew) {
-    if (playerNew && !playerNew.name) {
+  $scope.playerUpdate = function (id, player) {
+    console.info('playerUpdate():', id, player);
+    if (player && !player.name) {
       notificationFactory.error('Name can\'t be empty. To remove a player please use trash button.');
-      return;
+      return false;
     }
-    $scope.removePlayer(playerOld);
-    playerNew.editMode = false;
-    $scope.addPlayer(playerNew, false, true);
-    //share.playerEdit = angular.copy(playerNew);
+
+    share.players[id].editMode = !share.players[id].editMode;
+    player.editMode = !player.editMode;
+    //$scope.playersToggleEditMode(id, player);
+
+    playerFactory.set(id, player);
+
+    if (share.players[id].editMode) {
+      share.playerEdit = angular.copy(player);
+    }
+
+    return true;
   };
 
-  $scope.updateSport = function (sportOld, sportNew) {
-    if (sportNew && !sportNew.name) {
+  $scope.sportUpdate = function (id, sport) {
+    if (sport && !sport.name) {
       notificationFactory.error('Name can\'t be empty. To remove a sport please use trash button.');
       return;
     }
-    $scope.removeSport(sportOld);
-    sportNew.editMode = false;
-    $scope.addSport(sportNew, false, true);
+    sport.editMode = false;
+    sportFactory.set(id, sport);
+    return true;
   };
 
   $scope.sportSelect = function (sport) {
     // select current sport (de-selecting others)
     sportFactory.select(sport);
-    //share.match.sportSelected = sport.name;
     share.teams.playersMax = sport.playersMax;
   };
 
@@ -166,19 +196,20 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     return sportFactory.selected();
   };
 
-  $scope.removePlayer = function (player) {
-    playerFactory.remove(player.name);
+  $scope.playerRemove = function (id) {
+    console.info('removing player', id);
+    playerFactory.remove(id);
   };
 
-  $scope.removeSport = function (sport) {
+  $scope.sportRemove = function (sport) {
     sportFactory.remove(sport.name);
   };
 
-  $scope.removePlayersAll = function () {
+  $scope.playersRemoveAll = function () {
     playerFactory.remove();
   };
 
-  $scope.removesportsAll = function () {
+  $scope.sportsRemoveAll = function () {
     sportFactory.remove();
   };
 

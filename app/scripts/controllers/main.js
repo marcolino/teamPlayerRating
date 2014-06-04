@@ -99,7 +99,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       return false;
     }
     share.teams.completed = $scope.checkTeamsCompleted();
-    if (!share.teams.completed && sysFactory.objectIsEmpty(share.playersAvailable)) {
+    if (!share.teams.completed && sysFactory.objectLength(share.playersAvailable) === 0) {
       notificationFactory.warning('The number of players is insufficient to play a match. Please add some players!');
     }
     return true;
