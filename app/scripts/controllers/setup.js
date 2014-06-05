@@ -192,7 +192,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     sportFactory.select(sport);
   };
 
-  $scope.sportSelected = function () {
+  $scope.sportSelected = function () { // TODO: directly use sportFactory.isSelected();
     // return selected sport
     return sportFactory.isSelected();
   };

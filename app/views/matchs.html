@@ -14,8 +14,7 @@
             </button>
           </th>
           <th>Date</th>
-          <th>Team A</th>
-          <th>Team B</th>
+          <th>Match</th>
           <th>Score</th>
         </tr>
       </thead>
@@ -23,9 +22,11 @@
         <tr class="vertical-middle" ng-repeat="(id, v) in share.matchs | orderBy:matchsOrderByPredicate:false">
           <td>
             <div style="white-space: nowrap;" ng-show="!v.editMode">
+              <!-- TODO: send to $location('/'), with selected match loaded...
               <button class="btn btn-primary glyphicon glyphicon-edit"
                ng-click="matchsToggleEditMode(id, v)">
               </button>
+              -->
               <button class="btn btn-primary glyphicon glyphicon-trash"
                really-message="Are you really sure to remove match <i>{{v.name}}</i> ?" really-click="matchRemove(id)">
               </button>
@@ -45,16 +46,18 @@
             <span ng-show="!v.editMode">{{v.date}}</span>
             <input ng-model="share.matchEdit.name" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
-          <td class="vertical-middle" style="vertical-align: middle;">
-            <span ng-show="!v.editMode">{{v.team['A']}}</span>
+          <td class="vertical-middle" style="vertical-align: middle; text-align: center;">
+            <span ng-show="!v.editMode">{{v.teams['A'].name + ' - ' + v.teams['B'].name}}</span>
             <input ng-model="share.matchEdit.team['A']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
+<!--
           <td class="vertical-middle" style="vertical-align: middle;">
-            <span ng-show="!v.editMode">{{v.team['B']}}</span>
+            <span ng-show="!v.editMode">{{v.teams['B'].name}}</span>
             <input ng-model="share.matchEdit.team['B']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
-          <td class="vertical-middle numerical" style="vertical-align: middle;">
-            <span ng-show="!v.editMode">{{v.score}}</span>
+-->
+          <td class="vertical-middle" style="vertical-align: middle; text-align: center;">
+            <span ng-show="!v.editMode">{{v.teams['A'].score + ' - ' + v.teams['B'].score}}</span>
             <input ng-model="share.matchEdit.score" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
         </tr>

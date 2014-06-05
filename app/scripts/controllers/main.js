@@ -24,6 +24,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       //share.players = playerFactory.all;
       share.match = {};
       //share.match.date;
+      share.match.date = new Date();
       share.match.teams = {};
       share.match.teams['A'] = {
         name: 'Oranges',
@@ -35,7 +36,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         score: -1,
         players: {}
       };
-      console.info('IN share.match', share.match);
+      console.info('IN share.match.teams[A]', share.match.teams['A']);
 
 /*
       sportFactory.ref.on('value', function() {
@@ -192,9 +193,9 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     //match.date = share.match.date;
 
     // TODO: move share.match.teams to share.match.teams ...
-    share.match.teams = [];
-    share.match.teams['A'] = share.match.teams['A'];
-    share.match.teams['B'] = share.match.teams['B'];
+    //share.match.teams = [];
+    //share.match.teams['A'] = share.match.teams['A'];
+    //share.match.teams['B'] = share.match.teams['B'];
 
     matchFactory.add(share.match).then(function (id) {
       console.info('added match id:', id);
@@ -215,7 +216,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     $scope.opened = true;
   };
 
-  $scope.sportSelected = function () {
+  $scope.sportSelected = function () { // TODO: directly use sportFactory.isSelected(); (or rename it sportFactory.selected(); )
     // return selected sport
     return sportFactory.isSelected();
   };

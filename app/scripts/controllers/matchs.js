@@ -55,13 +55,24 @@ $scope.init = function () { // first load
   };
 
   $scope.goto = function (route) {
-    notificationFactory.info('Name can\'t be empty. To remove a match please use trash button.');    $location.path(route)
+    $location.path(route);
   }
 
   $scope.toggleCollapse = function () {
     share.matchsCollapsed = !share.matchsCollapsed;
     console.info('share.matchsCollapsed:', share.matchsCollapsed);
   }
+
+/*
+  $scope.matchToggleEditMode = function (id) {
+    share.matchs[id].editMode = !share.matchs[id].editMode;
+/ *
+    if (share.matchs[id].editMode) {
+      share.matchEdit = angular.copy(match);
+    }
+* /
+  };
+*/
 
   $scope.init();
 
