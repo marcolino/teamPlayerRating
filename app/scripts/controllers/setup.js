@@ -5,10 +5,12 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   $scope.share = share;
 
   $scope.init = function () { // first load
-    if (!share.initialized) {
+    if (!share.setupInitialized) {
       console.info(' * INITIALIZING');
-      share.spinner = spinnerFactory;
-      share.spinner.show();
+      if (!share.spinner) {
+        share.spinner = spinnerFactory;
+        share.spinner.show();
+      }
 
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
@@ -39,6 +41,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
       share.currentTab = 'Players';
 
+      share.setupInitialized = true;
     } else {
       share.spinner.hide();
     }
@@ -68,9 +71,8 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     ];
     // store the object
     share.playersDefault.forEach(function(player) {
-      console.info('populating players with', player);
+      //console.info('populating players with', player);
       $scope.playerAdd(player);
-      //playerFactory.add(player);
     });
   };
 
@@ -85,8 +87,8 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     ];
     // store the object
     share.sportsDefault.forEach(function(sport) {
+      //console.info('populating sports with', sport);
       $scope.sportAdd(sport);
-      //sportFactory.add(sport);
     });
   };
 
@@ -107,10 +109,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   };
 
   $scope.playersToggleEditMode = function (id, player) {
-    console.info('playersToggleEditMode():', id, player);
-    console.info('playersToggleEditMode(), before editMode:', share.players[id].editMode);
     share.players[id].editMode = !share.players[id].editMode;
-    console.info('playersToggleEditMode(), after  editMode:', share.players[id].editMode);
     if (share.players[id].editMode) {
       share.playerEdit = angular.copy(player);
     }
@@ -150,22 +149,19 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
     }
     sportFactory.add(sport).then(function (id) {
       console.info('added sport id:', id);
+      notificationFactory.success('ADDED sport id', id);
     });
     share.sportAdd = angular.copy(share.sportDefault);
     return true;
   };
 
   $scope.playerUpdate = function (id, player) {
-    console.info('playerUpdate():', id, player);
     if (player && !player.name) {
-      notificationFactory.error('Name can\'t be empty. To remove a player please use trash button.');
+      notificationFactory.warning('Name can\'t be empty. To remove a player please use trash button.');
       return false;
     }
-
     share.players[id].editMode = !share.players[id].editMode;
     player.editMode = !player.editMode;
-    //$scope.playersToggleEditMode(id, player);
-
     playerFactory.set(id, player);
 
     if (share.players[id].editMode) {
@@ -177,32 +173,36 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
   $scope.sportUpdate = function (id, sport) {
     if (sport && !sport.name) {
-      notificationFactory.error('Name can\'t be empty. To remove a sport please use trash button.');
-      return;
+      notificationFactory.waring('Name can\'t be empty. To remove a sport please use trash button.');
+      return false;
     }
-    sport.editMode = false;
+    share.sports[id].editMode = !share.sports[id].editMode;
+    sport.editMode = !sport.editMode;
     sportFactory.set(id, sport);
+
+    if (share.sports[id].editMode) {
+      share.sportsEdit = angular.copy(sport);
+    }
+
     return true;
   };
 
   $scope.sportSelect = function (sport) {
     // select current sport (de-selecting others)
     sportFactory.select(sport);
-    share.teams.playersMax = sport.playersMax;
   };
 
   $scope.sportSelected = function () {
     // return selected sport
-    return sportFactory.selected();
+    return sportFactory.isSelected();
   };
 
   $scope.playerRemove = function (id) {
-    console.info('removing player', id);
     playerFactory.remove(id);
   };
 
-  $scope.sportRemove = function (sport) {
-    sportFactory.remove(sport.name);
+  $scope.sportRemove = function (id) {
+    sportFactory.remove(id);
   };
 
   $scope.playersRemoveAll = function () {

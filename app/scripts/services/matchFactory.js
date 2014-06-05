@@ -2,21 +2,36 @@
 
 app.factory('matchFactory',
   function($firebase, FIREBASE_URL) {
-    var url = FIREBASE_URL + '/' + 'match';
+    var url = FIREBASE_URL + '/' + 'matchs';
     var ref = new Firebase(url);
-    var matches = $firebase(ref);
+    var matchs = $firebase(ref);
 
     return {
       ref: ref,
-      all: matches,
+      all: matchs,
       add: function(match) {
-        return matches.$add(match);
+        return matchs.$add(match).then(
+          function (ref) {
+            var id = ref.name();
+            //console.error('SUCCESS, id:', id);
+            return id;
+          },
+          function (err) {
+            // Firebase is resilient with failures...
+            // use Firebase Security Rules to test this...
+            console.error('ERROR:', err);
+            return null;
+          }
+        );
+      },
+      set: function(id, match) {
+        ref.child(id).set(match);
       },
       find: function(id) {
-        return matches.$child(id);
+        return matchs.$child(id);
       },
       findByProperty: function(property, value) {
-        var ret;
+        var ret = null;
         ref.once('value', function(ss) {
           ss.forEach(function(childSnapshot) {
             var id = childSnapshot.name();
@@ -30,9 +45,8 @@ app.factory('matchFactory',
         return ret;
       },
       remove: function(id) {
-        return matches.$remove(id);
-      },
-      delete: function(id) { return this.remove(id); } // alias
+        return matchs.$remove(id);
+      }
     };
   }
 );

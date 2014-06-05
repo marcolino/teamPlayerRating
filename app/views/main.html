@@ -3,40 +3,40 @@
   <div class="container-fluid">
     <div class="span12 text-right">
       <input type="text" ng-disabled="true" class="text-right sport" ng-value="sportSelected();" />
-      <input type="text" class="text-right date" datepicker-popup="{{share.match.dateFormat}}" ng-model="share.match.date" is-open="opened" min="minDate" datepicker-options="share.match.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
+      <input type="text" class="text-right date" datepicker-popup="{{share.main.dateFormat}}" ng-model="share.match.date" is-open="opened" min="minDate" datepicker-options="share.main.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
     </div>
   </div>
 
   <div class="container-fluid container-court">
     <div class="row">
       <div class="col-xs-6">
-        <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="share.teams['A'].players">
-          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
+        <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="share.match.teams['A'].players">
+          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.match.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
         </div>
       </div>
       <div class="col-xs-6">
-        <div id="teamB" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-b': true, 'team-selected': isTeamSelected('B')}" ng-model="share.teams['B'].players">
-          <div class="btn btn-warning player player-team-b" ng-repeat="item in share.teams['B'].players" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
+        <div id="teamB" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-b': true, 'team-selected': isTeamSelected('B')}" ng-model="share.match.teams['B'].players">
+          <div class="btn btn-warning player player-team-b" ng-repeat="item in share.match.teams['B'].players" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <input id="label-teamA" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="share.teams.closed" ng-model="share.teams['A'].name" />
+        <input id="label-teamA" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="teamsCheckClosed()" ng-model="share.match.teams['A'].name" />
       </div>
       <div class="col-xs-6">
-        <input id="label-teamB" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="share.teams.closed" ng-model="share.teams['B'].name" />
+        <input id="label-teamB" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="teamsCheckClosed()" ng-model="share.match.teams['B'].name" />
       </div>
     </div>
   </div>
 
   <div class="container-fluid">
-    <div class="span12 text-center" ng-show="share.teams.completed && !share.teams.closed">
+    <div class="span12 text-center" ng-show="share.main.teamsCompleted && !share.main.teamsClosed">
       <button class="btn btn-lg btn-primary" type="button" ng-click="teamsClose();">Close teams and Play!</button>
     </div>
   </div>
 
-  <div class="container-fluid container-lockerroom" ng-show="!share.teams.closed">
+  <div class="container-fluid container-lockerroom" ng-show="!teamsCheckClosed()">
     <div class="lockerroom">
       <span ng-repeat="(key, item) in share.playersAvailable" NOlimit-text-length NOmax-len="103">
         <div class="btn btn-warning player" ng-click="playerSelect($event)" ng-model="share.players" ng-hide="!item.name">
@@ -46,27 +46,27 @@
     </div>
   </div>
   
-  <div class="container-fluid container-scores text-center" ng-show="share.teams.closed">
+  <div class="container-fluid container-scores text-center" ng-show="teamsCheckClosed()">
     <div class="scores">
       <div class="row">
         <div class="col-xs-12">Final match score</div>
       </div>
       <div class="row">
         <div class="col-xs-6 score-input-container score-input-container-a">
-          <input type="text" class="score-input court-a" valid-score ng-model="share.teams['A'].score" />
+          <input type="text" class="score-input court-a" valid-score ng-model="share.match.teams['A'].score" />
         </div>
         <div class="col-xs-6 score-input-container score-input-container-b">
-          <input type="text" class="score-input court-b" valid-score ng-model="share.teams['B'].score" />
+          <input type="text" class="score-input court-b" valid-score ng-model="share.match.teams['B'].score" />
         </div>
       </div>
       <div class="row">
         <div class="col-xs-16">
-          <button class="btn btn-lg btn-primary" type="button" ng-disabled="!checkMatchClosed()" ng-click="matchConfirm()">
+          <button class="btn btn-lg btn-primary" type="button" ng-disabled="!matchCheckClosed()" ng-click="matchConfirm()">
             Confirm score
           </button>
         </div>
         <div class="col-xs-16">
-          <button class="btn btn-lg btn-primary" type="button" ng-show="checkMatchConfirmed()" ng-click="reset(); init()">
+          <button class="btn btn-lg btn-primary" type="button" ng-show="matchCheckConfirmed()" ng-click="reset(); init()">
             Reset match
           </button>
         </div>

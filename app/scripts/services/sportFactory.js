@@ -13,11 +13,12 @@ app.factory('sportFactory',
         return sports.$add(sport).then(
           function (ref) {
             var id = ref.name();
-            console.error('SUCCESS, id:', id);
             return id;
           },
-          function (err) { // TODO: IS THIS CALLED, ON ERROR? DO I NEED IT?
-            console.error('ERROR, TODO...', err);
+          function (err) {
+            // Firebase is resilient with failures...
+            // use Firebase Security Rules to test this...
+            console.error('ERROR:', err);
             return null;
           }
         );
@@ -25,23 +26,17 @@ app.factory('sportFactory',
       set: function(id, sport) {
         ref.child(id).set(sport);
       },
-/*
-      add: function(sport) {
-        ref.child(sport.name).set(sport);
-      },
-*/
       find: function(id) {
         return sports.$child(id);
       },
       findByProperty: function(property, value) {
-        var ret;
+        var ret = null;
         ref.once('value', function(ss) {
           ss.forEach(function(childSnapshot) {
             var id = childSnapshot.name();
             childSnapshot.ref().child(property).once('value', function(ss) {
               if (ss.val() === value) {
-              //ret = id;
-                ret = ss;
+                ret = id;
               }
             });
           });
@@ -52,12 +47,10 @@ app.factory('sportFactory',
         return sports.$remove(id);
       },
       select: function (id) {
-        //ref.child(id).child('selected').set(true);
         ref.once('value', function(ss) {
           ss.forEach(function(childSnapshot) {
-            //var id = childSnapshot.name();
             childSnapshot.ref().child('name').once('value', function(ss) {
-              if (ss.val() === sport.name) { // select requested sport
+              if (ss.val() === sports.$child(id).name) { // select requested sport
                 childSnapshot.ref().child('selected').set(true);
               } else { // de-select other sports
                 childSnapshot.ref().child('selected').set(false);
@@ -84,7 +77,8 @@ app.factory('sportFactory',
         }
 */
       },
-      selected: function () {
+      isSelected: function () {
+        // TODO: should use "ref.once('value', ..."
         var obj = sports;
         for (var prop in obj) {
           if (obj.hasOwnProperty(prop)) {

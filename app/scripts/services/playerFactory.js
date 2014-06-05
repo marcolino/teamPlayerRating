@@ -13,17 +13,18 @@ app.factory('playerFactory',
         return players.$add(player).then(
           function (ref) {
             var id = ref.name();
-            console.error('SUCCESS, id:', id);
+            //console.error('SUCCESS, id:', id);
             return id;
           },
-          function (err) { // TODO: IS THIS CALLED, ON ERROR? DO I NEED IT?
-            console.error('ERROR, TODO...', err);
+          function (err) {
+            // Firebase is resilient with failures...
+            // use Firebase Security Rules to test this...
+            console.error('ERROR:', err);
             return null;
           }
         );
       },
       set: function(id, player) {
-        console.info('set', ref.child(id));
         ref.child(id).set(player);
       },
       find: function(id) {
@@ -36,8 +37,7 @@ app.factory('playerFactory',
             var id = childSnapshot.name();
             childSnapshot.ref().child(property).once('value', function(ss) {
               if (ss.val() === value) {
-              //ret = id;
-                ret = ss;
+                ret = id;
               }
             });
           });

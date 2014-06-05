@@ -21,6 +21,10 @@ var app = angular.module('teamplayerratingApp', [
         templateUrl: 'views/setup.html',
         controller: 'SetupCtrl'
       })
+      .when('/matches', {
+        templateUrl: 'views/matchs.html',
+        controller: 'MatchsCtrl'
+      })
       .when('/statistics', {
         templateUrl: 'views/statistics.html',
         controller: 'StatisticsCtrl'
