@@ -23,8 +23,8 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       share.main.sports = sportFactory.all;
       //share.players = playerFactory.all;
       share.match = {};
-      //share.match.date;
       share.match.date = new Date();
+      //share.match.date = $scope.dateToday(share.main.dateFormat);
       share.match.teams = {};
       share.match.teams['A'] = {
         name: 'Oranges',
@@ -231,6 +231,17 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     });
     return ret;
   };
+
+  /*
+  $scope.dateToday = function(format) {
+    var d = new Date();
+    var day = d.getDate();
+    var m = d.getMonth();
+    var y = d.getFullYear();
+    ... INCOMPLETE ...
+    return today.format(format);
+  };
+  */
 
   $scope.init();
 

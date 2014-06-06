@@ -1,7 +1,7 @@
 <div class="ng-cloak j-spinner">
   <div class="container-fluid">
     <div class="btn-toolbar" style="margin: 0.3em 0.6em;">
-      <button class="btn btn-primary glyphicon" ng-class="{ 'glyphicon-plus-sign': share.matchsCollapsed, 'glyphicon-minus-sign': !share.matchsCollapsed }" ng-attr-title="{{ (share.matchsCollapsed ? 'Expand' : 'Collapse') + ' team matchs' }}"
+      <button class="btn btn-primary glyphicon" ng-class="{ 'glyphicon-plus-sign': share.matchsCollapsed, 'glyphicon-minus-sign': !share.matchsCollapsed }" ng-attr-title="{{ (share.matchsCollapsed ? 'Expand' : 'Collapse') + ' teams' }}"
        ng-click="toggleCollapse();">
       </button>
     </div>
@@ -9,12 +9,13 @@
       <thead>
         <tr>
           <th>
-            <button class="btn btn-primary glyphicon glyphicon-plus"
+            <button class="btn btn-primary glyphicon glyphicon-plus" title="Add a new match"
              ng-click="goto('/')">
             </button>
           </th>
           <th>Date</th>
-          <th>Match</th>
+          <th>Team A</th>
+          <th>Team B</th>
           <th>Score</th>
         </tr>
       </thead>
@@ -27,8 +28,8 @@
                ng-click="matchsToggleEditMode(id, v)">
               </button>
               -->
-              <button class="btn btn-primary glyphicon glyphicon-trash"
-               really-message="Are you really sure to remove match <i>{{v.name}}</i> ?" really-click="matchRemove(id)">
+              <button class="btn btn-primary glyphicon glyphicon-trash" title="Remove this match"
+               really-message="Are you really sure to remove match <i>{{v.teams['A'].name + ' - ' + v.teams['B'].name}}</i> played on <i>{{v.date | date: share.main.dateFormat}}</i> ?" really-click="matchRemove(id)">
               </button>
             </div>
             <div class="btn-toolbar" ng-show="v.editMode">
@@ -43,20 +44,32 @@
             </div>
           </td>
           <td class="vertical-middle" style="vertical-align: middle;">
-            <span ng-show="!v.editMode">{{v.date}}</span>
+            <span ng-show="!v.editMode">{{v.date | date: share.main.dateFormat}}</span>
             <input ng-model="share.matchEdit.name" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
-          <td class="vertical-middle" style="vertical-align: middle; text-align: center;">
-            <span ng-show="!v.editMode">{{v.teams['A'].name + ' - ' + v.teams['B'].name}}</span>
+          <td class="vertical-middle" style="vertical-align: middle; t_ext-align: center;">
+            <span ng-show="!v.editMode">{{v.teams['A'].name}}</span>
             <input ng-model="share.matchEdit.team['A']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
+            <div class="container-fluid" ng-show="!share.matchsCollapsed">
+              <div class="row">
+                <div class="col-xs-12">
+                  <span class="btn btn-warning player player-team-a" ng-repeat="item in v.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
+                </div>
+              </div>
+            </div>
           </td>
-<!--
-          <td class="vertical-middle" style="vertical-align: middle;">
+          <td class="vertical-middle" style="vertical-align: middle; t_ext-align: center;">
             <span ng-show="!v.editMode">{{v.teams['B'].name}}</span>
             <input ng-model="share.matchEdit.team['B']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
+            <div class="container-fluid" ng-show="!share.matchsCollapsed">
+              <div class="row">
+                <div class="col-xs-12">
+                  <span class="btn btn-warning player player-team-b" ng-repeat="item in v.teams['B'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
+                </div>
+              </div>
+            </div>
           </td>
--->
-          <td class="vertical-middle" style="vertical-align: middle; text-align: center;">
+          <td class="vertical-middle" style="white-space: nowrap; vertical-align: middle; text-align: center;">
             <span ng-show="!v.editMode">{{v.teams['A'].score + ' - ' + v.teams['B'].score}}</span>
             <input ng-model="share.matchEdit.score" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
@@ -65,7 +78,7 @@
       <tfoot>
         <tr>
           <td colspan="0">
-            <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="matchsAreEmpty()"
+            <button class="btn btn-primary glyphicon glyphicon-trash" ng-disabled="matchsAreEmpty()" title="Remove all matches"
               really-message="Are you really sure to remove <i>all</i> matchs?" really-click="matchsRemoveAll()">
             </button>
             <!--

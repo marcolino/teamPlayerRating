@@ -4,13 +4,16 @@ app.controller('MatchsCtrl', function ($scope, $location, stateFactory, sportFac
   var share = stateFactory;
   $scope.share = share;
 
-$scope.init = function () { // first load
+  $scope.init = function () { // first load
     if (!share.matchsInitialized) {
       console.info(' * INITIALIZING');
       if (!share.spinner) {
         share.spinner = spinnerFactory;
         share.spinner.show();
       }
+
+      share.main = {};
+      share.main.dateFormat = 'yyyy-MM-dd'; // TODO: why need to be set here and also in main.js? Put this in shareFactory?
 
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
@@ -22,6 +25,7 @@ $scope.init = function () { // first load
 
       share.matchs.$on('loaded', function () {
         share.spinner.hide();
+        console.info(share.matchs);
       });
 
       share.matchsInitialized = true;
@@ -56,12 +60,12 @@ $scope.init = function () { // first load
 
   $scope.goto = function (route) {
     $location.path(route);
-  }
+  };
 
   $scope.toggleCollapse = function () {
     share.matchsCollapsed = !share.matchsCollapsed;
     console.info('share.matchsCollapsed:', share.matchsCollapsed);
-  }
+  };
 
 /*
   $scope.matchToggleEditMode = function (id) {
