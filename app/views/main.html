@@ -3,29 +3,29 @@
   <div class="container-fluid">
     <div class="span12 text-right">
       <input type="text" ng-disabled="true" class="text-right sport" ng-value="sportSelected();" />
-      <input type="text" class="text-right date" datepicker-popup="{{share.main.dateFormat}}" ng-model="share.match.date" is-open="opened" min="minDate" datepicker-options="share.main.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
+      <input type="text" class="text-right date" datepicker-popup="{{share.main.dateFormat}}" ng-model="share.main.match.date" is-open="opened" min="minDate" datepicker-options="share.main.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
     </div>
   </div>
 
   <div class="container-fluid container-court">
     <div class="row">
       <div class="col-xs-6">
-        <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="share.match.teams['A'].players">
-          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.match.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
+        <div id="teamA" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-a': true, 'team-selected': isTeamSelected('A')}" ng-model="share.main.match.teams['A'].players">
+          <div class="btn btn-warning player player-team-a" ng-repeat="item in share.main.match.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</div>
         </div>
       </div>
       <div class="col-xs-6">
-        <div id="teamB" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-b': true, 'team-selected': isTeamSelected('B')}" ng-model="share.match.teams['B'].players">
-          <div class="btn btn-warning player player-team-b" ng-repeat="item in share.match.teams['B'].players" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
+        <div id="teamB" ng-click="teamSelect($event)" ng-class="{'court': true, 'court-b': true, 'team-selected': isTeamSelected('B')}" ng-model="share.main.match.teams['B'].players">
+          <div class="btn btn-warning player player-team-b" ng-repeat="item in share.main.match.teams['B'].players" ng-show="item.name" ng-model="teamB">{{item.name}}</div>
         </div>
       </div>
     </div>
     <div class="row">
       <div class="col-xs-6">
-        <input id="label-teamA" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="teamsCheckClosed()" ng-model="share.match.teams['A'].name" />
+        <input id="label-teamA" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-a': true, 'team-selected': isTeamSelected('A')}" ng-disabled="teamsCheckClosed()" ng-model="share.main.match.teams['A'].name" />
       </div>
       <div class="col-xs-6">
-        <input id="label-teamB" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="teamsCheckClosed()" ng-model="share.match.teams['B'].name" />
+        <input id="label-teamB" ng-click="teamSelect($event)" type="text" ng-class="{'team-label': true, 'team-label-b': true, 'team-selected': isTeamSelected('B')}" ng-disabled="teamsCheckClosed()" ng-model="share.main.match.teams['B'].name" />
       </div>
     </div>
   </div>
@@ -53,10 +53,10 @@
       </div>
       <div class="row">
         <div class="col-xs-6 score-input-container score-input-container-a">
-          <input type="text" class="score-input court-a" valid-score ng-model="share.match.teams['A'].score" />
+          <input type="text" class="score-input court-a" valid-score ng-model="share.main.match.teams['A'].score" />
         </div>
         <div class="col-xs-6 score-input-container score-input-container-b">
-          <input type="text" class="score-input court-b" valid-score ng-model="share.match.teams['B'].score" />
+          <input type="text" class="score-input court-b" valid-score ng-model="share.main.match.teams['B'].score" />
         </div>
       </div>
       <div class="row">

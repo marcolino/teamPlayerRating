@@ -36,7 +36,7 @@ console.info("DOING INIT...");
       share.teams.completed = false;
       share.teams.closed = false;
 
-      share.match.sport = "Calcio a 5";
+      share.main.match.sport = "Calcio a 5";
 
       $scope.sports = sportFactory.all;
 
@@ -44,7 +44,7 @@ console.info("DOING INIT...");
 
       sportFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
-        share.teams.playersMax = ids[share.match.sport].playersMax;
+        share.teams.playersMax = ids[share.main.match.sport].playersMax;
 console.info('teams.playersMax:', share.teams.playersMax);
       });
       playerFactory.ref.on('value', function(snapshot) {

@@ -59,9 +59,12 @@ var app = angular.module('teamplayerratingApp', [
   })
 */
 
+/*
 app.run(function (stateFactory) {
   stateFactory.match = {};
   stateFactory.match.date = new Date();
   stateFactory.match.status = 'starting';
   stateFactory.teams = {};
 });
+*/
+app.run(function () {});

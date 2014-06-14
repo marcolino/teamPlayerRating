@@ -12,16 +12,12 @@ app.controller('MatchsCtrl', function ($scope, $location, stateFactory, sportFac
         share.spinner.show();
       }
 
-      share.main = {};
-      share.main.dateFormat = 'yyyy-MM-dd'; // TODO: why need to be set here and also in main.js? Put this in shareFactory?
+      //share.main = {};
+      //share.main.dateFormat = 'yyyy-MM-dd'; // TODO: why need to be set here and also in main.js? Put this in shareFactory?
 
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
       share.matchs = matchFactory.all;
-
-      share.matchsEditMode = false;
-      share.matchsCollapsed = true;
-      share.matchsOrderByPredicate = 'date';
 
       share.matchs.$on('loaded', function () {
         share.spinner.hide();

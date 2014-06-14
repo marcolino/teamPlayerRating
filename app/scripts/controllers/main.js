@@ -3,57 +3,29 @@
 app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, matchFactory, notificationFactory, sysFactory, spinnerFactory) {
   var share = stateFactory;
   $scope.share = share;
-
+  
   $scope.init = function () { // first load
-    if (!share.initialized) {
+    if (!share.initializedMain) {
       if (!share.spinner) {
         share.spinner = spinnerFactory;
         share.spinner.show();
       }
-      share.main = {};
-      share.main.teamsInitialized = true;
-      share.main.teamSelected = null;
-      share.main.teamsCompleted = false;
-      share.main.teamsClosed = false;
-      share.main.matchConfirmed = false;
-      share.main.dateFormat = 'yyyy-MM-dd';
-      share.main.dateOptions = {};
-      share.main.dateOptions['starting-day'] = 1;
-      share.main.dateOptions['showWeeks'] = 0;
-      share.main.sports = sportFactory.all;
-      //share.players = playerFactory.all;
-      share.match = {};
-      share.match.date = new Date();
-      //share.match.date = $scope.dateToday(share.main.dateFormat);
-      share.match.teams = {};
-      share.match.teams['A'] = {
-        name: 'Oranges',
-        score: -1,
-        players: {}
-      };
-      share.match.teams['B'] = {
-        name: 'Blues',
-        score: -1,
-        players: {}
-      };
-      console.info('IN share.match.teams[A]', share.match.teams['A']);
 
-/*
-      sportFactory.ref.on('value', function() {
-        share.main.sportselected = sportFactory.isSelected();
-      });
-*/
+      share.sports = sportFactory.all;
+      share.players = playerFactory.all;
+
       playerFactory.ref.on('value', function(snapshot) {
         var ids = snapshot.val();
         share.playersAvailable = angular.copy(ids);
         share.spinner.hide();
       });
-      share.mainInitialized = true;
+      share.initializedMain = true;
     }
   };
   
   $scope.reset = function () {
-    share.mainInitialized = false;
+    share.initMain();
+    share.initializedMain = false;
   };
   
   $scope.teamSelect = function (event) {
@@ -69,10 +41,10 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
       var name = event.target.firstChild.data;
       if (name) { // selected a player in team to remove it
         var idParentTeam = event.target.parentElement.id.replace(/^team/, '');
-        angular.forEach(share.match.teams[idParentTeam].players, function(value, key) {
+        angular.forEach(share.main.match.teams[idParentTeam].players, function(value, key) {
           if (value.name === name) {
-            share.playersAvailable[key] = share.match.teams[idParentTeam].players[key];
-            delete share.match.teams[idParentTeam].players[key];
+            share.playersAvailable[key] = share.main.match.teams[idParentTeam].players[key];
+            delete share.main.match.teams[idParentTeam].players[key];
           } else { // this shouldn't happen...
             notificationFactory.error('Selected element name not found in team', idParentTeam, '!');
             return false;
@@ -101,9 +73,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         notificationFactory.warning('Please select a team!');
         return false;
       }
-      console.log('share.main.teamSelected:', share.main.teamSelected);
-      console.log('$scope.sportSelectedPlayersMax():', $scope.sportSelectedPlayersMax());
-      if (sysFactory.objectLength(share.match.teams[share.main.teamSelected].players) >= $scope.sportSelectedPlayersMax()) {
+      if (sysFactory.objectLength(share.main.match.teams[share.main.teamSelected].players) >= $scope.sportSelectedPlayersMax()) {
         notificationFactory.info('This team is complete');
         return false;
       }
@@ -113,7 +83,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
         notificationFactory.error('Selected player name "', name, '" not found!');
         return false;
       }
-      share.match.teams[share.main.teamSelected].players[id] = share.playersAvailable[id];
+      share.main.match.teams[share.main.teamSelected].players[id] = share.playersAvailable[id];
       delete share.playersAvailable[id];
     } else { // this shouldn't happen...
       notificationFactory.error('Empty name element target: ', element.target);
@@ -132,8 +102,8 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
   $scope.teamsCheckCompleted = function () {
     if (
-      (sysFactory.objectLength(share.match.teams['A'].players) === $scope.sportSelectedPlayersMax()) &&
-      (sysFactory.objectLength(share.match.teams['B'].players) === $scope.sportSelectedPlayersMax())
+      (sysFactory.objectLength(share.main.match.teams['A'].players) === $scope.sportSelectedPlayersMax()) &&
+      (sysFactory.objectLength(share.main.match.teams['B'].players) === $scope.sportSelectedPlayersMax())
     ) {
       console.info('All teams are complete');
       return true;
@@ -148,7 +118,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   };
 
   $scope.teamSetSelected = function (id) {
-    share.main.teamSelected = share.match.teams[id.replace(/^team/, '')];
+    share.main.teamSelected = share.main.match.teams[id.replace(/^team/, '')];
     console.info('Selected team with id', id);
   };
 
@@ -158,15 +128,14 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   };
 
   $scope.matchCheckClosed = function () {
-    console.info('CC share.match.teams[A]', share.match.teams['A']);
     return (
-      (typeof share.match.teams['A'].score !== 'undefined') &&
-      (typeof share.match.teams['B'].score !== 'undefined')
+      (typeof share.main.match.teams['A'].score !== 'undefined') &&
+      (typeof share.main.match.teams['B'].score !== 'undefined')
     );
   };
 
   $scope.matchCheckConfirmed = function () {
-    return share.main.matchConfirmed;
+    return share.main.match.confirmed;
   };
 
   $scope.matchConfirm = function () {
@@ -181,7 +150,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     /* TODO: but, shoul use promise / then... to keep $location.path() and share.main.matchConfirmed here...
     $scope.updateScores().then(function (id) {
       $location.path('/statistics');
-      share.main.matchConfirmed = true;
+      share.main.match.confirmed = true;
     });
     */
   };
@@ -190,16 +159,16 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     // TODO: ... :-)
 
     //var match = {};
-    //match.date = share.match.date;
+    //match.date = share.main.match.date;
 
-    // TODO: move share.match.teams to share.match.teams ...
-    //share.match.teams = [];
-    //share.match.teams['A'] = share.match.teams['A'];
-    //share.match.teams['B'] = share.match.teams['B'];
+    // TODO: move share.main.match.teams to share.main.match.teams ...
+    //share.main.match.teams = [];
+    //share.main.match.teams['A'] = share.main.match.teams['A'];
+    //share.main.match.teams['B'] = share.main.match.teams['B'];
 
-    matchFactory.add(share.match).then(function (id) {
+    matchFactory.add(share.main.match).then(function (id) {
       console.info('added match id:', id);
-      share.main.matchConfirmed = true;
+      share.main.match.confirmed = true;
       $location.path('/statistics');
     });
 
@@ -224,7 +193,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
   $scope.sportSelectedPlayersMax = function() {
     var sport = $scope.sportSelected();
     var ret = 0;
-    angular.forEach(share.main.sports, function(value) {
+    angular.forEach(share.sports, function(value) {
       if (value.name === sport) {
         ret = parseInt(value.playersMax);
       }
