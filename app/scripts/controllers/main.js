@@ -1,6 +1,6 @@
 'use strict';
 
-app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFactory, playerFactory, matchFactory, notificationFactory, sysFactory, spinnerFactory) {
+app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, sportFactory, playerFactory, matchFactory, notificationFactory, sysFactory, spinnerFactory) {
   var share = stateFactory;
   $scope.share = share;
   
@@ -147,7 +147,7 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
     }
 
     $scope.updateScores();
-    /* TODO: but, shoul use promise / then... to keep $location.path() and share.main.matchConfirmed here...
+    /* TODO: but, should use promise / then... to keep $location.path() and share.main.matchConfirmed here...
     $scope.updateScores().then(function (id) {
       $location.path('/statistics');
       share.main.match.confirmed = true;
@@ -157,6 +157,17 @@ app.controller('MainCtrl', function ($scope, $location, stateFactory, sportFacto
 
   $scope.updateScores = function () {
     // TODO: ... :-)
+
+    $http.jsonp(
+      'http://192.168.10.30/teamplayerranking/uty/PHPSkills/src/Moserware/UnitTests/TrueSkill/test.php' + '?' + 'callback=JSON_CALLBACK' + '&' + $.param(share.main.match))
+      .success(function(response) {
+        console.info('NEW SKILLS RETRIEVED: ', response);
+        // update players skills with response...
+      })
+      .error(function(data, status, headers, config) {
+        console.error('NEW SKILLS NOT RETRIEVED! STATUS IS: ', status);
+      });
+
 
     //var match = {};
     //match.date = share.main.match.date;
