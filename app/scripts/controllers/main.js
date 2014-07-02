@@ -163,6 +163,18 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
       .success(function(response) {
         console.info('NEW SKILLS RETRIEVED: ', response);
         // update players skills with response...
+
+/*
+        for (var i = 0; i < response.length; ++i) {
+          var skill = {};
+          //console.info(' +++ player:', response[i]);
+          skill.mu = response[i].skill[0];
+          skill.sigma = response[i].skill[1];
+          //console.info('skill:', skill);
+          playerFactory.setSkill(response[i].id, skill);
+        }
+*/
+
       })
       .error(function(data, status, headers, config) {
         console.error('NEW SKILLS NOT RETRIEVED! STATUS IS: ', status);
