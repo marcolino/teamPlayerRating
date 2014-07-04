@@ -25,7 +25,7 @@ app.factory('stateFactory', function() {
     share.main.teamsCompleted = false;
     share.main.teamsClosed = false;
 
-    share.main.match = {}; // TODO: should be "share.main.match"
+    share.main.match = {};
     share.main.match.date = new Date();
     share.main.match.confirmed = false;
     share.main.match.teams = {};

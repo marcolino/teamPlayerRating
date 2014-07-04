@@ -31,7 +31,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
         share.spinner.hide();
       });
 
-      share.playerDefault = { name: '', email: '', skill: 50 };
+      share.playerDefault = { name: '', email: '', skill: 25 }; // TODO...
       share.playerAdd = angular.copy(share.playerDefault);
       share.playerEdit = {};
 
@@ -211,6 +211,21 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
   $scope.sportsRemoveAll = function () {
     sportFactory.remove();
+  };
+
+  $scope.playerResetSkill = function (id, player) {
+    // TODO: use some more global constants?
+    player.skill.sigma = 25;
+    player.skill.mu = 25 / 3;
+  };
+
+  $scope.playersResetSkillAll = function () {
+    for (var id in share.players) {
+      var player = share.players[id];
+      if (!player.skill) continue; // skip non-objects - TODO: do it better...
+      $scope.playerResetSkill(null, player);
+      playerFactory.set(id, player);
+    }
   };
 
   $scope.init();

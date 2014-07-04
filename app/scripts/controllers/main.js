@@ -156,14 +156,28 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
   };
 
   $scope.updateScores = function () {
-    // TODO: ... :-)
-
+    var url = 'http://192.168.10.30/teamplayerranking/uty/PHPSkills/src/getNewSkills.php';
+    var response = share.main.match;
+    for (var id in response.teams['A'].players) {
+      console.info('OLD SKILL OF TEAM A PLAYER '+response.teams['A'].players[id].name+' OF TEAM A: ', response.teams['A'].players[id].skill.sigma);
+    }
+    for (var id in response.teams['B'].players) {
+      console.info('OLD SKILL OF TEAM B PLAYER '+response.teams['B'].players[id].name+' OF TEAM A: ', response.teams['B'].players[id].skill.sigma);
+    }
     $http.jsonp(
-      'http://192.168.10.30/teamplayerranking/uty/PHPSkills/src/Moserware/UnitTests/TrueSkill/test.php' + '?' + 'callback=JSON_CALLBACK' + '&' + $.param(share.main.match))
+      url + '?' + 'callback=JSON_CALLBACK' + '&' + $.param(share.main.match))
       .success(function(response) {
         console.info('NEW SKILLS RETRIEVED: ', response);
+/*
+        for (var id in response.teams['A'].players) {
+          console.info('NEW SKILL OF TEAM A PLAYER '+response.teams['A'].players[id].name+' OF TEAM A: ', response.teams['A'].players[id].skill.sigma);
+        }
+        for (var id in response.teams['B'].players) {
+          console.info('NEW SKILL OF TEAM B PLAYER '+response.teams['B'].players[id].name+' OF TEAM A: ', response.teams['B'].players[id].skill.sigma);
+        }
+*/
         // update players skills with response...
-
+        /* TODO !!! */
 /*
         for (var i = 0; i < response.length; ++i) {
           var skill = {};
@@ -174,7 +188,6 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
           playerFactory.setSkill(response[i].id, skill);
         }
 */
-
       })
       .error(function(data, status, headers, config) {
         console.error('NEW SKILLS NOT RETRIEVED! STATUS IS: ', status);

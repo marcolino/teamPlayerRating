@@ -44,6 +44,7 @@ app.factory('sportFactory',
         return ret;
       },
       remove: function(id) {
+        // note: removes all players if id is null
         return sports.$remove(id);
       },
       select: function (id) {

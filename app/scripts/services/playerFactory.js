@@ -45,6 +45,7 @@ app.factory('playerFactory',
         return ret;
       },
       remove: function(id) {
+        // note: removes all players if id is null
         return players.$remove(id);
       }
     };

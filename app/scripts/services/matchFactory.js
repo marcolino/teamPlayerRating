@@ -45,6 +45,7 @@ app.factory('matchFactory',
         return ret;
       },
       remove: function(id) {
+        // note: removes all players if id is null
         return matchs.$remove(id);
       }
     };
