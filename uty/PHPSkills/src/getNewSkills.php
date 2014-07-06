@@ -18,6 +18,7 @@ use Moserware\Skills\Teams;
 use Moserware\Skills\SkillCalculator;
 use Moserware\Skills\TrueSkill\TwoTeamTrueSkillCalculator;
 
+$charset = 'utf8';
 $callback = isset($_GET['callback']) ? $_GET['callback'] : null;
 $teams = isset($_GET['teams']) ? $_GET['teams'] : null;
 
@@ -54,23 +55,24 @@ foreach ($teams as $teamId => $team) {
   foreach ($teams[$teamId]['players'] as $playerId => $player) {
     $rating = $newRatingsWinLoseTS->getRating($players[$teamId][$playerId]->playerTS);
     $response[] = array(
-      # TODO: think of a better response format... (in main JS controller)
-      $players[$teamId][$playerId]->name => array(
+      'id' => $playerId,
+      'name' => $players[$teamId][$playerId]->name,
+      'rating' => array(
         'sigma' => $rating->getMean(),
         'mu' => $rating->getStandardDeviation(),
-      )
+      ),
     );
   }
 }
 
 if ($callback) {
-  header('Content-Type: text/javascript; charset=utf8');
-  #header('Access-Control-Allow-Origin: ...'); # TODO: set Access-Control-Allow-Origin ?
+  header('Content-Type: text/javascript; charset='.$charset);
   header('Access-Control-Max-Age: 3628800');
   header('Access-Control-Allow-Methods: GET, POST, PUT, DELETE');
+  #header('Access-Control-Allow-Origin: ...'); # we do not set Access-Control-Allow-Origin
   echo $callback . "(" . json_encode($response) . ")";
 } else {
-  header('Content-Type: application/json; charset=utf8');
+  header('Content-Type: application/json; charset='.$charset);
   echo $response;
 }
 

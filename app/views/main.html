@@ -2,7 +2,7 @@
 
   <div class="container-fluid">
     <div class="span12 text-right">
-      <input type="text" ng-disabled="true" class="text-right sport" ng-value="sportSelected();" />
+      <input type="text" readonly="true" ng-click="share.setupTabActive = 'tab-sports'; go('/setup');" class="text-right sport" ng-value="sportSelected();" />
       <input type="text" class="text-right date" datepicker-popup="{{share.main.dateFormat}}" ng-model="share.main.match.date" is-open="opened" min="minDate" datepicker-options="share.main.dateOptions" date-disabled="matchDateDisabled(date, mode)" show-button-bar="false" ng-required="true" ng-click="matchDateOpen($event)" />
     </div>
   </div>

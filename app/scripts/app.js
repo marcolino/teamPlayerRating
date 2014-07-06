@@ -27,7 +27,7 @@ var app = angular.module('teamplayerratingApp', [
       })
       .when('/statistics', {
         templateUrl: 'views/statistics.html',
-        controller: 'StatisticsCtrl'
+        controller: 'SetupCtrl'
       })
       .otherwise({
         redirectTo: '/'

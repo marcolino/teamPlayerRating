@@ -41,15 +41,18 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
       var name = event.target.firstChild.data;
       if (name) { // selected a player in team to remove it
         var idParentTeam = event.target.parentElement.id.replace(/^team/, '');
+        var found = false;
         angular.forEach(share.main.match.teams[idParentTeam].players, function(value, key) {
           if (value.name === name) {
             share.playersAvailable[key] = share.main.match.teams[idParentTeam].players[key];
             delete share.main.match.teams[idParentTeam].players[key];
-          } else { // this shouldn't happen...
-            notificationFactory.error('Selected element name not found in team', idParentTeam, '!');
-            return false;
+            found = true;
           }
         });
+        if (!found) { // this shouldn't happen...
+          notificationFactory.error('Selected element name not found in team "' + idParentTeam + '"!');
+          return false;
+        }
         share.main.teamsCompleted = $scope.teamsCheckCompleted();
       } else { // this shouldn't happen...
         notificationFactory.error('Selected element in team with empty first child data: ', event.target.firstChild, '!');
@@ -147,16 +150,11 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
     }
 
     $scope.updateScores();
-    /* TODO: but, should use promise / then... to keep $location.path() and share.main.matchConfirmed here...
-    $scope.updateScores().then(function (id) {
-      $location.path('/statistics');
-      share.main.match.confirmed = true;
-    });
-    */
   };
 
   $scope.updateScores = function () {
-    var url = 'http://192.168.10.30/teamplayerranking/uty/PHPSkills/src/getNewSkills.php';
+    var url = 'http://localhost/teamPlayerRating/uty/PHPSkills/src/getNewSkills.php';
+    /*
     var response = share.main.match;
     for (var id in response.teams['A'].players) {
       console.info('OLD SKILL OF TEAM A PLAYER '+response.teams['A'].players[id].name+' OF TEAM A: ', response.teams['A'].players[id].skill.sigma);
@@ -164,49 +162,32 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
     for (var id in response.teams['B'].players) {
       console.info('OLD SKILL OF TEAM B PLAYER '+response.teams['B'].players[id].name+' OF TEAM A: ', response.teams['B'].players[id].skill.sigma);
     }
+    */
     $http.jsonp(
       url + '?' + 'callback=JSON_CALLBACK' + '&' + $.param(share.main.match))
+    //url + '?' + $.param(share.main.match))
       .success(function(response) {
-        console.info('NEW SKILLS RETRIEVED: ', response);
-/*
-        for (var id in response.teams['A'].players) {
-          console.info('NEW SKILL OF TEAM A PLAYER '+response.teams['A'].players[id].name+' OF TEAM A: ', response.teams['A'].players[id].skill.sigma);
+        console.info('new skill retrieved: ', response);
+        // update players skills with response
+        for (var n in response) {
+          var playerTS = response[n];
+          var player = share.players[playerTS.id];
+          player.skill.sigma = playerTS.rating.sigma;
+          player.skill.mu = playerTS.rating.mu;
+          playerFactory.set(playerTS.id, player);
         }
-        for (var id in response.teams['B'].players) {
-          console.info('NEW SKILL OF TEAM B PLAYER '+response.teams['B'].players[id].name+' OF TEAM A: ', response.teams['B'].players[id].skill.sigma);
-        }
-*/
-        // update players skills with response...
-        /* TODO !!! */
-/*
-        for (var i = 0; i < response.length; ++i) {
-          var skill = {};
-          //console.info(' +++ player:', response[i]);
-          skill.mu = response[i].skill[0];
-          skill.sigma = response[i].skill[1];
-          //console.info('skill:', skill);
-          playerFactory.setSkill(response[i].id, skill);
-        }
-*/
+        matchFactory.add(share.main.match).then(function (id) {
+          console.info('added match id:', id);
+          share.main.match.confirmed = true;
+          //$location.path('/statistics');
+          $scope.go('/statistics');
+        });
       })
       .error(function(data, status, headers, config) {
-        console.error('NEW SKILLS NOT RETRIEVED! STATUS IS: ', status);
-      });
-
-
-    //var match = {};
-    //match.date = share.main.match.date;
-
-    // TODO: move share.main.match.teams to share.main.match.teams ...
-    //share.main.match.teams = [];
-    //share.main.match.teams['A'] = share.main.match.teams['A'];
-    //share.main.match.teams['B'] = share.main.match.teams['B'];
-
-    matchFactory.add(share.main.match).then(function (id) {
-      console.info('added match id:', id);
-      share.main.match.confirmed = true;
-      $location.path('/statistics');
-    });
+        console.error('new skills not retrieved!', 'Status is', status);
+        notificationFactory.error('Error calculating new ratings, match not saved!');
+      }
+    );
 
   };
 
@@ -237,16 +218,9 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
     return ret;
   };
 
-  /*
-  $scope.dateToday = function(format) {
-    var d = new Date();
-    var day = d.getDate();
-    var m = d.getMonth();
-    var y = d.getFullYear();
-    ... INCOMPLETE ...
-    return today.format(format);
+  $scope.go = function (path) {
+    $location.path(path);
   };
-  */
 
   $scope.init();
 

@@ -15,6 +15,24 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sports = sportFactory.all;
       share.players = playerFactory.all;
 
+      share.players.$on('loaded', function () {
+        share.spinner.hide();
+        /*
+        share.playersList = [];
+        for (var id in share.players) {
+          if (share.players.hasOwnProperty(id)) {
+            if (typeof share.players[id] === 'object') {
+              share.playersList.push(share.players[id]);
+            }
+          }
+        }
+        */
+      });
+
+      share.sports.$on('loaded', function () {
+        share.spinner.hide();
+      });
+
       share.playersAddMode = false;
       share.playersEditMode = false;
       share.playersOrderByPredicate = 'name';
@@ -22,14 +40,6 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sportsAddMode = false;
       share.sportsEditMode = false;
       share.sportsOrderByPredicate = 'name';
-
-      share.players.$on('loaded', function () {
-        share.spinner.hide();
-      });
-
-      share.sports.$on('loaded', function () {
-        share.spinner.hide();
-      });
 
       share.playerDefault = { name: '', email: '', skill: 25 }; // TODO...
       share.playerAdd = angular.copy(share.playerDefault);
@@ -39,35 +49,39 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sportAdd = angular.copy(share.sportDefault);
       share.sportEdit = {};
 
-      share.currentTab = 'Players';
-
+      //share.currentTab = 'Players';
+      share.setupTabActive = 'tab-players';
       share.setupInitialized = true;
     } else {
       share.spinner.hide();
     }
   };
 
+  $scope.isSetupTabActive = function (tab) {
+    return tab === share.setupTabActive;
+  };
+
   $scope.playersPopulate = function () {
     // TODO: sort these (here, or in forEach()...)
     share.playersDefault = [
-      { 'name': 'Frinks',            'email': '', 'skill': 50 },
-      { 'name': 'Lucio',             'email': '', 'skill': 50 },
-      { 'name': 'Soletta',           'email': '', 'skill': 50 },
-      { 'name': 'Paoloalgo',         'email': '', 'skill': 50 },
-      { 'name': 'Marcotono',         'email': '', 'skill': 50 },
-      { 'name': 'Attila',            'email': '', 'skill': 50 },
-      { 'name': 'Puntone',           'email': '', 'skill': 50 },
-      { 'name': 'Bonnie',            'email': '', 'skill': 50 },
-      { 'name': 'Remi',              'email': '', 'skill': 50 },
-      { 'name': 'Grigio',            'email': '', 'skill': 50 },
-      { 'name': 'Mosso',             'email': '', 'skill': 50 },
-      { 'name': 'Nordin',            'email': '', 'skill': 50 },
-      { 'name': 'Hermes',            'email': '', 'skill': 50 },
-      { 'name': 'Cavallero',         'email': '', 'skill': 50 },
-      { 'name': 'Aleandro',          'email': '', 'skill': 50 },
-      { 'name': 'Francesco',         'email': '', 'skill': 50 },
-      { 'name': 'Robertoventolin',   'email': '', 'skill': 50 },
-      { 'name': 'Marcobellancio',    'email': '', 'skill': 50 },
+      { 'name': 'Frinks',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Lucio',             'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Soletta',           'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Paoloalgo',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Marcotono',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Attila',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Puntone',           'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Bonnie',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Remi',              'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Grigio',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Mosso',             'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Nordin',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Hermes',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Cavallero',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Aleandro',          'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Francesco',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Robertoventolin',   'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Marcobellancio',    'email': '', 'skill': { sigma: 25, mu: 25/3 } },
     ];
     // store the object
     share.playersDefault.forEach(function(player) {

@@ -2,16 +2,16 @@
 
   <div class="container-fluid">
     <ul class="nav nav-pills">
-      <li class="active">
+      <li ng-class="{active: isSetupTabActive('tab-players')}">
         <a data-target="#tab-players" data-toggle="pill">Players</a>
       </li>
-      <li>
+      <li ng-class="{active: isSetupTabActive('tab-sports')}">
         <a data-target="#tab-sports" data-toggle="pill">Sports</a>
       </li>
     </ul>
 
     <div class="tab-content">
-      <div id="tab-players" class="tab-pane active">
+      <div id="tab-players" ng-class="{'tab-pane':true, active: isSetupTabActive('tab-players')}">
         <table id="table-players" class="table table-bordered table-condensed table-hover table-auto-width">
           <thead>
             <tr>
@@ -86,7 +86,7 @@
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <!-- TODO: write a directive to show skill... -->
-                <span n_g-show="!v.editMode">{{v.skill.sigma | number }}</span>
+                <span n_g-show="!v.editMode">{{v.skill.sigma | number:2 }}</span>
                 <!-- TODO: it should be not possible to edit skills... -->
                 <!-- <input ng-model="share.playerEdit.skill" ng-show="v.editMode" key="enter" trap-key="playerUpdate(id, share.playerEdit)" /> -->
                 <button class="btn btn-primary glyphicon glyphicon-refresh" ng-show="v.editMode" 
@@ -121,7 +121,7 @@
         </table>
       </div>
 
-      <div id="tab-sports" class="tab-pane">
+      <div id="tab-sports" ng-class="{'tab-pane':true, active: isSetupTabActive('tab-sports')}">
         <table id="table-sports" class="table table-bordered table-condensed table-hover table-auto-width">
           <thead>
             <tr>

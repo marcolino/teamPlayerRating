@@ -1,3 +1,24 @@
-<div class="ng-cloak">
-  statistics...
+<div class="ng-cloak j-spinner">
+  <div class="container-fluid">
+    <table id="table-statistics" class="table table-bordered table-condensed table-hover table-auto-width">
+      <thead>
+        <tr>
+          <th>Name</th>
+          <th>Skill</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr class="vertical-middle" ng-repeat="v in share.players | orderPlayerBySkill">
+          <td class="vertical-middle" style="vertical-align: middle;">
+            <span>{{v.name}}</span>
+          </td>
+          <td class="vertical-middle numerical" style="vertical-align: middle;">
+            <span>{{v.skill.sigma | number:2 }}</span>
+            <!-- TODO: write a directive to show skill... -->
+            <span>({{v.skill.mu | number:2 }})</span>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </div>

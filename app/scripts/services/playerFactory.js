@@ -6,48 +6,60 @@ app.factory('playerFactory',
     var ref = new Firebase(url);
     var players = $firebase(ref);
 
-    return {
+    var Player = {
       ref: ref,
-      all: players,
-      add: function(player) {
-        return players.$add(player).then(
-          function (ref) {
-            var id = ref.name();
-            //console.error('SUCCESS, id:', id);
-            return id;
-          },
-          function (err) {
-            // Firebase is resilient with failures...
-            // use Firebase Security Rules to test this...
-            console.error('ERROR:', err);
-            return null;
-          }
-        );
-      },
-      set: function(id, player) {
-        ref.child(id).set(player);
-      },
-      find: function(id) {
-        return players.$child(id);
-      },
-      findByProperty: function(property, value) {
-        var ret = null;
-        ref.once('value', function(ss) {
-          ss.forEach(function(childSnapshot) {
-            var id = childSnapshot.name();
-            childSnapshot.ref().child(property).once('value', function(ss) {
-              if (ss.val() === value) {
-                ret = id;
-              }
-            });
+      all: players
+    };
+
+    Player.add = function(player) {
+      if (Player.findByProperty('name', player.name)) {
+          console.error('ERROR: duplicate player name', player.name);
+          return null;
+      }
+      return players.$add(player).then(
+        function (ref) {
+          var id = ref.name();
+          //console.error('SUCCESS, id:', id);
+          return id;
+        },
+        function (err) {
+          // Firebase is resilient with failures...
+          // use Firebase Security Rules to test this...
+          console.error('ERROR:', err);
+          return null;
+        }
+      );
+    };
+    Player.set = function(id, player) {
+      ref.child(id).set(player);
+    };
+    Player.find = function(id) {
+      return players.$child(id);
+    };
+    Player.findByProperty = function(property, value) {
+      var ret = null;
+      ref.once('value', function(ss) {
+        ss.forEach(function(childSnapshot) {
+          var id = childSnapshot.name();
+          childSnapshot.ref().child(property).once('value', function(ss) {
+            if (ss.val() === value) {
+              ret = id;
+            }
           });
         });
-        return ret;
-      },
-      remove: function(id) {
-        // note: removes all players if id is null
-        return players.$remove(id);
-      }
+      });
+      return ret;
     };
+    Player.remove = function(id) {
+      // note: removes all players if id is null
+      return players.$remove(id);
+    };
+    Player.setRating = function(id, rating) {
+      console.info('id:', id);
+      console.info('ref.child(id):', ref.child(id));
+      ref.child(id).skill.set(rating);
+    };
+
+    return Player;
   }
 );
