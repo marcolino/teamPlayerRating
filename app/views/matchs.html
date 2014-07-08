@@ -1,7 +1,7 @@
 <div class="ng-cloak j-spinner">
   <div class="container-fluid">
     <div class="btn-toolbar" style="margin: 0.3em 0.6em;">
-      <button class="btn btn-primary glyphicon" ng-class="{ 'glyphicon-plus-sign': share.matchsCollapsed, 'glyphicon-minus-sign': !share.matchsCollapsed }" ng-attr-title="{{ (share.matchsCollapsed ? 'Expand' : 'Collapse') + ' teams' }}"
+      <button class="btn btn-primary glyphicon" ng-class="{ 'glyphicon-zoom-in': share.matchsCollapsed, 'glyphicon-zoom-out': !share.matchsCollapsed }" ng-attr-title="{{ (share.matchsCollapsed ? 'Expand' : 'Collapse') + ' teams' }}"
        ng-click="toggleCollapse();">
       </button>
     </div>
@@ -20,8 +20,8 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="vertical-middle" ng-repeat="(id, v) in share.matchs | orderBy:matchsOrderByPredicate:false">
-          <td>
+        <tr class="vertical-middle" ng-repeat="(id, v) in share.matchs | orderByPriority | orderBy:'date':false"><!--orderBy:matchsOrderByPredicate:false">-->
+          <td class="vertical-middle" style="vertical-align: middle;">
             <div style="white-space: nowrap;" ng-show="!v.editMode">
               <!-- TODO: send to $location('/'), with selected match loaded...
               <button class="btn btn-primary glyphicon glyphicon-edit"
@@ -47,24 +47,24 @@
             <span ng-show="!v.editMode">{{v.date | date: share.main.dateFormat}}</span>
             <input ng-model="share.matchEdit.name" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
           </td>
-          <td class="vertical-middle" style="vertical-align: middle; t_ext-align: center;">
+          <td class="vertical-middle" style="vertical-align: middle;">
             <span ng-show="!v.editMode">{{v.teams['A'].name}}</span>
             <input ng-model="share.matchEdit.team['A']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
             <div class="container-fluid" ng-show="!share.matchsCollapsed">
               <div class="row">
                 <div class="col-xs-12">
-                  <span class="btn btn-warning player player-team-a" ng-repeat="item in v.teams['A'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
+                  <span class="btn btn-warning player player-team-a" ng-repeat="item in v.teams['A'].players | orderByPriority | orderBy:'name'" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
                 </div>
               </div>
             </div>
           </td>
-          <td class="vertical-middle" style="vertical-align: middle; t_ext-align: center;">
+          <td class="vertical-middle" style="vertical-align: middle;">
             <span ng-show="!v.editMode">{{v.teams['B'].name}}</span>
             <input ng-model="share.matchEdit.team['B']" ng-show="v.editMode" key="enter" trap-key="matchUpdate(id, share.matchEdit)" />
             <div class="container-fluid" ng-show="!share.matchsCollapsed">
               <div class="row">
                 <div class="col-xs-12">
-                  <span class="btn btn-warning player player-team-b" ng-repeat="item in v.teams['B'].players" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
+                  <span class="btn btn-warning player player-team-b" ng-repeat="item in v.teams['B'].players | orderByPriority | orderBy:'name'" ng-show="item.name" ng-model="teamA">{{item.name}}</span>
                 </div>
               </div>
             </div>

@@ -13,8 +13,8 @@ app.factory('playerFactory',
 
     Player.add = function(player) {
       if (Player.findByProperty('name', player.name)) {
-          console.error('ERROR: duplicate player name', player.name);
-          return null;
+        console.error('ERROR: duplicate player name', player.name);
+        return null;
       }
       return players.$add(player).then(
         function (ref) {

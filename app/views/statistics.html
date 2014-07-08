@@ -1,21 +1,38 @@
 <div class="ng-cloak j-spinner">
   <div class="container-fluid">
+<!-- <div ng-repeat="flav in ['cherry', 'grape']"> -->
+<!--
+<div ng-repeat="player in share.players | orderByPriority | orderBy:'skill.sigma':true">
+  <visualrating rat="{{player.skill}}"></visualrating>
+</div>
+-->
     <table id="table-statistics" class="table table-bordered table-condensed table-hover table-auto-width">
       <thead>
         <tr>
+          <th>Pos.</th>
           <th>Name</th>
           <th>Skill</th>
         </tr>
       </thead>
       <tbody>
-        <tr class="vertical-middle" ng-repeat="v in share.players | orderPlayerBySkill">
-          <td class="vertical-middle" style="vertical-align: middle;">
-            <span>{{v.name}}</span>
+        <tr class="vertical-middle" ng-repeat="player in share.players | orderByPriority | orderBy:'skill.sigma':true">
+          <td class="vertical-middle" style="vertical-align: middle; text-align: right;">
+            <span>{{1 + $index}}&deg;</span>
           </td>
-          <td class="vertical-middle numerical" style="vertical-align: middle;">
+          <td class="vertical-middle">
+            <span>{{player.name}}</span>
+          </td>
+          <td class="vertical-bottom">
+  <visualrating ratin="{{player.skill}}"></visualrating>
+<!--
+            <visualrating rating="{{v.skill}}"></visualrating>
+-->
+            <!--
+            &nbsp;|&nbsp;
             <span>{{v.skill.sigma | number:2 }}</span>
-            <!-- TODO: write a directive to show skill... -->
+            <!- - TODO: write a directive to show skill... - ->
             <span>({{v.skill.mu | number:2 }})</span>
+          -->
           </td>
         </tr>
       </tbody>

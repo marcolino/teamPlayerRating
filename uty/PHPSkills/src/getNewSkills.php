@@ -27,7 +27,13 @@ $gameInfoTS = new GameInfo();
 $teamsTS = null;
 $ranking = null;
 
+# user-sort teams, since ranks array (3rd parameters of calculateNewRatings())
+# apparently does not work as expected;
+# negate scores difference to get rankinks, requested by calculateNewRatings();
+usort($teams, function($a, $b) { return - ($a['score'] - $b['score']); });
+
 foreach ($teams as $teamId => $team) {
+#print("==============" . $teamId . "===============<br>\n");
   $teams[$teamId]['teamTS'] = new Team();
   foreach ($teams[$teamId]['players'] as $playerId => $player) {
     $players[$teamId][$playerId]->name = $player['name'];
@@ -46,14 +52,23 @@ foreach ($teams as $teamId => $team) {
     Teams::concat($teamsTS, $teams[$teamId]['teamTS']) :
     $teams[$teamId]['teamTS']
   ;
-  $ranking[] = - $teams[$teamId]['score']; # negate scores to get rank
+#  $ranking[] = $teams[$teamId]['score']; # negate scores to get rank
+#print_r($teamsTS); print "<br>\n";
+#print_r($teamId); print "<br>\n";
+#print_r($ranking); print "<br>\n";
+#print("==============" . "<br>\n");
 }
+#$ranking[0] = 2;
+#$ranking[1] = 1;
 
-$newRatingsWinLoseTS = $calculatorTS->calculateNewRatings($gameInfoTS, $teamsTS, $ranking);
+#print_r($teams); print "--------<br>\n";
+
+$newRatingsWinLoseTS = $calculatorTS->calculateNewRatings($gameInfoTS, $teamsTS, array(1, 2));
 
 foreach ($teams as $teamId => $team) {
   foreach ($teams[$teamId]['players'] as $playerId => $player) {
     $rating = $newRatingsWinLoseTS->getRating($players[$teamId][$playerId]->playerTS);
+#print "name: " . $players[$teamId][$playerId]->name . ": " . $rating->getMean() . "<br>\n";
     $response[] = array(
       'id' => $playerId,
       'name' => $players[$teamId][$playerId]->name,
@@ -64,6 +79,7 @@ foreach ($teams as $teamId => $team) {
     );
   }
 }
+#exit;
 
 if ($callback) {
   header('Content-Type: text/javascript; charset='.$charset);

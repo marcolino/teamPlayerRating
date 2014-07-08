@@ -1,6 +1,10 @@
 'use strict';
 
-app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, playerFactory, notificationFactory, sysFactory, spinnerFactory) {
+/*
+ * Do not show / edit skill in setup view
+ */
+
+app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactory, playerFactory, notificationFactory, sysFactory, spinnerFactory) {
   var share = stateFactory;
   $scope.share = share;
 
@@ -17,16 +21,8 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
 
       share.players.$on('loaded', function () {
         share.spinner.hide();
-        /*
-        share.playersList = [];
-        for (var id in share.players) {
-          if (share.players.hasOwnProperty(id)) {
-            if (typeof share.players[id] === 'object') {
-              share.playersList.push(share.players[id]);
-            }
-          }
-        }
-        */
+        $scope.playersList = $filter('orderByPriority')(share.players);
+        console.info('$scope.playersList:', $scope.playersList);
       });
 
       share.sports.$on('loaded', function () {
@@ -41,7 +37,7 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sportsEditMode = false;
       share.sportsOrderByPredicate = 'name';
 
-      share.playerDefault = { name: '', email: '', skill: 25 }; // TODO...
+      share.playerDefault = { name: '', email: '', skill: { sigma: 25, mu: 25 / 3 }}; // TODO...
       share.playerAdd = angular.copy(share.playerDefault);
       share.playerEdit = {};
 
@@ -49,8 +45,9 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       share.sportAdd = angular.copy(share.sportDefault);
       share.sportEdit = {};
 
-      //share.currentTab = 'Players';
-      share.setupTabActive = 'tab-players';
+      if (!share.setupTabActive) {
+        share.setupTabActive = 'tab-players';
+      }
       share.setupInitialized = true;
     } else {
       share.spinner.hide();
@@ -78,10 +75,13 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
       { 'name': 'Nordin',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
       { 'name': 'Hermes',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
       { 'name': 'Cavallero',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
-      { 'name': 'Aleandro',          'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Alejandro',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
       { 'name': 'Francesco',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
       { 'name': 'Robertoventolin',   'email': '', 'skill': { sigma: 25, mu: 25/3 } },
       { 'name': 'Marcobellancio',    'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Davide',            'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Paffutello',        'email': '', 'skill': { sigma: 25, mu: 25/3 } },
+      { 'name': 'Maxdamuri',         'email': '', 'skill': { sigma: 25, mu: 25/3 } },
     ];
     // store the object
     share.playersDefault.forEach(function(player) {
@@ -123,6 +123,9 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   };
 
   $scope.playersToggleEditMode = function (id, player) {
+    console.log('id: ', id);
+    console.log('player: ', player);
+    console.log('share.players: ', share.players);
     share.players[id].editMode = !share.players[id].editMode;
     if (share.players[id].editMode) {
       share.playerEdit = angular.copy(player);
@@ -236,7 +239,9 @@ app.controller('SetupCtrl', function ($scope, stateFactory, sportFactory, player
   $scope.playersResetSkillAll = function () {
     for (var id in share.players) {
       var player = share.players[id];
-      if (!player.skill) continue; // skip non-objects - TODO: do it better...
+      if (!player.skill) {
+        continue; // skip non-objects - TODO: do it better...
+      }
       $scope.playerResetSkill(null, player);
       playerFactory.set(id, player);
     }

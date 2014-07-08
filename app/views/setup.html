@@ -47,11 +47,12 @@
                 <input ng-model="share.playerAdd.email" key="enter" trap-key="playerAdd(share.playerAdd, false, false)" />
               </td>
               <td>
-                <!-- TODO: it should be not possible to set skills... -->
-                <input ng-model="share.playerAdd.skill" key="enter" trap-key="playerAdd(share.playerAdd, false, false)" />
+                <!-- TODO: write a directive to show skill... -->
+                <span>{{share.playerAdd.skill.sigma | number:2 }}</span>
+                <!-- TODO: it should be not possible to edit skills... -->
               </td>
             </tr>
-            <tr class="vertical-middle" ng-repeat="(id, v) in share.players | orderBy:playersOrderByPredicate:false">
+            <tr class="vertical-middle" ng-repeat="(id, v) in share.players | orderByPriority | orderBy:'name'"> <!-- | orderPlayerByName"> -->
               <td>
                 <div style="white-space: nowrap;" ng-show="!v.editMode">
                   <button class="btn btn-primary glyphicon glyphicon-edit"
@@ -86,7 +87,7 @@
               </td>
               <td class="vertical-middle numerical" style="vertical-align: middle;">
                 <!-- TODO: write a directive to show skill... -->
-                <span n_g-show="!v.editMode">{{v.skill.sigma | number:2 }}</span>
+                <span>{{v.skill.sigma | number:2 }}</span>
                 <!-- TODO: it should be not possible to edit skills... -->
                 <!-- <input ng-model="share.playerEdit.skill" ng-show="v.editMode" key="enter" trap-key="playerUpdate(id, share.playerEdit)" /> -->
                 <button class="btn btn-primary glyphicon glyphicon-refresh" ng-show="v.editMode" 
@@ -154,7 +155,7 @@
                 <input ng-model="share.sportAdd.playersMax" key="enter" trap-key="sportAdd(share.sportAdd)" />
               </td>
             </tr>
-            <tr class="vertical-middle" ng-repeat="(id, v) in share.sports | orderBy:sportsOrderByPredicate:false">
+            <tr class="vertical-middle" ng-repeat="(id, v) in share.sports | orderByPriority | orderBy:'name'">
               <td>
                 <div style="white-space: nowrap;" ng-show="!v.editMode">
                   <button class="btn btn-primary glyphicon glyphicon-edit"

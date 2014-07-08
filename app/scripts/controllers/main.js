@@ -19,6 +19,9 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
         share.playersAvailable = angular.copy(ids);
         share.spinner.hide();
       });
+
+      $scope.getClientIP(); // only for development
+
       share.initializedMain = true;
     }
   };
@@ -148,33 +151,36 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
     if (!$scope.matchCheckClosed()) {
       return false;
     }
-
-    $scope.updateScores();
+    $scope.updateSkills();
   };
 
-  $scope.updateScores = function () {
-    var url = 'http://localhost/teamPlayerRating/uty/PHPSkills/src/getNewSkills.php';
-    /*
-    var response = share.main.match;
-    for (var id in response.teams['A'].players) {
-      console.info('OLD SKILL OF TEAM A PLAYER '+response.teams['A'].players[id].name+' OF TEAM A: ', response.teams['A'].players[id].skill.sigma);
+  $scope.updateSkills = function () {
+    // try to determine host to update skills, based on client ip...
+    //  (for development only)
+    var host;
+    if ($scope.isIpPrivate(share.clientIP)) { // home
+      host = 'localhost';
+    } else { // work
+      host = '192.168.10.30';
     }
-    for (var id in response.teams['B'].players) {
-      console.info('OLD SKILL OF TEAM B PLAYER '+response.teams['B'].players[id].name+' OF TEAM A: ', response.teams['B'].players[id].skill.sigma);
-    }
-    */
+    var url = 'http://'+host+'/teamPlayerRating/uty/PHPSkills/src/getNewSkills.php';
+    console.info(share.main.match);
     $http.jsonp(
       url + '?' + 'callback=JSON_CALLBACK' + '&' + $.param(share.main.match))
-    //url + '?' + $.param(share.main.match))
       .success(function(response) {
         console.info('new skill retrieved: ', response);
         // update players skills with response
         for (var n in response) {
           var playerTS = response[n];
           var player = share.players[playerTS.id];
+          if (!player.skillPrevious) { // save previous skill
+            player.skillPrevious = player.skill;
+          }
           player.skill.sigma = playerTS.rating.sigma;
           player.skill.mu = playerTS.rating.mu;
           playerFactory.set(playerTS.id, player);
+          console.info('player.skillPrevious:', player.skillPrevious);
+          console.info('player.skill:', player.skill);
         }
         matchFactory.add(share.main.match).then(function (id) {
           console.info('added match id:', id);
@@ -183,12 +189,38 @@ app.controller('MainCtrl', function ($scope, $location, $http, stateFactory, spo
           $scope.go('/statistics');
         });
       })
-      .error(function(data, status, headers, config) {
+      .error(function(data, status/*, headers, config*/) {
         console.error('new skills not retrieved!', 'Status is', status);
         notificationFactory.error('Error calculating new ratings, match not saved!');
       }
     );
 
+  };
+
+  $scope.getClientIP = function () {
+    $.ajax({
+      type: 'GET',
+      url: 'http://api.hostip.info/get_json.php',
+      dataType: 'json',
+      success: function(json) {
+        share.clientIP = json.ip;
+      },
+      error: function (request, type, status) {
+        console.error('Error checking for current IP:', '[request: ' + request.statusText + '] [type: ' + type + '] [status: ' + status + ']');
+      }
+    });
+  };
+
+  $scope.isIpPrivate = function (ip) {
+    var parts = ip.split('.');
+    if (
+         (parts[0] === '10') ||
+         (parts[0] === '172' && (parseInt(parts[1], 10) >= 16 && parseInt(parts[1], 10) <= 31)) ||
+         (parts[0] === '192' && parts[1] === 168)
+       ) {
+      return true;
+    }
+    return false;
   };
 
   $scope.matchDateDisabled = function(/*date, mode*/) {

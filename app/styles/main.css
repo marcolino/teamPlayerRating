@@ -70,7 +70,7 @@ small {
   min-width: 152px;
   padding: 0.2em;
   opacity: 0.3;
-  background: url('../images/grassfield.png') repeat scroll 0% 0% transparent;
+  background: url('../images/grassfield.pngK') repeat scroll 0% 0% transparent;
   border: 4px solid #888;
   -webkit-border-radius: 7px;
      -moz-border-radius: 7px;
@@ -186,6 +186,9 @@ small {
 .vertical-middle {
   vertical-align: middle;
 }
+.vertical-bottom {
+  vertical-align: bottom;
+}
 .numerical {
   text-align: right;
 }
@@ -197,4 +200,29 @@ small {
 }
 .button-deselected {
   opacity: 0.2;
+}
+
+/* statistics view style */
+.rotate {
+  color: yellow;
+  -webkit-transform: rotate(-90deg);
+  -moz-transform: rotate(-90deg);
+  -ms-transform: rotate(-90deg);
+  -o-transform: rotate(-90deg);
+  transform: rotate(-90deg);
+
+  -webkit-transform-origin: 50% 50%;
+  -moz-transform-origin: 50% 50%;
+  -ms-transform-origin: 50% 50%;
+  -o-transform-origin: 50% 50%;
+  transform-origin: 50% 50%;
+
+  filter: progid:DXImageTransform.Microsoft.BasicImage(rotation=3); /* IE9+ */
+}
+.rating-bar {
+  background-color: green;
+  display: inline-block;
+  bottom: 0;
+  width: 3.0em; /* set with script, based on sigma value */
+  height: 0.2em; /* set with script, based on mu value */
 }

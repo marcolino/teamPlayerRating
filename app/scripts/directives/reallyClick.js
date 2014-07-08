@@ -33,7 +33,6 @@ app.directive('reallyClick', function($modal) {
         }, function() {
           // modal dismissed
         });
-        //*/        
       });
 
     }

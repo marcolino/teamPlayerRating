@@ -18,7 +18,7 @@ app.factory('stateFactory', function() {
     //share.main.teamsInitialized = true;
     share.main.dateFormat = 'yyyy-MM-dd';
     share.main.dateOptions = {};
-    share.main.dateOptions['starting-day'] = 1;
+    share.main.dateOptions['startingDay'] = 1;
     share.main.dateOptions['showWeeks'] = 0;
 
     share.main.teamSelected = null;
