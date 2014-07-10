@@ -1,0 +1,5 @@
+<div class="ng-cloak j-spinner"><div class="container-fluid"><!-- <div ng-repeat="flav in ['cherry', 'grape']"> --><!--
+<div ng-repeat="player in share.players | orderByPriority | orderBy:'skill.sigma':true">
+  <visualrating rat="{{player.skill}}"></visualrating>
+</div>
+--><table id="table-statistics" class="table table-bordered table-condensed table-hover table-auto-width"><thead><tr><th>Pos.<th>Name<th>Skill<tbody><tr class="vertical-middle" ng-repeat="player in share.players | orderByPriority | orderBy:'skill.rank':false"><td class="vertical-middle" style="vertical-align: middle; text-align: right"><span>{{player.rank}}<!-- {{1 + $index}} -->&deg;</span><td class="vertical-middle"><span>{{player.name}}</span><td class="vertical-bottom"><visualrating ratin="{{player.skill}}"></visualrating></table></div></div>

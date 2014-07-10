@@ -1,0 +1,22 @@
+<!--
+<nav id="navbar-example" class="navbar navbar-inverse navbar-static" role="navigation">
+  <div class="container-fluid">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+        <span class="sr-only">Toggle navigation</span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="#">Team player rating system</a>
+    </div>
+    <div class="collapse navbar-collapse bs-js-navbar-collapse">
+      <ul class="nav navbar-nav navbar-right">
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#/setup">Setup</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" href="#/statistics">Statistics</a></li>
+        <li role="presentation"><a role="menuitem" tabindex="-1" ng-href="#/about">About</a></li>
+      </ul>
+    </div><!- - /.nav-collapse - ->
+  </div><!- - /.container-fluid - ->
+</nav>
+--><nav class="navbar navbar-inverse n_avbar-static disable-highlight" role="navigation"><!-- Brand and toggle get grouped for better mobile display --><div class="navbar-header"><!-- button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1" --><button type="button" class="navbar-toggle" ng-init="isCollapsed = true" ng-click="isCollapsed = !isCollapsed"><span class="sr-only">Toggle navigation</span> <span class="icon-bar"></span> <span class="icon-bar"></span> <span class="icon-bar"></span></button> <a class="navbar-brand" href="#" ng-click="isCollapsed = true">Team player rating system</a></div><!-- Collect the nav links, forms, and other content for toggling --><!-- div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1" --><div class="navbar-collapse" ng-class="isCollapsed ? 'collapse' : 'in'"><form class="navbar-form navbar-left" role="search" ng-submit="submitPost()" ng-show="signedIn()"><div class="form-group"><input type="text" class="form-control" placeholder="Title" ng-model="post.title"></div><div class="form-group"><input type="text" class="form-control" placeholder="Link" ng-model="post.url"></div><button type="submit" class="btn btn-default">Submit</button></form><ul class="nav navbar-nav navbar-right"><li role="presentation"><a role="menuitem" tabindex="-1" ng-click="isCollapsed = !isCollapsed" ng-href="#/setup">Setup</a></li><li role="presentation"><a role="menuitem" tabindex="-1" ng-click="isCollapsed = !isCollapsed" ng-href="#/matches">Matches</a></li><li role="presentation"><a role="menuitem" tabindex="-1" ng-click="isCollapsed = !isCollapsed" ng-href="#/statistics">Statistics</a></li><li role="presentation"><a role="menuitem" tabindex="-1" ng-click="isCollapsed = !isCollapsed" ng-href="#/about">About</a></li></ul></div><!-- /.navbar-collapse --></nav>
