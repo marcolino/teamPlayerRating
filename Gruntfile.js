@@ -202,13 +202,16 @@ module.exports = function (grunt) {
     },
 
     imagemin: {
-      dist: {
+      dynamic: {
         files: [{
           expand: true,
           cwd: '<%= yeoman.app %>/images',
           src: '{,*/}*.{png,jpg,jpeg,gif}',
           dest: '<%= yeoman.dist %>/images'
-        }]
+        }],
+        options: {
+          cache: true // this doesn't work, images always re-minified...
+        }
       }
     },
 
@@ -360,6 +363,7 @@ module.exports = function (grunt) {
   });
 
   //grunt.loadNpmTasks('grunt-ftp-upload');
+  //grunt.loadNpmTasks('grunt-contrib-imagemin');
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
@@ -401,6 +405,7 @@ module.exports = function (grunt) {
     'cdnify',
     'cssmin',
     'uglify',
+    'imagemin',
     'rev',
     'usemin',
     'htmlmin'
