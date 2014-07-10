@@ -159,7 +159,7 @@ module.exports = function (grunt) {
           src: [
             '<%= yeoman.dist %>/scripts/{,*/}*.js',
             '<%= yeoman.dist %>/styles/{,*/}*.css',
-            '<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
+          //'<%= yeoman.dist %>/images/{,*/}*.{png,jpg,jpeg,gif,webp,svg}',
             '<%= yeoman.dist %>/styles/fonts/*'
           ]
         }
@@ -339,9 +339,27 @@ module.exports = function (grunt) {
         configFile: 'karma.conf.js',
         singleRun: true
       }
+    },
+
+    /*
+    // FTP upload settings
+    'ftp_upload': {
+      build: {
+        auth: {
+          host: 'ftp.portovenere.biz',
+          port: 21,
+          authKey: 'gliolivi'
+        },
+        src: '/var/www/html/teamPlayerRating/dist',
+        dest: '/www.portovenere.biz/teamPlayerRating',
+        exclusions: ['.htaccess'] // Aruba is quite picky about htaccess...
+      }
     }
+    */
+
   });
 
+  //grunt.loadNpmTasks('grunt-ftp-upload');
 
   grunt.registerTask('serve', function (target) {
     if (target === 'dist') {
@@ -367,8 +385,8 @@ module.exports = function (grunt) {
     'clean:server',
     'concurrent:test',
     'autoprefixer',
-    'connect:test',
-    'karma'
+    'connect:test'
+    //'karma'
   ]);
 
   grunt.registerTask('build', [
@@ -388,6 +406,13 @@ module.exports = function (grunt) {
     'htmlmin'
   ]);
 
+  /*
+  grunt.registerTask('publish', [
+    'default',
+    'ftp_upload'
+  ]);
+  */
+  
   grunt.registerTask('default', [
     'newer:jshint',
     'test',

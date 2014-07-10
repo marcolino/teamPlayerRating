@@ -23,6 +23,7 @@ app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactor
         share.spinner.hide();
         $scope.playersList = $filter('orderByPriority')(share.players);
         console.info('$scope.playersList:', $scope.playersList);
+        $scope.playersSetRank(); // ... hmmm ...
       });
 
       share.sports.$on('loaded', function () {
@@ -37,7 +38,8 @@ app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactor
       share.sportsEditMode = false;
       share.sportsOrderByPredicate = 'name';
 
-      share.playerDefault = { name: '', email: '', skill: { sigma: 25, mu: 25 / 3 }}; // TODO...
+      share.skillDefault = { sigma: 25, mu: 25 / 3 };
+      share.playerDefault = { name: '', email: '', skill: share.skillDefault}; // TODO...
       share.playerAdd = angular.copy(share.playerDefault);
       share.playerEdit = {};
 
@@ -48,6 +50,7 @@ app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactor
       if (!share.setupTabActive) {
         share.setupTabActive = 'tab-players';
       }
+
       share.setupInitialized = true;
     } else {
       share.spinner.hide();
@@ -126,6 +129,14 @@ app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactor
     console.log('id: ', id);
     console.log('player: ', player);
     console.log('share.players: ', share.players);
+/*
+    share.players[id].editMode = !share.players[id].editMode;
+    if (share.players[id].editMode) {
+      share.playerEdit = angular.copy(player);
+    }
+*/
+    // TODO: THIS IS THE RIGHT MODE TO ACCESS share.players ...
+    id = player.$id;
     share.players[id].editMode = !share.players[id].editMode;
     if (share.players[id].editMode) {
       share.playerEdit = angular.copy(player);
@@ -245,6 +256,59 @@ app.controller('SetupCtrl', function ($scope, $filter, stateFactory, sportFactor
       $scope.playerResetSkill(null, player);
       playerFactory.set(id, player);
     }
+  };
+
+  $scope.playersSetRank = function () {
+    console.info('playersSetRank()');
+    var skillPrevious = share.skillDefault;
+    var rank = 1;
+    var rankPrevious = rank;
+    var rankNew;
+    var playersList = $filter('orderByPriority')(share.players);
+    console.info('players before sort:', playersList);
+    playersList.sort(
+      function compare(a, b) {
+        if (
+          (a.skill.sigma > b.skill.sigma) ||
+          (
+            (a.skill.sigma === b.skill.sigma) &&
+            (a.skill.mu >= b.skill.mu)
+          )
+        ) {
+          return -1;
+        } else {
+          return 1;
+        }
+      }
+    );
+    console.info('players after sort:', playersList);
+
+    for (var i in playersList) {
+      var player = playersList[i];
+      console.info('Player "' + player.name + '" id is ', player.$id);
+/*
+      if (!player.skill) {
+        continue; // skip non-objects - TODO: do it better...
+      }
+*/
+      if (
+        (player.skill.sigma > skillPrevious.sigma) ||
+        (
+          (player.skill.sigma === skillPrevious.sigma) &&
+          (player.skill.mu >= skillPrevious.mu)
+        )
+      ) {
+        console.log(1, skillPrevious);
+        rankNew = rankPrevious;
+      } else {
+        console.log(2);
+        rankNew = rank;
+        rankPrevious = rank;
+      }
+      share.players[player.$id].rank = rankNew;
+      rank++;
+    }
+    //console.info('share.players with ranks: ', share.players);
   };
 
   $scope.init();

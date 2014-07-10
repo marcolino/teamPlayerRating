@@ -15,24 +15,15 @@
         </tr>
       </thead>
       <tbody>
-        <tr class="vertical-middle" ng-repeat="player in share.players | orderByPriority | orderBy:'skill.sigma':true">
+        <tr class="vertical-middle" ng-repeat="player in share.players | orderByPriority | orderBy:'skill.rank':false">
           <td class="vertical-middle" style="vertical-align: middle; text-align: right;">
-            <span>{{1 + $index}}&deg;</span>
+            <span>{{player.rank}}<!-- {{1 + $index}} -->&deg;</span>
           </td>
           <td class="vertical-middle">
             <span>{{player.name}}</span>
           </td>
           <td class="vertical-bottom">
-  <visualrating ratin="{{player.skill}}"></visualrating>
-<!--
-            <visualrating rating="{{v.skill}}"></visualrating>
--->
-            <!--
-            &nbsp;|&nbsp;
-            <span>{{v.skill.sigma | number:2 }}</span>
-            <!- - TODO: write a directive to show skill... - ->
-            <span>({{v.skill.mu | number:2 }})</span>
-          -->
+            <visualrating ratin="{{player.skill}}"></visualrating>
           </td>
         </tr>
       </tbody>
